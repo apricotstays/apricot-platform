@@ -1,0 +1,28 @@
+{
+  "name": "apricot-platform",
+  "private": true,
+  "description": "Apricot Stays platform monorepo: website, future API, shared brand and schema.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @apricot/web",
+    "build": "npm run build -w @apricot/web",
+    "preview": "npm run preview -w @apricot/web",
+    "check": "npm run check -w @apricot/web",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "links": "linkinator apps/web/dist --recurse --retry --skip \"WHATSAPP_NUMBER|INSTAGRAM_HANDLE|instagram\\\\.com\"",
+    "a11y": "npx --yes pa11y-ci@5.0.0 --config .pa11yci.json",
+    "lhci": "npx --yes @lhci/cli@0.15.1 autorun"
+  },
+  "devDependencies": {
+    "linkinator": "8.1.0",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.1"
+  }
+}

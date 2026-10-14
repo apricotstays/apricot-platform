@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Build & quality checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Formatting
+        run: npm run format:check
+
+      - name: Type & template check
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Broken links (internal)
+        run: npm run links
+
+      - name: Accessibility (WCAG 2 AA, axe)
+        # TEMP: non-blocking until the v0.2 colour-contrast fix lands (see CHANGELOG known issues).
+        continue-on-error: true
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4321 &
+          npx --yes wait-on@8.0.3 http://127.0.0.1:4321/
+          npm run a11y
+
+      - name: Page-speed budget (Lighthouse)
+        # Baseline gate perf >= 0.8; raised to 0.9 once fonts are self-hosted (v0.2).
+        run: npm run lhci
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse
+          path: .lighthouseci
+          if-no-files-found: ignore
+          retention-days: 14

@@ -1,0 +1,12 @@
+{
+  "name": "@apricot/brand",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Apricot Stays brand tokens: colours, fonts, logo.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./src/tokens.css",
+    "./logo.svg": "./src/logo.svg"
+  }
+}
