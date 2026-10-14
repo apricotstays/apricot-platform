@@ -1,7 +1,8 @@
 import type { APIRoute } from "astro";
+import { properties } from "@apricot/schema";
 
 // Keep in sync with pages in src/pages (excluding 404).
-const paths = ["/", "/privacy"];
+const paths = ["/", ...properties.map((p) => `/stays/${p.slug}`), "/privacy"];
 
 export const GET: APIRoute = ({ site }) => {
   const urls = paths.map((p) => `  <url><loc>${new URL(p, site).href}</loc></url>`).join("\n");

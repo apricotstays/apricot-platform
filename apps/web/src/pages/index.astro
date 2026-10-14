@@ -1,13 +1,51 @@
 ---
+import { Picture, getImage } from "astro:assets";
 import Base from "../layouts/Base.astro";
-import Header from "../components/Header.astro";
+import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import Icon from "../components/Icon.astro";
+import SectionRule from "../components/SectionRule.astro";
 import { properties } from "@apricot/schema";
 import { brand, contact } from "@apricot/brand";
+import { galleries, photos } from "../data/media";
 
-const waHref = contact.whatsappLink(
-  "Hi Apricot Stays, I'd like to know about availability.\n\nDates:\nGuests:\nHome (if any):",
+const wa = (text: string) => contact.whatsappLink(text);
+const availability = wa(
+  "Hi Apricot Stays, I'd like to check availability.\n\nDates:\nGuests:\nHome (if any):",
 );
+
+// Hero: one optimised poster, used by the <video> (desktop) and the <picture> (mobile / reduced motion).
+const hero = photos.courtyardDay;
+const poster = await getImage({ src: hero.src, width: 1440, format: "webp", quality: 70 });
+
+const amenities = [
+  {
+    icon: "wifi",
+    title: "High-speed Wi-Fi",
+    text: "Fast, reliable internet in every home — good for workcations.",
+  },
+  { icon: "power", title: "24/7 power backup", text: "No interruptions, whatever the weather." },
+  {
+    icon: "tree",
+    title: "Gardens & courtyards",
+    text: "Your own green corner to unwind, read or watch the evening light.",
+  },
+  {
+    icon: "shield",
+    title: "Gated security",
+    text: "All homes sit inside the gated DLF Hyde Park estate.",
+  },
+  {
+    icon: "building",
+    title: "Clubhouse access",
+    text: "Use of the DLF Hyde Park clubhouse during your stay.",
+  },
+  {
+    icon: "users",
+    title: "Room to gather",
+    text: "The Château sleeps ten, with a full kitchen and firepit.",
+  },
+] as const;
 
 const orgId = `${brand.url}/#organization`;
 const jsonLd = {
@@ -20,7 +58,7 @@ const jsonLd = {
       url: `${brand.url}/`,
       logo: `${brand.url}/favicon.svg`,
       slogan: brand.tagline,
-      areaServed: { "@type": "Place", name: "Chandigarh Tricity, India" },
+      email: contact.email,
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "reservations",
@@ -30,308 +68,318 @@ const jsonLd = {
     },
     ...properties.map((p) => ({
       "@type": "LodgingBusiness",
-      "@id": `${brand.url}/#${p.slug}`,
+      "@id": `${brand.url}/stays/${p.slug}#lodging`,
       name: p.name,
+      url: `${brand.url}/stays/${p.slug}`,
+      description: p.summary,
       brand: { "@id": orgId },
       telephone: contact.whatsappE164,
-      containedInPlace: { "@type": "Place", name: "Chandigarh Tricity, India" },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: contact.address.locality,
+        addressRegion: contact.address.region,
+        addressCountry: contact.address.country,
+      },
+      geo: { "@type": "GeoCoordinates", ...contact.address.geo },
+      ...(p.airbnbUrl ? { sameAs: [p.airbnbUrl] } : {}),
     })),
   ],
 };
 ---
 
 <Base
-  title="Apricot Stays · Boutique homes in the Chandigarh Tricity"
-  description="Apricot Stays is a small collection of boutique homes across the Chandigarh Tricity. Our new website is on its way — chat with us on WhatsApp to book."
-  og={{
-    title: "Apricot Stays · Stay like you live here",
-    description: "Boutique homes across the Chandigarh Tricity. Our new website is on its way.",
-  }}
+  title="Apricot Stays · Boutique homes in New Chandigarh"
+  description="A small collection of boutique homes at DLF Hyde Park, New Chandigarh — a garden cottage, a terracotta courtyard and a five-bedroom château. Book on WhatsApp."
+  og={{ title: "Apricot Stays · Stay like you live here", image: hero.src, imageAlt: hero.alt }}
   jsonLd={jsonLd}
 >
-  <Header />
+  <Navbar />
 
-  <main>
-    <div class="wrap hero">
-      <section>
-        <p class="eyebrow">
-          <i></i>New website coming soon
-        </p>
-        <h1>
-          Stay like you <em>live</em> here.
-        </h1>
-        <p class="lede">
-          A small collection of boutique homes across the Chandigarh Tricity, each one kept the way
-          we'd keep our own.
-        </p>
+  <main id="main">
+    <!-- Hero -->
+    <section class="relative h-[calc(100svh-73px)] min-h-[420px] w-full overflow-hidden bg-stone-200">
+      <h1 class="sr-only">Apricot Stays — boutique homes at DLF Hyde Park, New Chandigarh</h1>
+      <Picture
+        src={hero.src}
+        alt={hero.alt}
+        widths={[480, 768, 1080, 1440]}
+        sizes="100vw"
+        formats={["avif", "webp"]}
+        fallbackFormat="jpg"
+        loading="eager"
+        fetchpriority="high"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+      <video
+        class="absolute inset-0 hidden h-full w-full object-cover md:block motion-reduce:hidden"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster={poster.src}
+        aria-hidden="true"
+        tabindex="-1"
+      >
+        <source src="/media/hero.mp4" type="video/mp4" media="(min-width: 768px)" />
+      </video>
+    </section>
 
-        <div class="ctas">
-          <a class="btn btn-primary" href={waHref} target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3z"></path>
-            </svg>
-            Chat on WhatsApp
-          </a>
+    <!-- Our Collection -->
+    <section
+      id="collection"
+      class="scroll-mt-20 border-b border-stone-100 bg-white py-16 sm:py-20 lg:py-24"
+    >
+      <div class="mx-auto max-w-7xl px-6 lg:px-12">
+        <div class="mb-16 text-center">
+          <SectionRule center />
+          <h2 class="font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
+            Our Collection
+          </h2>
         </div>
-        <p class="note">
-          Or message{" "}
-          <a href={waHref} target="_blank" rel="noopener">
-            {contact.whatsappDisplay}
-          </a>{" "}
-          for availability and rates.
-        </p>
-      </section>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {properties.map((p) => {
+            const cover = galleries[p.slug][0];
+            return (
+              <a
+                href={`/stays/${p.slug}`}
+                class="reveal group block rounded-sm focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-4 focus-visible:outline-none"
+              >
+                <div class="relative mb-4 aspect-[4/3] overflow-hidden bg-stone-100">
+                  <Picture
+                    src={cover.src}
+                    alt={cover.alt}
+                    widths={[400, 600, 900]}
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    formats={["avif", "webp"]}
+                    fallbackFormat="jpg"
+                    class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 motion-reduce:transform-none"
+                  />
+                </div>
+                <div class="mt-5">
+                  <h3 class="mb-1 font-sans text-base font-normal tracking-[0.08em] text-stone-800 uppercase transition-colors group-hover:text-apricot">
+                    {p.name}
+                  </h3>
+                  <p class="font-sans text-xs font-light tracking-[0.2em] text-stone-500 uppercase">
+                    {p.locality}
+                  </p>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
 
-      <aside class="homes" aria-label="Our homes">
-        <svg class="art" viewBox="0 0 200 200" aria-hidden="true">
-          <circle cx="100" cy="100" r="98" fill="#F6E2CF"></circle>
-          <circle cx="100" cy="100" r="66" fill="#F1CDAA"></circle>
-          <circle cx="100" cy="100" r="34" fill="#E9AE7D"></circle>
-        </svg>
-        <h2>Our homes</h2>
-        <ol>
-          {properties.map((p, i) => (
-            <li>
-              <span class="n" aria-hidden="true">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span class="name">
-                {p.name}
-                {p.tag && <span class="tag">{p.tag}</span>}
-              </span>
-            </li>
+    <!-- The Garden Club -->
+    <section class="bg-cream py-16 sm:py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-12">
+        <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-24">
+          <div class="reveal order-2 lg:order-1">
+            <SectionRule />
+            <h2 class="mb-6 font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
+              The Garden Club
+            </h2>
+            <p class="mb-6 max-w-md font-sans text-base leading-7 font-normal text-stone-600">
+              The Garden Club is our way of welcoming returning guests into a calmer, greener rhythm
+              of stay. Members enjoy priority bookings, preferred rates, and thoughtful
+              privileges—like complimentary early check-in and handpicked local experiences that
+              help you slow down and settle in.
+            </p>
+            <p class="mb-8 font-serif text-base text-stone-600 italic">
+              Root yourself. Stay awhile.
+            </p>
+            <a
+              href={wa("Hi Apricot Stays, I'd like to know more about the Garden Club.")}
+              target="_blank"
+              rel="noopener"
+              class="inline-block border-b border-stone-800 pb-1 font-sans text-sm font-light tracking-[0.15em] text-stone-800 uppercase transition-colors hover:border-stone-600 hover:text-stone-600"
+            >
+              Ask about membership
+            </a>
+          </div>
+          <div class="reveal order-1 lg:order-2">
+            <div class="aspect-[16/10] overflow-hidden bg-stone-100">
+              <Picture
+                src={photos.courtyardPatio.src}
+                alt={photos.courtyardPatio.alt}
+                widths={[480, 800, 1200]}
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                formats={["avif", "webp"]}
+                fallbackFormat="jpg"
+                class="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experiences -->
+    <section class="border-b border-stone-100 bg-white py-16 sm:py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-12">
+        <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-24">
+          <div class="reveal">
+            <div class="aspect-[16/10] overflow-hidden bg-stone-100">
+              <Picture
+                src={photos.courtyardDining.src}
+                alt={photos.courtyardDining.alt}
+                widths={[480, 800, 1200]}
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                formats={["avif", "webp"]}
+                fallbackFormat="jpg"
+                class="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+          <div class="reveal">
+            <SectionRule />
+            <h2 class="mb-6 font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
+              Experiences
+            </h2>
+            <p class="mb-8 max-w-md font-sans text-base leading-7 font-normal text-stone-600">
+              Holidays make explorers of all of us. Our homes offer an intimate view of local living
+              in the Tricity — old haunts seen with new eyes, and new favourites found with a keen
+              curiosity. Ask us for our own list of local favourites.
+            </p>
+            <a
+              href={wa(
+                "Hi Apricot Stays, could you share your favourite local places in the Tricity?",
+              )}
+              target="_blank"
+              rel="noopener"
+              class="inline-block border-b border-stone-800 pb-1 font-sans text-sm font-light tracking-[0.15em] text-stone-800 uppercase transition-colors hover:border-stone-600 hover:text-stone-600"
+            >
+              Ask for local tips
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Story -->
+    <section id="story" class="scroll-mt-20 overflow-hidden bg-linen py-16 sm:py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-12">
+        <div class="flex flex-col items-center gap-16 lg:flex-row">
+          <div class="relative w-full lg:w-1/2">
+            <div class="reveal relative z-10 overflow-hidden shadow-2xl">
+              <Picture
+                src={photos.courtyardLiving.src}
+                alt={photos.courtyardLiving.alt}
+                widths={[480, 800, 1200]}
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                formats={["avif", "webp"]}
+                fallbackFormat="jpg"
+                class="h-[420px] w-full object-cover sm:h-[500px]"
+              />
+            </div>
+            <div class="reveal absolute -right-12 -bottom-12 z-20 hidden w-2/3 overflow-hidden border-8 border-white shadow-2xl md:block">
+              <Picture
+                src={photos.courtyardGames.src}
+                alt={photos.courtyardGames.alt}
+                widths={[400, 600]}
+                sizes="33vw"
+                formats={["avif", "webp"]}
+                fallbackFormat="jpg"
+                class="h-[300px] w-full object-cover"
+              />
+            </div>
+          </div>
+          <div class="w-full lg:w-1/2 lg:pl-12">
+            <div class="reveal">
+              <SectionRule />
+              <h2 class="mb-6 font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
+                Our Story
+              </h2>
+              <p class="mb-6 max-w-md font-sans text-base leading-7 font-normal text-stone-600">
+                Apricot Stays began with a single family cottage — a place to escape the city noise
+                and reconnect with the seasons.
+              </p>
+              <p class="mb-8 max-w-md font-sans text-base leading-7 font-normal text-stone-600">
+                Today it's a small collection of homes at DLF Hyde Park, New Chandigarh, each chosen
+                for its character and its ability to offer a true sanctuary. We believe in personal
+                hospitality, where every guest feels like an old friend returning home.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Thoughtful Amenities -->
+    <section
+      id="amenities"
+      class="scroll-mt-20 border-t border-stone-200/80 bg-stone-50 py-16 sm:py-20 lg:py-24"
+    >
+      <div class="mx-auto max-w-7xl px-6 lg:px-12">
+        <div class="mx-auto mb-16 max-w-2xl text-center">
+          <SectionRule center />
+          <h2 class="mb-4 font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
+            Thoughtful Amenities
+          </h2>
+          <p class="font-sans text-base leading-7 font-normal text-stone-600">
+            We've curated every detail to make your stay as comfortable as it is memorable.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {amenities.map((a) => (
+            <div class="reveal group border border-stone-100 bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-md">
+              <div class="mb-6 flex h-12 w-12 items-center justify-center bg-pebble text-sage transition-all duration-300 group-hover:scale-110 group-hover:bg-sage/10 motion-reduce:transform-none">
+                <Icon name={a.icon} />
+              </div>
+              <h3 class="mb-3 font-sans text-base font-medium text-stone-800">{a.title}</h3>
+              <p class="leading-7 text-stone-600">{a.text}</p>
+            </div>
           ))}
-        </ol>
-        <p>
-          Photos, details and direct booking are coming to this page soon. Until then, message us
-          for availability and rates.
+        </div>
+      </div>
+    </section>
+
+    <!-- Also on Airbnb -->
+    <section class="border-t border-stone-100 bg-white py-14">
+      <div class="mx-auto max-w-5xl px-6 text-center">
+        <p class="mb-6 font-sans text-[0.65rem] tracking-[0.2em] text-stone-500 uppercase">
+          Also on Airbnb
         </p>
-      </aside>
-    </div>
+        <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+          {properties
+            .filter((p) => p.airbnbUrl)
+            .map((p) => (
+              <a
+                href={p.airbnbUrl}
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-2 font-sans text-sm text-stone-600 hover:text-stone-900"
+              >
+                {p.name}
+                <Icon name="external" size={14} />
+              </a>
+            ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Pre-footer CTA -->
+    <section class="bg-stone-900 px-6 py-24 text-center text-white">
+      <div class="mx-auto max-w-2xl">
+        <h2 class="mb-6 font-serif text-4xl leading-tight font-normal sm:text-5xl">
+          Ready to unwind?
+        </h2>
+        <p class="mb-8 text-lg text-stone-300">
+          Message us on WhatsApp for availability and rates.
+        </p>
+        <a
+          href={availability}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex h-14 items-center justify-center gap-3 rounded-full bg-apricot px-8 text-lg font-medium text-white shadow-lg shadow-apricot/25 transition-all hover:-translate-y-0.5 hover:bg-apricot/90 hover:shadow-xl hover:shadow-apricot/30 focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-4 focus-visible:ring-offset-stone-900 focus-visible:outline-none active:translate-y-0"
+        >
+          <Icon name="whatsapp" size={20} />
+          Check Availability
+        </a>
+      </div>
+    </section>
   </main>
 
   <Footer />
 </Base>
-
-<style is:global>
-  body {
-    font-family: var(--font-body);
-    font-size: 17px;
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    -webkit-font-smoothing: antialiased;
-  }
-  .wrap {
-    width: 100%;
-    max-width: 1160px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  main {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    padding: 24px 0 56px;
-  }
-  .hero {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 64px;
-    align-items: center;
-  }
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--apricot-text);
-    margin-bottom: 22px;
-  }
-  .eyebrow i {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--apricot);
-    box-shadow: 0 0 0 0 rgba(227, 135, 75, 0.5);
-    animation: pulse 2.4s infinite;
-  }
-  @keyframes pulse {
-    70% {
-      box-shadow: 0 0 0 10px rgba(227, 135, 75, 0);
-    }
-    100% {
-      box-shadow: 0 0 0 0 rgba(227, 135, 75, 0);
-    }
-  }
-  h1 {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(44px, 6.4vw, 80px);
-    line-height: 1.02;
-    letter-spacing: -0.025em;
-    margin-bottom: 24px;
-  }
-  h1 em {
-    font-style: italic;
-    color: var(--apricot-deep);
-  }
-  .lede {
-    font-size: 19px;
-    color: var(--ink-2);
-    max-width: 34ch;
-    margin-bottom: 34px;
-  }
-
-  .ctas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 18px;
-  }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 15px 24px;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 16px;
-    text-decoration: none;
-    transition:
-      transform 0.15s ease,
-      background 0.15s ease;
-  }
-  .btn svg {
-    width: 20px;
-    height: 20px;
-  }
-  .btn-primary {
-    background: var(--ink);
-    color: var(--white);
-  }
-  .btn-primary:hover {
-    background: #4a3527;
-    transform: translateY(-1px);
-  }
-  .note {
-    font-size: 14px;
-    color: var(--ink-2);
-    max-width: 44ch;
-  }
-  .note a {
-    color: var(--ink);
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
-  .homes {
-    background: var(--white);
-    border: 1px solid var(--line);
-    border-radius: 28px;
-    padding: 34px 32px;
-    position: relative;
-    overflow: hidden;
-  }
-  .homes .art {
-    position: absolute;
-    right: -50px;
-    top: -50px;
-    width: 230px;
-    height: 230px;
-    opacity: 0.9;
-  }
-  .homes h2 {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-2);
-    margin-bottom: 22px;
-    position: relative;
-  }
-  .homes ol {
-    list-style: none;
-    position: relative;
-  }
-  .homes li {
-    display: flex;
-    align-items: baseline;
-    gap: 18px;
-    padding: 20px 0;
-    border-top: 1px solid var(--line);
-  }
-  .homes li:last-child {
-    padding-bottom: 4px;
-  }
-  .homes .n {
-    font-family: var(--font-display);
-    font-style: italic;
-    color: var(--apricot-text);
-    font-size: 16px;
-    width: 24px;
-    flex: none;
-  }
-  .homes .name {
-    font-family: var(--font-display);
-    font-size: 27px;
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-  }
-  .homes .tag {
-    display: block;
-    font-family: var(--font-body);
-    font-size: 14px;
-    color: var(--ink-2);
-    margin-top: 4px;
-    letter-spacing: 0;
-  }
-  .homes p {
-    margin-top: 22px;
-    font-size: 15px;
-    color: var(--ink-2);
-    position: relative;
-  }
-
-  @media (max-width: 880px) {
-    .hero {
-      grid-template-columns: 1fr;
-      gap: 44px;
-    }
-    main {
-      padding-top: 8px;
-    }
-  }
-  @media (max-width: 480px) {
-    .wrap {
-      padding: 0 16px;
-    }
-    .lede {
-      font-size: 17px;
-    }
-    .btn {
-      width: 100%;
-      justify-content: center;
-    }
-    .homes {
-      padding: 26px 22px;
-      border-radius: 22px;
-    }
-    .homes .name {
-      font-size: 23px;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .eyebrow i {
-      animation: none;
-    }
-    .btn {
-      transition: none;
-    }
-  }
-</style>

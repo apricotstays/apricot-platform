@@ -2,12 +2,12 @@
 
 Monorepo for **Apricot Stays** — boutique homes across the Chandigarh Tricity.
 
-| Path              | What it is                                                   | Status   |
-| ----------------- | ------------------------------------------------------------ | -------- |
-| `apps/web`        | apricotstays.in (Astro, static)                              | Live     |
-| `apps/api`        | Availability, enquiries, agent API (Cloudflare Workers)      | Reserved |
-| `packages/brand`  | Colours, fonts, logo — single source of truth                | Active   |
-| `packages/schema` | Shared data definitions (properties now; availability later) | Active   |
+| Path              | What it is                                              | Status   |
+| ----------------- | ------------------------------------------------------- | -------- |
+| `apps/web`        | apricotstays.in (Astro, static)                         | Live     |
+| `apps/api`        | Availability, enquiries, agent API (Cloudflare Workers) | Reserved |
+| `packages/brand`  | Colours, fonts (Tailwind `@theme`), contact details     | Active   |
+| `packages/schema` | Homes and their facts (availability later, from STAIZ)  | Active   |
 
 Booking and availability logic belongs in **STAIZ**; this site reads from it rather than re-implementing it.
 

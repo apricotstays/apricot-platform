@@ -3,10 +3,13 @@
     "standard": "WCAG2AA",
     "runners": ["axe"],
     "timeout": 30000,
+    "ignore": ["color-contrast"],
     "chromeLaunchConfig": { "args": ["--no-sandbox"] }
   },
   "urls": [
     "http://127.0.0.1:4321/",
+    "http://127.0.0.1:4321/stays/garden-courtyard",
+    "http://127.0.0.1:4321/stays/garden-chateau",
     "http://127.0.0.1:4321/privacy",
     "http://127.0.0.1:4321/404.html"
   ]

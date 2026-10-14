@@ -1,0 +1,29 @@
+/*
+ * Apricot Stays brand theme (Tailwind v4 @theme), ported from the Replit design (Oct 2026).
+ * Single source of truth for colours and fonts. Keep in sync with index.ts.
+ *
+ * Note: --color-apricot (#FF5A5F) is below WCAG AA contrast on white (3.0:1).
+ * Owner decision, 14 Oct 2026: keep it. See CHANGELOG 0.3.0.
+ */
+@theme {
+  --font-sans: "DM Sans Variable", "DM Sans", system-ui, sans-serif;
+  --font-serif: "Lora Variable", "Lora", Georgia, serif;
+
+  --color-apricot: #ff5a5f;
+  --color-sage: #00a699;
+  --color-porch: #ffffff;
+  --color-stone: #484848;
+  --color-pebble: #f7f7f7;
+  --color-gold: #d4a574;
+  --color-bronze: #b08960;
+
+  /* Warm section backgrounds */
+  --color-cream: #fbf8f3;
+  --color-linen: #f7f3ed;
+  --color-blush: #f7ede7;
+  --color-sand: #eee6db;
+  --color-ivory: #f9f6f0;
+
+  --color-background: var(--color-porch);
+  --color-foreground: var(--color-stone);
+}

@@ -1,25 +1,27 @@
 /**
  * Apricot Stays brand tokens — single source of truth.
- * Keep in sync with tokens.css (CSS custom properties used by the website).
+ * Keep in sync with theme.css (Tailwind @theme used by the website).
+ * Palette ported from the Replit design (owner decision, 14 Oct 2026).
  */
 export const colors = {
-  bg: "#F6EEE3",
-  bg2: "#EFE3D3",
-  ink: "#33241A",
-  ink2: "#6B5545",
-  line: "#DCCBB6",
-  apricot: "#E3874B",
-  apricotDeep: "#B8602C",
-  /** Use for small apricot text (WCAG AA). */
-  apricotText: "#A55628",
-  leaf: "#5E6B48",
-  white: "#FFFBF5",
+  apricot: "#FF5A5F",
+  sage: "#00A699",
+  porch: "#FFFFFF",
+  stone: "#484848",
+  pebble: "#F7F7F7",
+  gold: "#D4A574",
+  bronze: "#B08960",
+  cream: "#FBF8F3",
+  linen: "#F7F3ED",
+  blush: "#F7EDE7",
+  sand: "#EEE6DB",
+  ivory: "#F9F6F0",
 } as const;
 
 /** Fonts are self-hosted via Fontsource (no Google Fonts requests). */
 export const fonts = {
-  display: '"Fraunces Variable", Georgia, serif',
-  body: '"DM Sans Variable", system-ui, sans-serif',
+  serif: '"Lora Variable", "Lora", Georgia, serif',
+  sans: '"DM Sans Variable", "DM Sans", system-ui, sans-serif',
 } as const;
 
 export const brand = {
@@ -30,9 +32,15 @@ export const brand = {
 } as const;
 
 export const contact = {
-  /** WhatsApp is the only contact channel for now. */
+  /** WhatsApp is the booking channel. */
   whatsappE164: "+919740544873",
   whatsappDisplay: "+91 97405 44873",
   whatsappLink: (text: string) => `https://wa.me/919740544873?text=${encodeURIComponent(text)}`,
   email: "hello@apricotstays.in",
+  address: {
+    locality: "DLF Hyde Park, New Chandigarh",
+    region: "Punjab",
+    country: "IN",
+    geo: { latitude: 30.8406, longitude: 76.7249 },
+  },
 } as const;

@@ -1,6 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
-import Header from "../components/Header.astro";
+import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import { contact } from "@apricot/brand";
 
@@ -11,10 +11,10 @@ const updated = "14 October 2026";
   title="Privacy · Apricot Stays"
   description="How Apricot Stays handles personal data on apricotstays.in and in WhatsApp enquiries, in line with India's Digital Personal Data Protection Act, 2023."
 >
-  <Header />
+  <Navbar sticky={false} />
 
-  <main class="wrap">
-    <article>
+  <main id="main" class="mx-auto w-full max-w-7xl px-6 pt-12 pb-20 lg:px-12">
+    <article class="prose-apricot max-w-[68ch]">
       <p class="eyebrow">Privacy notice</p>
       <h1>Your privacy</h1>
       <p class="meta">Last updated {updated}</p>
@@ -28,8 +28,9 @@ const updated = "14 October 2026";
       <h2>What this website collects</h2>
       <p>
         <strong>Nothing that identifies you.</strong> There are no forms, no accounts, no cookies
-        and no advertising or tracking pixels. Fonts are served from our own site, so your browser
-        does not contact Google or other font services.
+        and no advertising or tracking pixels. Fonts, photos and video are served from our own site,
+        so your browser does not contact Google or other third parties while you browse. Links to
+        WhatsApp, Airbnb and Google Maps open those services only if you tap them.
       </p>
       <ul>
         <li>
@@ -85,83 +86,34 @@ const updated = "14 October 2026";
   <Footer />
 </Base>
 
-<style is:global>
-  body {
-    font-family: var(--font-body);
-    font-size: 17px;
-    line-height: 1.65;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    -webkit-font-smoothing: antialiased;
+<style>
+  @reference "../styles/global.css";
+  .prose-apricot :global(.eyebrow) {
+    @apply mb-4 font-sans text-xs font-semibold tracking-[0.2em] text-stone-500 uppercase;
   }
-  .wrap {
-    width: 100%;
-    max-width: 1160px;
-    margin: 0 auto;
-    padding: 0 24px;
+  .prose-apricot :global(h1) {
+    @apply mb-2 font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl;
   }
-  main {
-    flex: 1;
-    padding: 24px 24px 72px;
+  .prose-apricot :global(.meta) {
+    @apply mb-8 text-sm text-stone-500;
   }
-  article {
-    max-width: 68ch;
+  .prose-apricot :global(h2) {
+    @apply mt-10 mb-3 font-serif text-2xl font-normal text-stone-900;
   }
-  .eyebrow {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--apricot-text);
-    margin-bottom: 18px;
+  .prose-apricot :global(p),
+  .prose-apricot :global(li) {
+    @apply leading-7 text-stone-600;
   }
-  h1 {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(40px, 5.5vw, 64px);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin-bottom: 10px;
+  .prose-apricot :global(p + p) {
+    @apply mt-4;
   }
-  .meta {
-    font-size: 14px;
-    color: var(--ink-2);
-    margin-bottom: 32px;
+  .prose-apricot :global(strong) {
+    @apply font-semibold text-stone-800;
   }
-  h2 {
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: 24px;
-    letter-spacing: -0.01em;
-    margin: 36px 0 12px;
+  .prose-apricot :global(ul) {
+    @apply mt-4 ml-5 list-disc space-y-2;
   }
-  article p,
-  article li {
-    color: var(--ink-2);
-  }
-  article p + p {
-    margin-top: 14px;
-  }
-  article strong {
-    color: var(--ink);
-    font-weight: 600;
-  }
-  article ul {
-    margin: 14px 0 0 1.2em;
-  }
-  article li + li {
-    margin-top: 8px;
-  }
-  article a {
-    color: var(--ink);
-    font-weight: 600;
-  }
-  @media (max-width: 480px) {
-    .wrap,
-    main {
-      padding-left: 16px;
-      padding-right: 16px;
-    }
+  .prose-apricot :global(a) {
+    @apply font-medium text-stone-900 underline underline-offset-4;
   }
 </style>
