@@ -4,6 +4,10 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ## [Unreleased]
 
+### Changed
+
+- Homepage, The Garden Club: "privileges—like" → "privileges such as".
+
 ## [0.3.0] — 2026-10-14
 
 Full guest site, ported from the Replit design (recovered from the Replit dev server on 14 Oct 2026, ahead of the Replit account expiry).
