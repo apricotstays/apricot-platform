@@ -51,7 +51,7 @@ jobs:
 
       - name: Page-speed budget (Lighthouse)
         timeout-minutes: 5
-        # Baseline gate perf >= 0.8; raised to 0.9 once fonts are self-hosted (v0.2).
+        # Baseline gate perf >= 0.7 (GitHub runners score 0.73-0.78); raised to 0.9 once fonts are self-hosted (v0.2).
         run: npm run lhci
 
       - name: Upload Lighthouse reports
