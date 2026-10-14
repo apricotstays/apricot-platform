@@ -11,5 +11,5 @@
   },
   "observability": { "enabled": true },
   "preview_urls": true,
-  "workers_dev": true,
+  "workers_dev": false,
 }
