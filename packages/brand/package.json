@@ -2,11 +2,11 @@
   "name": "@apricot/brand",
   "version": "0.1.0",
   "private": true,
-  "description": "Apricot Stays brand tokens: colours, fonts, logo.",
+  "description": "Apricot Stays brand: colours, fonts (Tailwind @theme), contact details.",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./tokens.css": "./src/tokens.css",
+    "./theme.css": "./src/theme.css",
     "./logo.svg": "./src/logo.svg"
   }
 }

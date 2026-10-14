@@ -1,41 +1,87 @@
 ---
+import { contact } from "@apricot/brand";
+import { properties } from "@apricot/schema";
+
 const year = new Date().getFullYear();
+const wa = contact.whatsappLink("Hi Apricot Stays, I'd like to know about availability.");
+const heading = "mb-6 font-sans text-sm font-light tracking-[0.15em] text-stone-800 uppercase";
+const item = "text-stone-500 transition-colors hover:text-stone-900";
 ---
 
-<footer>
-  <div class="wrap">
-    <span>© {year} Apricot Stays · Chandigarh Tricity</span>
-    <a href="/privacy">Privacy</a>
+<footer class="bg-stone-50 pt-20 pb-10">
+  <div class="container mx-auto px-6">
+    <div class="mb-16 grid grid-cols-1 gap-12 md:grid-cols-4">
+      <div class="md:col-span-2">
+        <p class="mb-6 font-sans text-lg font-light tracking-[0.15em] text-stone-800 uppercase">
+          Apricot Stays
+        </p>
+        <p class="mb-8 max-w-md font-sans text-sm leading-relaxed font-light text-stone-600">
+          A small collection of boutique homes at DLF Hyde Park, New Chandigarh, each one kept the
+          way we'd keep our own.
+        </p>
+      </div>
+
+      <div>
+        <p class={heading}>Explore</p>
+        <ul class="space-y-4">
+          <li>
+            <a href="/" class={item}>
+              Home
+            </a>
+          </li>
+          <li>
+            <a href="/#story" class={item}>
+              Our Story
+            </a>
+          </li>
+          <li>
+            <a href="/#amenities" class={item}>
+              Amenities
+            </a>
+          </li>
+          {properties.map((p) => (
+            <li>
+              <a href={`/stays/${p.slug}`} class={item}>
+                {p.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <p class={heading}>Contact</p>
+        <div class="space-y-3 font-sans text-sm font-light text-stone-600">
+          <p>
+            WhatsApp:{" "}
+            <a
+              href={wa}
+              target="_blank"
+              rel="noopener"
+              class="font-normal text-stone-800 hover:underline"
+            >
+              {contact.whatsappDisplay}
+            </a>
+          </p>
+          <p>
+            Email:{" "}
+            <a href={`mailto:${contact.email}`} class="font-normal text-stone-800 hover:underline">
+              {contact.email}
+            </a>
+          </p>
+          <div class="pt-3 leading-relaxed">
+            <p>{contact.address.locality},</p>
+            <p>{contact.address.region}, India</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-center justify-between gap-4 border-t border-stone-200 pt-8 text-sm text-stone-500 md:flex-row">
+      <p>&copy; {year} Apricot Stays. All rights reserved.</p>
+      <a href="/privacy" class="hover:text-stone-800">
+        Privacy
+      </a>
+    </div>
   </div>
 </footer>
-
-<style>
-  footer {
-    border-top: 1px solid var(--line);
-    padding: 22px 0;
-    font-size: 14px;
-    color: var(--ink-2);
-  }
-  .wrap {
-    width: 100%;
-    max-width: 1160px;
-    margin: 0 auto;
-    padding: 0 24px;
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  a {
-    text-decoration: none;
-  }
-  a:hover {
-    color: var(--ink);
-    text-decoration: underline;
-  }
-  @media (max-width: 480px) {
-    .wrap {
-      padding: 0 16px;
-    }
-  }
-</style>

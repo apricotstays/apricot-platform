@@ -4,12 +4,17 @@ import { properties } from "@apricot/schema";
 
 // https://llmstxt.org — a plain summary for AI assistants and agents.
 export const GET: APIRoute = () => {
-  const homes = properties.map((p) => `- ${p.name}${p.tag ? ` (${p.tag})` : ""}`).join("\n");
+  const homes = properties
+    .map(
+      (p) =>
+        `- [${p.name}](${brand.url}/stays/${p.slug}): ${p.summary} Up to ${p.maxGuests} guests.`,
+    )
+    .join("\n");
   const body = `# ${brand.name}
 
-> ${brand.name} is a small collection of boutique, home-style short-stay homes across the ${brand.region}, India. "${brand.tagline}"
+> ${brand.name} is a small collection of boutique, home-style short-stay homes at ${contact.address.locality}, ${contact.address.region}, India. "${brand.tagline}"
 
-The full website (photos, details, direct booking) is coming soon. For now, all enquiries and bookings are handled on WhatsApp.
+Enquiries and direct bookings are handled on WhatsApp. Rates are quoted on request.
 
 ## Homes
 

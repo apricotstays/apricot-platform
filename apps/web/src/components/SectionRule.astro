@@ -1,0 +1,8 @@
+---
+interface Props {
+  center?: boolean;
+}
+const { center = false } = Astro.props;
+---
+
+<div class:list={["mb-5 h-px w-10 bg-apricot", center && "mx-auto"]} aria-hidden="true"></div>

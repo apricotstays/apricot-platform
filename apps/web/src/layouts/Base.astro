@@ -1,26 +1,33 @@
 ---
-import "@fontsource-variable/fraunces/standard.css";
-import "@fontsource-variable/fraunces/standard-italic.css";
-import "@fontsource-variable/dm-sans/wght.css";
-import "@apricot/brand/tokens.css";
+import "../styles/global.css";
 // Preload the Latin font files used above the fold to avoid a layout shift on font swap.
-import frauncesUrl from "@fontsource-variable/fraunces/files/fraunces-latin-standard-normal.woff2?url";
-import frauncesItalicUrl from "@fontsource-variable/fraunces/files/fraunces-latin-standard-italic.woff2?url";
+import loraUrl from "@fontsource-variable/lora/files/lora-latin-wght-normal.woff2?url";
 import dmSansUrl from "@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url";
+import ogDefault from "../assets/stays/courtyard/courtyard-evening.jpg";
+import { getImage } from "astro:assets";
 
 interface Props {
   title: string;
   description: string;
   noindex?: boolean;
-  og?: { title: string; description: string };
+  og?: { title?: string; description?: string; image?: ImageMetadata; imageAlt?: string };
   jsonLd?: Record<string, unknown>;
+  /** Extra <head> preloads, e.g. the hero image. */
+  preloadImage?: string;
 }
 
-const { title, description, noindex = false, og, jsonLd } = Astro.props;
+const { title, description, noindex = false, og, jsonLd, preloadImage } = Astro.props;
 // build.format "file": pathnames look like "/index.html" or "/privacy.html".
 const path = Astro.url.pathname.replace(/\.html$/, "").replace(/(^|\/)index$/, "$1") || "/";
 const canonical = new URL(path, Astro.site);
-const ogImage = new URL("/og.jpg", Astro.site);
+const ogImg = await getImage({
+  src: og?.image ?? ogDefault,
+  width: 1200,
+  height: 630,
+  fit: "cover",
+  format: "jpg",
+});
+const ogImageUrl = new URL(ogImg.src, Astro.site);
 ---
 
 <!doctype html>
@@ -31,51 +38,37 @@ const ogImage = new URL("/og.jpg", Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
-    <meta name="theme-color" content="#F6EEE3" />
+    <meta name="theme-color" content="#FFFFFF" />
     {!noindex && <link rel="canonical" href={canonical} />}
-    {og && (
-      <>
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Apricot Stays" />
-        <meta property="og:locale" content="en_IN" />
-        <meta property="og:title" content={og.title} />
-        <meta property="og:description" content={og.description} />
-        <meta property="og:url" content={canonical} />
-        <meta property="og:image" content={ogImage} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Apricot Stays — Stay like you live here." />
-        <meta name="twitter:card" content="summary_large_image" />
-      </>
-    )}
-    {[frauncesUrl, frauncesItalicUrl, dmSansUrl].map((href) => (
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Apricot Stays" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:title" content={og?.title ?? title} />
+    <meta property="og:description" content={og?.description ?? description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content={og?.imageAlt ?? "Apricot Stays, DLF Hyde Park, New Chandigarh"}
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    {[loraUrl, dmSansUrl].map((href) => (
       <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
     ))}
+    {preloadImage && <link rel="preload" href={preloadImage} as="image" fetchpriority="high" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap.xml" />
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
-  <body>
+  <body class="min-h-screen">
+    <a
+      href="#main"
+      class="sr-only z-[60] bg-white px-4 py-2 text-stone-900 focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+    >
+      Skip to content
+    </a>
     <slot />
   </body>
 </html>
-
-<style is:global>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  html,
-  body {
-    background: var(--bg);
-    color: var(--ink);
-  }
-  a {
-    color: inherit;
-  }
-  :focus-visible {
-    outline: 2px solid var(--apricot-text);
-    outline-offset: 3px;
-  }
-</style>

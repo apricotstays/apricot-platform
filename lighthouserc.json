@@ -2,7 +2,11 @@
   "ci": {
     "collect": {
       "staticDistDir": "apps/web/dist",
-      "url": ["http://localhost/index.html", "http://localhost/privacy.html"],
+      "url": [
+        "http://localhost/index.html",
+        "http://localhost/stays/garden-courtyard.html",
+        "http://localhost/privacy.html"
+      ],
       "numberOfRuns": 3,
       "settings": {
         "chromeFlags": "--no-sandbox --headless=new"
