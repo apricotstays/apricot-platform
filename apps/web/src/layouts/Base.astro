@@ -1,38 +1,35 @@
 ---
+import "@fontsource-variable/fraunces/standard.css";
+import "@fontsource-variable/fraunces/standard-italic.css";
+import "@fontsource-variable/dm-sans/wght.css";
 import "@apricot/brand/tokens.css";
-import { fonts } from "@apricot/brand";
+// Preload the Latin font files used above the fold to avoid a layout shift on font swap.
+import frauncesUrl from "@fontsource-variable/fraunces/files/fraunces-latin-standard-normal.woff2?url";
+import frauncesItalicUrl from "@fontsource-variable/fraunces/files/fraunces-latin-standard-italic.woff2?url";
+import dmSansUrl from "@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url";
 
 interface Props {
   title: string;
-  description?: string;
+  description: string;
   noindex?: boolean;
   og?: { title: string; description: string };
   jsonLd?: Record<string, unknown>;
-  /** Override the Google Fonts stylesheet (defaults to the brand set). */
-  fontsHref?: string;
 }
 
-const {
-  title,
-  description,
-  noindex = false,
-  og,
-  jsonLd,
-  fontsHref = fonts.googleFontsHref,
-} = Astro.props;
-// With build.format "file", pathnames look like "/index.html" or "/about.html".
+const { title, description, noindex = false, og, jsonLd } = Astro.props;
+// build.format "file": pathnames look like "/index.html" or "/privacy.html".
 const path = Astro.url.pathname.replace(/\.html$/, "").replace(/(^|\/)index$/, "$1") || "/";
 const canonical = new URL(path, Astro.site);
 const ogImage = new URL("/og.jpg", Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
-    {description && <meta name="description" content={description} />}
+    <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
     <meta name="theme-color" content="#F6EEE3" />
     {!noindex && <link rel="canonical" href={canonical} />}
@@ -40,21 +37,23 @@ const ogImage = new URL("/og.jpg", Astro.site);
       <>
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Apricot Stays" />
+        <meta property="og:locale" content="en_IN" />
         <meta property="og:title" content={og.title} />
         <meta property="og:description" content={og.description} />
         <meta property="og:url" content={canonical} />
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Apricot Stays — Stay like you live here." />
         <meta name="twitter:card" content="summary_large_image" />
       </>
     )}
+    {[frauncesUrl, frauncesItalicUrl, dmSansUrl].map((href) => (
+      <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
+    ))}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href={fontsHref} rel="stylesheet" />
+    <link rel="sitemap" href="/sitemap.xml" />
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
-    <slot name="head" />
   </head>
   <body>
     <slot />
@@ -74,5 +73,9 @@ const ogImage = new URL("/og.jpg", Astro.site);
   }
   a {
     color: inherit;
+  }
+  :focus-visible {
+    outline: 2px solid var(--apricot-text);
+    outline-offset: 3px;
   }
 </style>

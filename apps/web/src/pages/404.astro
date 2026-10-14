@@ -1,37 +1,37 @@
 ---
 import Base from "../layouts/Base.astro";
-import Logo from "../components/Logo.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 ---
 
-<Base
-  title="Thank you · Apricot Stays"
-  noindex
-  fontsHref="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=DM+Sans:wght@400;600&display=swap"
->
+<Base title="Page not found · Apricot Stays" description="This page doesn't exist." noindex>
+  <Header />
   <main>
-    <Logo />
     <h1>
-      You're on the <em>list</em>.
+      This page has <em>moved out</em>.
     </h1>
-    <p>We'll write when the new site opens. You'll hear from us before anyone else.</p>
-    <a href="/">Back to Apricot Stays</a>
+    <p>It may have been an old link. The home page has everything for now.</p>
+    <a class="btn" href="/">
+      Back to Apricot Stays
+    </a>
   </main>
+  <Footer />
 </Base>
 
 <style is:global>
   body {
     font-family: var(--font-body);
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    padding: 24px 16px;
-    text-align: center;
     line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
-  svg {
-    width: 56px;
-    height: 56px;
-    margin-bottom: 20px;
+  main {
+    flex: 1;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 24px 16px 64px;
   }
   h1 {
     font-family: var(--font-display);
@@ -44,13 +44,14 @@ import Logo from "../components/Logo.astro";
   h1 em {
     color: var(--apricot-deep);
   }
-  p {
+  main p {
     color: var(--ink-2);
     font-size: 18px;
     max-width: 36ch;
     margin: 0 auto 30px;
   }
-  a {
+  .btn {
+    justify-self: center;
     display: inline-block;
     padding: 14px 24px;
     border-radius: 999px;

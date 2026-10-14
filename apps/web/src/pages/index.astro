@@ -1,14 +1,42 @@
 ---
 import Base from "../layouts/Base.astro";
-import Logo from "../components/Logo.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 import { properties } from "@apricot/schema";
+import { brand, contact } from "@apricot/brand";
 
+const waHref = contact.whatsappLink(
+  "Hi Apricot Stays, I'd like to know about availability.\n\nDates:\nGuests:\nHome (if any):",
+);
+
+const orgId = `${brand.url}/#organization`;
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Apricot Stays",
-  url: "https://apricotstays.in/",
-  areaServed: "Chandigarh Tricity, India",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": orgId,
+      name: brand.name,
+      url: `${brand.url}/`,
+      logo: `${brand.url}/favicon.svg`,
+      slogan: brand.tagline,
+      areaServed: { "@type": "Place", name: "Chandigarh Tricity, India" },
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "reservations",
+        telephone: contact.whatsappE164,
+        url: "https://wa.me/919740544873",
+      },
+    },
+    ...properties.map((p) => ({
+      "@type": "LodgingBusiness",
+      "@id": `${brand.url}/#${p.slug}`,
+      name: p.name,
+      brand: { "@id": orgId },
+      telephone: contact.whatsappE164,
+      containedInPlace: { "@type": "Place", name: "Chandigarh Tricity, India" },
+    })),
+  ],
 };
 ---
 
@@ -21,21 +49,14 @@ const jsonLd = {
   }}
   jsonLd={jsonLd}
 >
-  <header>
-    <div class="wrap">
-      <a class="brand" href="/" aria-label="Apricot Stays home">
-        <Logo />
-        <span>Apricot Stays</span>
-      </a>
-    </div>
-  </header>
+  <Header />
 
   <main>
     <div class="wrap hero">
       <section>
-        <div class="eyebrow">
+        <p class="eyebrow">
           <i></i>New website coming soon
-        </div>
+        </p>
         <h1>
           Stay like you <em>live</em> here.
         </h1>
@@ -45,66 +66,20 @@ const jsonLd = {
         </p>
 
         <div class="ctas">
-          <a
-            class="btn btn-primary"
-            id="wa"
-            href="https://wa.me/WHATSAPP_NUMBER?text=Hi%20Apricot%20Stays%2C%20I%27d%20like%20to%20know%20about%20availability."
-            target="_blank"
-            rel="noopener"
-          >
+          <a class="btn btn-primary" href={waHref} target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3z"></path>
             </svg>
             Chat on WhatsApp
           </a>
-          <a
-            class="btn btn-ghost"
-            href="https://www.instagram.com/INSTAGRAM_HANDLE/"
-            target="_blank"
-            rel="noopener"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              aria-hidden="true"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="5"></rect>
-              <circle cx="12" cy="12" r="4"></circle>
-              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
-            </svg>
-            Follow on Instagram
-          </a>
         </div>
-
-        <form
-          class="notify"
-          name="notify"
-          method="POST"
-          action="/thanks.html"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
-        >
-          <input type="hidden" name="form-name" value="notify" />
-          <p class="hidden">
-            <label>
-              Leave this empty <input name="bot-field" />
-            </label>
-          </p>
-          <label for="email">Hear first when we launch, plus early-guest offers.</label>
-          <div class="field">
-            <input
-              id="email"
-              type="email"
-              name="email"
-              placeholder="you@email.com"
-              required
-              autocomplete="email"
-            />
-            <button type="submit">Notify me</button>
-          </div>
-        </form>
+        <p class="note">
+          Or message{" "}
+          <a href={waHref} target="_blank" rel="noopener">
+            {contact.whatsappDisplay}
+          </a>{" "}
+          for availability and rates.
+        </p>
       </section>
 
       <aside class="homes" aria-label="Our homes">
@@ -117,7 +92,9 @@ const jsonLd = {
         <ol>
           {properties.map((p, i) => (
             <li>
-              <span class="n">{String(i + 1).padStart(2, "0")}</span>
+              <span class="n" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
               <span class="name">
                 {p.name}
                 {p.tag && <span class="tag">{p.tag}</span>}
@@ -133,23 +110,7 @@ const jsonLd = {
     </div>
   </main>
 
-  <footer>
-    <div class="wrap">
-      <span>
-        © <span id="y">2026</span> Apricot Stays · Chandigarh Tricity
-      </span>
-      <a href="https://www.instagram.com/INSTAGRAM_HANDLE/" target="_blank" rel="noopener">
-        @INSTAGRAM_HANDLE
-      </a>
-    </div>
-  </footer>
-  <script is:inline>
-    document.getElementById("y").textContent = new Date().getFullYear();
-    // Hide any link whose contact detail hasn't been filled in yet
-    document
-      .querySelectorAll('a[href*="WHATSAPP_NUMBER"],a[href*="INSTAGRAM_HANDLE"]')
-      .forEach((a) => (a.style.display = "none"));
-  </script>
+  <Footer />
 </Base>
 
 <style is:global>
@@ -167,27 +128,6 @@ const jsonLd = {
     max-width: 1160px;
     margin: 0 auto;
     padding: 0 24px;
-  }
-
-  header {
-    padding: 28px 0;
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-  }
-  .brand svg {
-    width: 34px;
-    height: 34px;
-    flex: none;
-  }
-  .brand span {
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
   }
 
   main {
@@ -210,7 +150,7 @@ const jsonLd = {
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--apricot-deep);
+    color: var(--apricot-text);
     margin-bottom: 22px;
   }
   .eyebrow i {
@@ -252,7 +192,7 @@ const jsonLd = {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-bottom: 40px;
+    margin-bottom: 18px;
   }
   .btn {
     display: inline-flex;
@@ -265,8 +205,7 @@ const jsonLd = {
     text-decoration: none;
     transition:
       transform 0.15s ease,
-      background 0.15s ease,
-      border-color 0.15s ease;
+      background 0.15s ease;
   }
   .btn svg {
     width: 20px;
@@ -280,64 +219,15 @@ const jsonLd = {
     background: #4a3527;
     transform: translateY(-1px);
   }
-  .btn-ghost {
-    border: 1.5px solid var(--line);
-    color: var(--ink);
-  }
-  .btn-ghost:hover {
-    border-color: var(--ink);
-    transform: translateY(-1px);
-  }
-
-  .notify {
-    max-width: 440px;
-  }
-  .notify label {
-    display: block;
+  .note {
     font-size: 14px;
     color: var(--ink-2);
-    margin-bottom: 10px;
+    max-width: 44ch;
   }
-  .field {
-    display: flex;
-    background: var(--white);
-    border: 1.5px solid var(--line);
-    border-radius: 999px;
-    padding: 5px;
-    transition: border-color 0.15s;
-  }
-  .field:focus-within {
-    border-color: var(--apricot);
-  }
-  .field input {
-    flex: 1;
-    min-width: 0;
-    border: 0;
-    background: transparent;
-    font: inherit;
-    font-size: 16px;
-    padding: 10px 16px;
+  .note a {
     color: var(--ink);
-    outline: none;
-  }
-  .field button {
-    border: 0;
-    background: var(--apricot);
-    color: var(--white);
-    font: inherit;
     font-weight: 600;
-    font-size: 15px;
-    padding: 10px 20px;
-    border-radius: 999px;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-  .field button:hover {
-    background: var(--apricot-deep);
-  }
-  .hidden {
-    position: absolute;
-    left: -9999px;
+    white-space: nowrap;
   }
 
   .homes {
@@ -382,7 +272,7 @@ const jsonLd = {
   .homes .n {
     font-family: var(--font-display);
     font-style: italic;
-    color: var(--apricot-deep);
+    color: var(--apricot-text);
     font-size: 16px;
     width: 24px;
     flex: none;
@@ -395,7 +285,7 @@ const jsonLd = {
   }
   .homes .tag {
     display: block;
-    font-family: "DM Sans", sans-serif;
+    font-family: var(--font-body);
     font-size: 14px;
     color: var(--ink-2);
     margin-top: 4px;
@@ -406,25 +296,6 @@ const jsonLd = {
     font-size: 15px;
     color: var(--ink-2);
     position: relative;
-  }
-
-  footer {
-    border-top: 1px solid var(--line);
-    padding: 22px 0;
-    font-size: 14px;
-    color: var(--ink-2);
-  }
-  footer .wrap {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  footer a {
-    text-decoration: none;
-  }
-  footer a:hover {
-    color: var(--ink);
   }
 
   @media (max-width: 880px) {
@@ -439,9 +310,6 @@ const jsonLd = {
   @media (max-width: 480px) {
     .wrap {
       padding: 0 16px;
-    }
-    header {
-      padding: 20px 0;
     }
     .lede {
       font-size: 17px;

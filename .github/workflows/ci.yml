@@ -41,8 +41,6 @@ jobs:
         run: npm run links
 
       - name: Accessibility (WCAG 2 AA, axe)
-        # TEMP: non-blocking until the v0.2 colour-contrast fix lands (see CHANGELOG known issues).
-        continue-on-error: true
         timeout-minutes: 5
         run: |
           npm run preview -w @apricot/web -- --host 127.0.0.1 --port 4321 &
@@ -51,7 +49,6 @@ jobs:
 
       - name: Page-speed budget (Lighthouse)
         timeout-minutes: 5
-        # Baseline gate perf >= 0.7 (GitHub runners score 0.73-0.78); raised to 0.9 once fonts are self-hosted (v0.2).
         run: npm run lhci
 
       - name: Upload Lighthouse reports

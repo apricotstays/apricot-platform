@@ -5,12 +5,17 @@
 export interface Property {
   slug: string;
   name: string;
-  /** Optional locality tag, e.g. "DLF Hyde Park". */
+  /** Optional locality tag shown under the name, e.g. "DLF Hyde Park". */
   tag?: string;
+  // Street addresses are added when Google Business Profiles exist (see roadmap).
 }
 
 export const properties: readonly Property[] = [
   { slug: "courtyard", name: "Apricot Courtyard" },
   { slug: "cottage", name: "Apricot Cottage" },
-  { slug: "garden-chateau", name: "Apricot Garden Château", tag: "DLF Hyde Park" },
+  {
+    slug: "garden-chateau",
+    name: "Apricot Garden Château",
+    tag: "DLF Hyde Park",
+  },
 ];

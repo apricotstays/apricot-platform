@@ -1,0 +1,5 @@
+# apricotstays.in — all crawlers, including AI assistants, are welcome.
+User-agent: *
+Allow: /
+
+Sitemap: https://apricotstays.in/sitemap.xml

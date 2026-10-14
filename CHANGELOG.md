@@ -4,6 +4,29 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-10-14
+
+### Added
+
+- WhatsApp as the single contact channel (+91 97405 44873) with a pre-filled enquiry message.
+- Privacy notice at `/privacy` (DPDP Act, 2023): no cookies, no forms, cookie-free analytics, WhatsApp handling, rights and grievance contact.
+- Discoverability: schema.org `Organization` + `LodgingBusiness` per home, `robots.txt`, `sitemap.xml`, `llms.txt`, `og:locale`/`og:image:alt`.
+- Security headers (`_headers`): CSP, HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy, COOP; long cache for hashed assets.
+- `_redirects`: retired `/thanks.html` and `/index.html` → `/`.
+- Custom 404 page.
+- Cloudflare Workers static-assets config (`apps/web/wrangler.jsonc`).
+
+### Changed
+
+- Fonts self-hosted (Fontsource: Fraunces, DM Sans) and preloaded. No requests to Google. Lighthouse performance 86 → 99, layout shift 0.
+- Small apricot text uses `--apricot-text` #A55628 (WCAG AA). Headline accent unchanged.
+- Header/Footer extracted into components; footer links to Privacy.
+- CI gates raised: accessibility (axe) now blocking; Lighthouse ≥ 0.9 on all categories.
+
+### Removed
+
+- Email sign-up form (Netlify Forms), thanks page, Instagram placeholders and the script that hid them. The page now ships no JavaScript.
+
 ## [0.1.0] — 2026-10-14
 
 ### Added
