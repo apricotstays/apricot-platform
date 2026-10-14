@@ -42,7 +42,11 @@ jobs:
 
       - name: Accessibility (WCAG 2 AA, axe)
         timeout-minutes: 5
+        env:
+          # Use the runner's preinstalled Chrome instead of Puppeteer's download.
+          PUPPETEER_SKIP_DOWNLOAD: "true"
         run: |
+          export PUPPETEER_EXECUTABLE_PATH="$(command -v google-chrome || command -v chromium)"
           npm run preview -w @apricot/web -- --host 127.0.0.1 --port 4321 &
           npx --yes wait-on@8.0.3 --timeout 60000 http-get://127.0.0.1:4321/
           npm run a11y
