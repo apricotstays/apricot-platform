@@ -16,13 +16,14 @@
     "check": "npm run check -w @apricot/web",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "links": "linkinator apps/web/dist --recurse --retry --skip \"WHATSAPP_NUMBER|INSTAGRAM_HANDLE|instagram\\\\.com\"",
+    "links": "linkinator apps/web/dist --recurse --clean-urls --retry --skip \"^https://(www\\\\.)?apricotstays\\\\.in\"",
     "a11y": "npx --yes pa11y-ci@5.0.0 --config .pa11yci.json",
     "lhci": "npx --yes @lhci/cli@0.15.1 autorun"
   },
   "devDependencies": {
     "linkinator": "8.1.0",
     "prettier": "3.9.10",
-    "prettier-plugin-astro": "1.1.1"
+    "prettier-plugin-astro": "1.1.1",
+    "wrangler": "4.151.0"
   }
 }

@@ -23,14 +23,14 @@ npm run build      # → apps/web/dist
 
 ## Quality checks (run on every PR)
 
-| Check          | Command                | Gate                                          |
-| -------------- | ---------------------- | --------------------------------------------- |
-| Formatting     | `npm run format:check` | Prettier, no diffs                            |
-| Types/template | `npm run check`        | `astro check`, no errors                      |
-| Build          | `npm run build`        | Must succeed                                  |
-| Broken links   | `npm run links`        | Internal links resolve                        |
-| Accessibility  | `npm run a11y`         | WCAG 2 AA via axe (needs `npm run preview`)   |
-| Page speed     | `npm run lhci`         | Lighthouse ≥ 90 perf, ≥ 95 a11y, HTML ≤ 50 KB |
+| Check          | Command                | Gate                                         |
+| -------------- | ---------------------- | -------------------------------------------- |
+| Formatting     | `npm run format:check` | Prettier, no diffs                           |
+| Types/template | `npm run check`        | `astro check`, no errors                     |
+| Build          | `npm run build`        | Must succeed                                 |
+| Broken links   | `npm run links`        | Internal links resolve                       |
+| Accessibility  | `npm run a11y`         | WCAG 2 AA via axe (needs `npm run preview`)  |
+| Page speed     | `npm run lhci`         | Lighthouse ≥ 90 every category, HTML ≤ 50 KB |
 
 ## How changes ship
 
@@ -43,7 +43,7 @@ Nobody pushes straight to `main`.
 
 ## Hosting
 
-Cloudflare (free plan): DNS, Pages/Workers static hosting, Web Analytics. No payment method is attached to any account; services that require one are out of scope. See `docs/` for the runbook.
+Cloudflare (free plan): DNS, Workers static assets (`apps/web/wrangler.jsonc`, preview per PR), Web Analytics. No payment method is attached to any account; services that require one are out of scope. See `docs/` for the runbook.
 
 ## Licence
 

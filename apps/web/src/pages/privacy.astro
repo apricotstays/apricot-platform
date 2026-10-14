@@ -1,0 +1,167 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { contact } from "@apricot/brand";
+
+const updated = "14 October 2026";
+---
+
+<Base
+  title="Privacy · Apricot Stays"
+  description="How Apricot Stays handles personal data on apricotstays.in and in WhatsApp enquiries, in line with India's Digital Personal Data Protection Act, 2023."
+>
+  <Header />
+
+  <main class="wrap">
+    <article>
+      <p class="eyebrow">Privacy notice</p>
+      <h1>Your privacy</h1>
+      <p class="meta">Last updated {updated}</p>
+
+      <p>
+        This notice explains what personal data Apricot Stays ("we") handles through
+        <strong>apricotstays.in</strong> and when you contact us on WhatsApp. It is written to meet
+        India's Digital Personal Data Protection Act, 2023 (DPDP Act).
+      </p>
+
+      <h2>What this website collects</h2>
+      <p>
+        <strong>Nothing that identifies you.</strong> There are no forms, no accounts, no cookies
+        and no advertising or tracking pixels. Fonts are served from our own site, so your browser
+        does not contact Google or other font services.
+      </p>
+      <ul>
+        <li>
+          <strong>Visitor statistics.</strong> We use Cloudflare Web Analytics, which counts page
+          views and page speed without cookies, without storing IP addresses and without building
+          visitor profiles.
+        </li>
+        <li>
+          <strong>Security logs.</strong> Our host, Cloudflare, briefly processes technical data
+          such as IP address and browser type to deliver the site and block attacks.
+        </li>
+      </ul>
+
+      <h2>When you message us on WhatsApp</h2>
+      <p>
+        If you tap "Chat on WhatsApp", you choose to start a conversation with us on WhatsApp, a
+        service run by Meta under its own privacy policy. We use what you send us — typically your
+        name, phone number, dates and number of guests — <strong>only</strong> to answer your
+        enquiry and, if you book, to arrange and manage your stay.
+      </p>
+      <p>
+        We do not sell your data or use it for advertising. We keep enquiry chats only as long as we
+        need them for your enquiry or stay, and booking records for as long as Indian law requires
+        (for example, for tax and guest-registration rules).
+      </p>
+
+      <h2>Your rights</h2>
+      <p>Under the DPDP Act you can ask us to:</p>
+      <ul>
+        <li>tell you what personal data we hold about you and how we use it;</li>
+        <li>correct, complete or update it;</li>
+        <li>erase it, where we no longer need to keep it;</li>
+        <li>withdraw any consent you have given; and</li>
+        <li>nominate someone to exercise these rights for you.</li>
+      </ul>
+
+      <h2>Contact and grievances</h2>
+      <p>
+        Message us on WhatsApp at <a href="https://wa.me/919740544873">{contact.whatsappDisplay}</a>
+        or email <a href={`mailto:${contact.email}`}>{contact.email}</a>. We will respond as soon as
+        we can and within the time the law allows. If you are not satisfied with our response, you
+        can complain to the Data Protection Board of India.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        If we start collecting more data — for example through an enquiry or booking form — we will
+        update this notice first and ask for your consent where required.
+      </p>
+    </article>
+  </main>
+
+  <Footer />
+</Base>
+
+<style is:global>
+  body {
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  main {
+    flex: 1;
+    padding: 24px 24px 72px;
+  }
+  article {
+    max-width: 68ch;
+  }
+  .eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--apricot-text);
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(40px, 5.5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .meta {
+    font-size: 14px;
+    color: var(--ink-2);
+    margin-bottom: 32px;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    margin: 36px 0 12px;
+  }
+  article p,
+  article li {
+    color: var(--ink-2);
+  }
+  article p + p {
+    margin-top: 14px;
+  }
+  article strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  article ul {
+    margin: 14px 0 0 1.2em;
+  }
+  article li + li {
+    margin-top: 8px;
+  }
+  article a {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  @media (max-width: 480px) {
+    .wrap,
+    main {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
+</style>

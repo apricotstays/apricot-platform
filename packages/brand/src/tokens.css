@@ -7,9 +7,11 @@
   --line: #dccbb6;
   --apricot: #e3874b;
   --apricot-deep: #b8602c;
+  /* Small apricot text: passes WCAG AA (4.6:1 on --bg, 5.1:1 on --white). */
+  --apricot-text: #a55628;
   --leaf: #5e6b48;
   --white: #fffbf5;
-  --font-display: "Fraunces", Georgia, serif;
-  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-display: "Fraunces Variable", Georgia, serif;
+  --font-body: "DM Sans Variable", system-ui, sans-serif;
   color-scheme: light;
 }

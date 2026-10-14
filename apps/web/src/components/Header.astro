@@ -1,0 +1,49 @@
+---
+import Logo from "./Logo.astro";
+---
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Apricot Stays home">
+      <Logo />
+      <span>Apricot Stays</span>
+    </a>
+  </div>
+</header>
+
+<style>
+  header {
+    padding: 28px 0;
+  }
+  .wrap {
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .brand :global(svg) {
+    width: 34px;
+    height: 34px;
+    flex: none;
+  }
+  .brand span {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  @media (max-width: 480px) {
+    header {
+      padding: 20px 0;
+    }
+    .wrap {
+      padding: 0 16px;
+    }
+  }
+</style>

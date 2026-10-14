@@ -10,16 +10,16 @@ export const colors = {
   line: "#DCCBB6",
   apricot: "#E3874B",
   apricotDeep: "#B8602C",
+  /** Use for small apricot text (WCAG AA). */
+  apricotText: "#A55628",
   leaf: "#5E6B48",
   white: "#FFFBF5",
 } as const;
 
+/** Fonts are self-hosted via Fontsource (no Google Fonts requests). */
 export const fonts = {
-  display: '"Fraunces", Georgia, serif',
-  body: '"DM Sans", system-ui, sans-serif',
-  /** Google Fonts stylesheet used by the website. */
-  googleFontsHref:
-    "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap",
+  display: '"Fraunces Variable", Georgia, serif',
+  body: '"DM Sans Variable", system-ui, sans-serif',
 } as const;
 
 export const brand = {
@@ -27,4 +27,12 @@ export const brand = {
   tagline: "Stay like you live here.",
   region: "Chandigarh Tricity",
   url: "https://apricotstays.in",
+} as const;
+
+export const contact = {
+  /** WhatsApp is the only contact channel for now. */
+  whatsappE164: "+919740544873",
+  whatsappDisplay: "+91 97405 44873",
+  whatsappLink: (text: string) => `https://wa.me/919740544873?text=${encodeURIComponent(text)}`,
+  email: "hello@apricotstays.in",
 } as const;
