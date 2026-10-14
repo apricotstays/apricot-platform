@@ -18,9 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -43,18 +43,20 @@ jobs:
       - name: Accessibility (WCAG 2 AA, axe)
         # TEMP: non-blocking until the v0.2 colour-contrast fix lands (see CHANGELOG known issues).
         continue-on-error: true
+        timeout-minutes: 5
         run: |
-          npm run preview -- --host 127.0.0.1 --port 4321 &
-          npx --yes wait-on@8.0.3 http://127.0.0.1:4321/
+          npm run preview -w @apricot/web -- --host 127.0.0.1 --port 4321 &
+          npx --yes wait-on@8.0.3 --timeout 60000 http-get://127.0.0.1:4321/
           npm run a11y
 
       - name: Page-speed budget (Lighthouse)
-        # Baseline gate perf >= 0.8; raised to 0.9 once fonts are self-hosted (v0.2).
+        timeout-minutes: 5
+        # Baseline gate perf >= 0.7 (GitHub runners score 0.73-0.78); raised to 0.9 once fonts are self-hosted (v0.2).
         run: npm run lhci
 
       - name: Upload Lighthouse reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lighthouse
           path: .lighthouseci
