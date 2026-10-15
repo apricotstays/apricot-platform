@@ -1,0 +1,43 @@
+BEGIN:VCALENDAR
+PRODID;X-RICAL-TZSOURCE=TZINFO:-//Airbnb Inc//Hosting Calendar 1.0//EN
+CALSCALE:GREGORIAN
+VERSION:2.0
+BEGIN:VEVENT
+DTEND;VALUE=DATE:20261019
+DTSTART;VALUE=DATE:20261016
+UID:1418fb94e984-9f1e1c0d8a2b3c4d5e6f@airbnb.com
+DESCRIPTION:Reservation URL: https://www.airbnb.com/hosting/reservations/details/
+ HMTESTAAAA1\nPhone Number (Last 4 Digits): 4821
+SUMMARY:Reserved
+END:VEVENT
+BEGIN:VEVENT
+DTEND;VALUE=DATE:20261023
+DTSTART;VALUE=DATE:20261019
+UID:1418fb94e984-0a1b2c3d4e5f6a7b8c9d@airbnb.com
+DESCRIPTION:Reservation URL: https://www.airbnb.com/hosting/reservations/details/
+ HMTESTBBBB2\nPhone Number (Last 4 Digits): 7350
+SUMMARY:Reserved
+END:VEVENT
+BEGIN:VEVENT
+DTEND;VALUE=DATE:20261107
+DTSTART;VALUE=DATE:20261106
+UID:1418fb94e984-1b2c3d4e5f6a7b8c9d0e@airbnb.com
+DESCRIPTION:Reservation URL: https://www.airbnb.com/hosting/reservations/details/
+ HMTESTCCCC3\nPhone Number (Last 4 Digits): 1906
+SUMMARY:Reserved
+END:VEVENT
+BEGIN:VEVENT
+DTEND;VALUE=DATE:20270104
+DTSTART;VALUE=DATE:20261224
+UID:7f3b6c2d9e1a-2c3d4e5f6a7b8c9d0e1f@airbnb.com
+SUMMARY:Airbnb (Not available)
+END:VEVENT
+BEGIN:VEVENT
+DTEND;VALUE=DATE:20261013
+DTSTART;VALUE=DATE:20261010
+UID:1418fb94e984-3d4e5f6a7b8c9d0e1f2a@airbnb.com
+DESCRIPTION:Reservation URL: https://www.airbnb.com/hosting/reservations/details/
+ HMTESTDDDD4\nPhone Number (Last 4 Digits): 2288
+SUMMARY:Reserved
+END:VEVENT
+END:VCALENDAR

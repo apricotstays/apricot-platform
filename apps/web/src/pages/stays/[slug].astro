@@ -6,6 +6,7 @@ import Navbar from "../../components/Navbar.astro";
 import Footer from "../../components/Footer.astro";
 import Icon from "../../components/Icon.astro";
 import TrustLine from "../../components/TrustLine.astro";
+import AvailabilityCalendar from "../../components/AvailabilityCalendar.astro";
 import { properties, type Property } from "@apricot/schema";
 import { brand, contact } from "@apricot/brand";
 import { galleries, rooms } from "../../data/media";
@@ -207,6 +208,8 @@ const jsonLd = {
             </ul>
           </section>
 
+          <AvailabilityCalendar slug={p.slug} name={p.name} />
+
           <section id="location" aria-labelledby="location-h">
             <h2 id="location-h" class="mb-6 text-xl font-semibold text-stone-800">
               Location
@@ -259,15 +262,45 @@ const jsonLd = {
             <p class="mb-6 text-sm text-stone-600">
               Message us with your dates — we'll confirm availability and rates.
             </p>
+            <!-- Dates line: shown only when this home's availability calendar has loaded. -->
+            <a
+              href="#availability"
+              class="mb-4 grid grid-cols-2 border border-stone-300 text-left hover:bg-stone-50"
+              aria-label="Choose dates in the availability calendar"
+              data-avail-dates
+              hidden
+            >
+              <span class="flex flex-col gap-0.5 border-r border-stone-300 px-3 py-2.5">
+                <span class="text-[11px] font-bold tracking-[0.06em] text-stone-600">CHECK-IN</span>
+                <span class="text-sm text-stone-800" data-avail-in>
+                  Add date
+                </span>
+              </span>
+              <span class="flex flex-col gap-0.5 px-3 py-2.5">
+                <span class="text-[11px] font-bold tracking-[0.06em] text-stone-600">
+                  CHECK-OUT
+                </span>
+                <span class="text-sm text-stone-800" data-avail-out>
+                  Add date
+                </span>
+              </span>
+            </a>
             <a
               href={book}
               target="_blank"
               rel="noopener"
-              class="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-apricot font-medium text-white transition-colors hover:bg-apricot/90"
+              class="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-apricot px-3 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-apricot/90"
+              data-avail-book
             >
               <Icon name="whatsapp" size={18} />
-              Check availability
+              <span data-avail-label>Check availability</span>
             </a>
+            <div class="mt-4 flex flex-col gap-1 bg-linen px-3.5 py-3" data-avail-msg hidden>
+              <span class="text-[11px] font-bold tracking-[0.06em] text-stone-600">
+                MESSAGE WE'LL PRE-FILL
+              </span>
+              <span class="text-sm leading-snug text-stone-800" data-avail-msg-text></span>
+            </div>
             {p.airbnbUrl && (
               <a
                 href={p.airbnbUrl}

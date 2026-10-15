@@ -1,0 +1,439 @@
+---
+/**
+ * Availability calendar for one home. Starts hidden and only appears once /api/availability
+ * answers with fresh data (≤ 24 h old). Any failure (no secret for this home, Airbnb down,
+ * offline) leaves it hidden and the page looks exactly as it did before.
+ *
+ * The script also drives the "Book direct" card (dates line, button label, pre-filled WhatsApp
+ * message) and a phone-only bottom bar; those elements carry data-avail-* hooks.
+ */
+import { contact } from "@apricot/brand";
+
+interface Props {
+  slug: string;
+  name: string;
+}
+const { slug, name } = Astro.props;
+const wa = contact.whatsappLink("");
+const chevron = (d: string) =>
+  `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+---
+
+<section
+  id="availability"
+  aria-labelledby="availability-h"
+  class="scroll-mt-8"
+  data-avail
+  data-home={slug}
+  data-name={name}
+  data-wa={wa}
+  hidden
+>
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <h2 id="availability-h" class="mb-1 text-xl font-semibold text-stone-800">
+        Availability
+      </h2>
+      <p class="text-stone-600" data-avail-hint aria-live="polite">
+        Pick your check-in date
+      </p>
+    </div>
+    <div class="flex gap-2">
+      <button type="button" class="avail-nav" aria-label="Previous month" data-avail-prev>
+        <Fragment set:html={chevron("M15 18l-6-6 6-6")} />
+      </button>
+      <button type="button" class="avail-nav" aria-label="Next month" data-avail-next>
+        <Fragment set:html={chevron("M9 18l6-6-6-6")} />
+      </button>
+    </div>
+  </div>
+  <p class="sr-only" aria-live="polite" data-avail-live></p>
+  <div class="flex flex-wrap gap-10" data-avail-months></div>
+  <p
+    class="mt-4 bg-[#fdf1ea] px-4 py-2.5 text-sm text-[#8a3b1e]"
+    role="status"
+    data-avail-note
+    hidden
+  ></p>
+  <div class="mt-6 flex flex-wrap items-center gap-5 text-sm text-stone-600">
+    <span class="flex items-center gap-2">
+      <span class="avail-key avail-day" data-s="free" aria-hidden="true">
+        7
+      </span>
+      Free
+    </span>
+    <span class="flex items-center gap-2">
+      <span class="avail-key avail-day" data-s="booked" aria-hidden="true">
+        7
+      </span>
+      Booked
+    </span>
+    <span class="flex items-center gap-2">
+      <span class="avail-key avail-day" data-s="end" aria-hidden="true">
+        7
+      </span>
+      Your dates
+    </span>
+    <button
+      type="button"
+      class="ml-auto min-h-11 font-medium text-stone-800 underline underline-offset-4"
+      data-avail-clear
+      hidden
+    >
+      Clear dates
+    </button>
+  </div>
+  <p class="mt-4 border-t border-stone-100 pt-4 text-sm text-stone-500" data-avail-updated></p>
+</section>
+
+<!-- Phone only: sticky booking bar, shown once the calendar has been scrolled into view. -->
+<div
+  class="fixed inset-x-0 bottom-0 z-40 m-0 flex flex-col gap-2.5 border-t border-stone-200 bg-white px-5 pt-3 pb-5 shadow-[0_-2px_8px_rgba(0,0,0,0.06)] lg:hidden"
+  data-avail-bar
+  hidden
+>
+  <div class="flex items-center justify-between gap-2">
+    <div>
+      <p class="font-semibold text-stone-800" data-avail-summary>
+        No dates picked
+      </p>
+      <p class="text-xs text-stone-500">Rates confirmed on WhatsApp</p>
+    </div>
+    <button
+      type="button"
+      class="min-h-11 text-sm font-medium text-stone-800 underline underline-offset-4"
+      data-avail-clear
+      hidden
+    >
+      Clear
+    </button>
+  </div>
+  <a
+    href={wa}
+    target="_blank"
+    rel="noopener"
+    class="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-apricot px-4 font-medium text-white"
+    data-avail-book
+  >
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20.5l1.8-5.2A8.4 8.4 0 1 1 21 11.5z"></path>
+    </svg>
+    <span data-avail-label>Check availability</span>
+  </a>
+</div>
+
+<style is:global>
+  .avail-nav {
+    display: flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d9d2c8;
+    border-radius: 999px;
+    background: #fff;
+    color: #484848;
+  }
+  .avail-nav:disabled {
+    opacity: 0.4;
+  }
+  .avail-day {
+    display: flex;
+    height: 44px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: transparent;
+    color: #3a3a3a;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .avail-day[data-s="free"]:not([aria-disabled]):hover {
+    box-shadow: inset 0 0 0 1px #2f2f2f;
+  }
+  .avail-day[data-s="past"] {
+    color: #b3aca2;
+    font-weight: 400;
+  }
+  .avail-day[data-s="booked"] {
+    border-radius: 0;
+    background: #efe9e1;
+    color: #6b655e;
+    font-weight: 400;
+    text-decoration: line-through;
+  }
+  .avail-day[data-s="range"] {
+    border-radius: 0;
+    background: #ffe1df;
+    color: #3a2a2a;
+  }
+  .avail-day[data-s="end"] {
+    background: #2f2f2f;
+    color: #fff;
+    font-weight: 700;
+  }
+  .avail-day[data-today]:not([data-s="end"]) {
+    font-weight: 700;
+    text-decoration: underline;
+  }
+  .avail-day[aria-disabled] {
+    cursor: default;
+  }
+  .avail-day:focus-visible {
+    outline: 2px solid #2f2f2f;
+    outline-offset: 2px;
+  }
+  .avail-key {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  .avail-key[data-s="free"] {
+    border: 1px solid #d9d2c8;
+  }
+  @media (max-width: 1023.98px) {
+    body.avail-bar-on {
+      padding-bottom: 8.5rem;
+    }
+  }
+</style>
+
+<script>
+  type Range = { from: string; to: string };
+  type Data = { updated: string; through: string; booked: Range[] };
+
+  const DAY = 864e5;
+  const MON = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(" ");
+  const MONTH =
+    "January February March April May June July August September October November December".split(
+      " ",
+    );
+  const WD = "Sunday Monday Tuesday Wednesday Thursday Friday Saturday".split(" ");
+  const NOTE = "Those dates cross a booked night, so we started again from your last tap.";
+
+  const dn = (iso: string) => Date.parse(iso) / DAY; // "YYYY-MM-DD" → UTC day number
+  const dt = (d: number) => new Date(d * DAY);
+  const fmt = (d: number) => `${dt(d).getUTCDate()} ${MON[dt(d).getUTCMonth()]}`;
+  const fmtW = (d: number) => `${WD[dt(d).getUTCDay()].slice(0, 3)} ${fmt(d)}`;
+  const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel);
+  const $$ = <T extends HTMLElement>(sel: string) => [...document.querySelectorAll<T>(sel)];
+
+  async function load(home: string): Promise<Data | null> {
+    try {
+      const res = await fetch(`/api/availability?home=${encodeURIComponent(home)}`);
+      if (!res.ok) return null;
+      const data = (await res.json()) as Data;
+      const age = Date.now() - Date.parse(data.updated);
+      if (!Array.isArray(data.booked) || !(age > -6e5 && age < DAY)) return null;
+      return data;
+    } catch {
+      return null;
+    }
+  }
+
+  async function init(sec: HTMLElement) {
+    const { home = "", name = "", wa = "" } = sec.dataset;
+    const data = await load(home);
+    if (!data) return;
+
+    // Today in India, where the homes are.
+    const today = dn(new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format());
+    const through = dn(data.through);
+    const ranges = data.booked.map((r) => [dn(r.from), dn(r.to)]);
+    const isBooked = (d: number) => ranges.some(([a, b]) => d >= a && d < b);
+    const allFree = (a: number, b: number) => {
+      for (let x = a; x < b; x++) if (isBooked(x)) return false;
+      return true;
+    };
+    const months: [number, number][] = [];
+    for (let y = dt(today).getUTCFullYear(), m = dt(today).getUTCMonth(); ; m++) {
+      const first = Date.UTC(y, m, 1) / DAY;
+      if (first >= through) break;
+      months.push([new Date(first * DAY).getUTCFullYear(), new Date(first * DAY).getUTCMonth()]);
+    }
+
+    const grid = $("[data-avail-months]")!;
+    const prev = $<HTMLButtonElement>("[data-avail-prev]")!;
+    const next = $<HTMLButtonElement>("[data-avail-next]")!;
+    const wide = matchMedia("(min-width: 768px)");
+    const defaultHref = $<HTMLAnchorElement>("[data-avail-book]")?.href ?? wa;
+    let mi = 0;
+    let ci: number | null = null;
+    let co: number | null = null;
+    let focus = today;
+    let note = "";
+
+    const show = () => (wide.matches ? 2 : 1);
+    const monthOf = (d: number) =>
+      months.findIndex(([y, m]) => y === dt(d).getUTCFullYear() && m === dt(d).getUTCMonth());
+
+    function status(d: number) {
+      const coOK = ci !== null && co === null && d > ci && allFree(ci, d);
+      const b = isBooked(d);
+      if (d < today || d >= through) return ["past", "unavailable", false] as const;
+      if (d === ci || d === co)
+        return ["end", d === ci ? "your check-in" : "your check-out", true] as const;
+      if (ci !== null && co !== null && d > ci && d < co)
+        return ["range", "in your stay", true] as const;
+      if (b && !coOK) return ["booked", "booked", false] as const;
+      return ["free", b ? "free for check-out" : "free", true] as const;
+    }
+
+    function drawMonths(moveFocus: boolean) {
+      grid.textContent = "";
+      for (const [y, m] of months.slice(mi, mi + show())) {
+        const box = document.createElement("div");
+        box.className = "min-w-0 flex-[1_1_260px]";
+        const h = document.createElement("h3");
+        h.className = "mb-3 text-center font-semibold text-stone-800";
+        h.textContent = `${MONTH[m]} ${y}`;
+        const g = document.createElement("div");
+        g.className = "grid grid-cols-7 gap-y-1";
+        for (const w of "MTWTFSS") {
+          const c = document.createElement("span");
+          c.className = "pb-1.5 text-center text-xs font-semibold text-stone-500";
+          c.setAttribute("aria-hidden", "true");
+          c.textContent = w;
+          g.append(c);
+        }
+        const first = Date.UTC(y, m, 1) / DAY;
+        const len = Math.round(Date.UTC(y, m + 1, 1) / DAY - first);
+        for (let i = (dt(first).getUTCDay() + 6) % 7; i > 0; i--)
+          g.append(document.createElement("span"));
+        for (let k = 1; k <= len; k++) {
+          const d = first + k - 1;
+          const [s, word, ok] = status(d);
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "avail-day";
+          b.dataset.s = s;
+          b.dataset.d = String(d);
+          if (d === today) b.dataset.today = "";
+          if (!ok) b.setAttribute("aria-disabled", "true");
+          b.setAttribute("aria-pressed", String(s === "end"));
+          b.setAttribute("aria-label", `${WD[dt(d).getUTCDay()]} ${k} ${MONTH[m]}, ${word}`);
+          b.tabIndex = d === focus ? 0 : -1;
+          b.textContent = String(k);
+          g.append(b);
+        }
+        box.append(h, g);
+        grid.append(box);
+      }
+      prev.disabled = mi === 0;
+      next.disabled = mi + show() >= months.length;
+      if (moveFocus) grid.querySelector<HTMLElement>(`[data-d="${focus}"]`)?.focus();
+    }
+
+    function update(moveFocus = false) {
+      drawMonths(moveFocus);
+      const range = ci !== null && co !== null;
+      const n = range ? co! - ci! : 0;
+      const nights = `${n} night${n === 1 ? "" : "s"}`;
+      let span = "";
+      if (range) {
+        span =
+          dt(ci!).getUTCMonth() === dt(co!).getUTCMonth()
+            ? `${dt(ci!).getUTCDate()}–${fmt(co!)}`
+            : `${fmt(ci!)} – ${fmt(co!)}`;
+      }
+      const msg = `Hi, are ${span} (${nights}) free at ${name}?`;
+      $("[data-avail-hint]")!.textContent =
+        ci === null
+          ? "Pick your check-in date"
+          : co === null
+            ? "Now pick your check-out date"
+            : `${span} · ${nights}`;
+      $("[data-avail-summary]")!.textContent = range
+        ? `${span} · ${nights}`
+        : ci !== null
+          ? `From ${fmt(ci)} · pick check-out`
+          : "No dates picked";
+      const noteEl = $("[data-avail-note]")!;
+      noteEl.textContent = note;
+      noteEl.hidden = !note;
+      $("[data-avail-in]")!.textContent = ci !== null ? fmtW(ci) : "Add date";
+      $("[data-avail-out]")!.textContent = co !== null ? fmtW(co) : "Add date";
+      $("[data-avail-msg]")!.hidden = !range;
+      $("[data-avail-msg-text]")!.textContent = msg;
+      for (const a of $$<HTMLAnchorElement>("[data-avail-book]"))
+        a.href = range ? wa + encodeURIComponent(msg) : defaultHref;
+      for (const l of $$("[data-avail-label]"))
+        l.textContent = range ? `Ask about ${span} on WhatsApp` : "Check availability";
+      for (const c of $$("[data-avail-clear]")) c.hidden = ci === null;
+    }
+
+    function pick(d: number) {
+      if (ci !== null && co === null && d > ci) {
+        if (allFree(ci, d)) [co, note] = [d, ""];
+        else [ci, co, note] = [isBooked(d) ? null : d, null, NOTE];
+      } else if (!isBooked(d)) [ci, co, note] = [d, null, ""];
+      focus = d;
+      update(true);
+    }
+
+    grid.addEventListener("click", (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-d]");
+      if (b && !b.hasAttribute("aria-disabled")) pick(Number(b.dataset.d));
+    });
+    grid.addEventListener("keydown", (e) => {
+      const step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key];
+      if (!step) return;
+      e.preventDefault();
+      focus = Math.min(Math.max(focus + step, today), through - 1);
+      const fm = monthOf(focus);
+      if (fm < mi) mi = fm;
+      else if (fm >= mi + show()) mi = Math.max(0, fm - show() + 1);
+      update(true);
+    });
+    const go = (delta: number) => {
+      mi = Math.min(Math.max(mi + delta, 0), Math.max(0, months.length - show()));
+      const [y, m] = months[mi];
+      focus = Math.max(today, Date.UTC(y, m, 1) / DAY);
+      update();
+      $("[data-avail-live]")!.textContent = months
+        .slice(mi, mi + show())
+        .map(([y, m]) => `${MONTH[m]} ${y}`)
+        .join(" and ");
+    };
+    prev.addEventListener("click", () => go(-1));
+    next.addEventListener("click", () => go(1));
+    for (const c of $$("[data-avail-clear]"))
+      c.addEventListener("click", () => {
+        [ci, co, note] = [null, null, ""];
+        update();
+      });
+    wide.addEventListener("change", () => update());
+
+    const mins = Math.max(0, Math.round((Date.now() - Date.parse(data.updated)) / 6e4));
+    const ago =
+      mins < 1 ? "just now" : mins < 60 ? `${mins} min ago` : `${Math.round(mins / 60)} h ago`;
+    $("[data-avail-updated]")!.textContent =
+      `Synced from Airbnb, updated ${ago}. We confirm every booking on WhatsApp.`;
+
+    update();
+    sec.hidden = false;
+    $("[data-avail-dates]")!.hidden = false;
+
+    const bar = $("[data-avail-bar]")!;
+    new IntersectionObserver((entries, obs) => {
+      if (!entries.some((en) => en.isIntersecting)) return;
+      bar.hidden = false;
+      document.body.classList.add("avail-bar-on");
+      obs.disconnect();
+    }).observe(sec);
+  }
+
+  const sec = document.querySelector<HTMLElement>("[data-avail]");
+  if (sec) void init(sec);
+</script>
