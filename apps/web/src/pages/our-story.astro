@@ -249,26 +249,23 @@ const gapCls = "bg-[#e6d5bf] px-1.5 text-[#4a3b2b]";
       </div>
     </section>
 
-    <!-- 5. Nerd, not herd -->
+    <!-- 5. Quieter pleasures -->
     <section aria-labelledby="choose-h" class="border-y border-[#e8dfd2]">
       <div class="mx-auto flex max-w-[1200px] flex-col gap-9 px-6 py-16 lg:py-[88px]">
         <div class="flex max-w-[640px] flex-col gap-3.5">
-          <p class={label}>Nerd, not herd</p>
+          <p class={label}>Our kind of stay</p>
           <h2 id="choose-h" class={h2}>
             For people who like quieter pleasures.
           </h2>
           <p class="text-[#4a443d]">
-            Apricot isn't for the herd. It's for the people who'd rather spend a morning in a garden
-            than a night in a club.
+            Apricot is for people who'd rather spend a morning in a garden than a night out.
           </p>
         </div>
         <ul class="grid grid-cols-1 gap-x-7 sm:grid-cols-2 lg:grid-cols-5">
           {pleasures.map(([yes, no]) => (
             <li class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 border-t border-[#e3d8c8] py-4">
               <span class="font-serif text-[26px] text-[#2f4a3a]">{yes}</span>
-              <span class="text-[15px] text-[#6b5f53]">
-                over <s>{no}</s>
-              </span>
+              <span class="text-[15px] text-[#6b5f53]">over {no}</span>
             </li>
           ))}
         </ul>
@@ -276,9 +273,7 @@ const gapCls = "bg-[#e6d5bf] px-1.5 text-[#4a3b2b]";
           <span class={label}>Shivani's pick</span>
           <span class="flex flex-wrap items-baseline gap-x-2.5">
             <span class="font-serif text-2xl text-[#2f4a3a]">Sunrises</span>
-            <span class="text-[15px] text-[#6b5f53]">
-              over <s>skyscrapers</s>
-            </span>
+            <span class="text-[15px] text-[#6b5f53]">over skyscrapers</span>
           </span>
         </div>
       </div>
