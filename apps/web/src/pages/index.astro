@@ -4,6 +4,7 @@ import Base from "../layouts/Base.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import Icon from "../components/Icon.astro";
+import TrustLine from "../components/TrustLine.astro";
 import SectionRule from "../components/SectionRule.astro";
 import { properties } from "@apricot/schema";
 import { brand, contact } from "@apricot/brand";
@@ -136,6 +137,7 @@ const jsonLd = {
           <h2 class="font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
             Our Collection
           </h2>
+          <TrustLine class="mt-4" />
         </div>
         <div class="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2">
           {properties.map((p) => {

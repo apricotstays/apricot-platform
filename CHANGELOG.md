@@ -6,21 +6,17 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Added
 
+- Garden Château gallery: 8 real photos from its Airbnb listing (front, street view, living room, lounge, foyer, hall with snooker table, dining ×2); the Château now shows 9 photos instead of 1. Bedroom photos held back until versions without caption overlays are available.
+- Trust line ("4.99 host rating · 93 Airbnb reviews · Superhost") under Our Collection and in each home's Book direct card. Text only — not in schema.org markup. Figures live in `packages/brand` (`trust`), checked Oct 2026.
 - New home: Apricot Garden Care (`/stays/garden-care`) — a step-free one-bedroom care stay near PGI and Homi Bhabha Cancer Hospital, with 7 photos from its Airbnb listing and its Airbnb link. Appears in Our Collection, the footer, Also on Airbnb, the sitemap and `llms.txt`.
+- Garden Cottage gallery: 8 real photos from the Cottage's Airbnb listing (sunset exterior, porch, bedroom ×2, kitchen ×2, garden ×2); the cottage now shows 9 photos instead of 1.
+- Garden Cottage Airbnb link.
 
 ### Changed
 
 - Our Collection: 2×2 grid on tablet/desktop (was 3 across) to fit four homes.
 - Stay facts: singular "1 bedroom" / "1 bathroom".
 - Homepage meta description mentions the care stay.
-
-### Added
-
-- Garden Cottage gallery: 8 real photos from the Cottage's Airbnb listing (sunset exterior, porch, bedroom ×2, kitchen ×2, garden ×2); the cottage now shows 9 photos instead of 1.
-- Garden Cottage Airbnb link.
-
-### Changed
-
 - Homepage, The Garden Club: "privileges—like" → "privileges such as".
 
 ## [0.3.0] — 2026-10-14

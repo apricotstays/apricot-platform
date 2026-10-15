@@ -44,3 +44,15 @@ export const contact = {
     geo: { latitude: 30.8406, longitude: 76.7249 },
   },
 } as const;
+
+/**
+ * Host track record, as shown on the host's public Airbnb profile.
+ * Update by hand when it changes. Shown as text only — never as schema.org
+ * AggregateRating (Google disallows self-serving markup of third-party reviews).
+ */
+export const trust = {
+  rating: "4.99",
+  reviews: 93,
+  superhost: true,
+  checked: "Oct 2026",
+} as const;

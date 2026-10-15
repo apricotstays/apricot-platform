@@ -19,6 +19,14 @@ import cottageKitchenSink from "../assets/stays/cottage/kitchen-sink.jpg";
 import cottageGardenDusk from "../assets/stays/cottage/garden-dusk.jpg";
 import cottageGardenPath from "../assets/stays/cottage/garden-path.jpg";
 import chateauExterior from "../assets/stays/chateau/exterior.jpg";
+import chateauFront from "../assets/stays/chateau/front.jpg";
+import chateauLiving from "../assets/stays/chateau/living-room.jpg";
+import chateauHall from "../assets/stays/chateau/hall-snooker.jpg";
+import chateauDining from "../assets/stays/chateau/dining.jpg";
+import chateauLounge from "../assets/stays/chateau/lounge.jpg";
+import chateauFoyer from "../assets/stays/chateau/foyer.jpg";
+import chateauDiningKitchen from "../assets/stays/chateau/dining-kitchen.jpg";
+import chateauStreet from "../assets/stays/chateau/street-view.jpg";
 import careExterior from "../assets/stays/care/exterior-lawn.jpg";
 import careLiving from "../assets/stays/care/living-room.jpg";
 import careLivingWide from "../assets/stays/care/living-room-wide.jpg";
@@ -101,6 +109,38 @@ export const photos = {
     src: chateauExterior,
     alt: "Apricot Garden Château — white columned facade at sunset",
   },
+  chateauFront: {
+    src: chateauFront,
+    alt: "Apricot Garden Château — white French-manor facade, lawn and clipped hedges",
+  },
+  chateauLiving: {
+    src: chateauLiving,
+    alt: "Living room with a curved cream sofa, green armchairs and tall curtained windows",
+  },
+  chateauHall: {
+    src: chateauHall,
+    alt: "Marble hall with a full-size snooker table, seating and the dining room beyond",
+  },
+  chateauDining: {
+    src: chateauDining,
+    alt: "Long dining table set for ten under a chandelier",
+  },
+  chateauLounge: {
+    src: chateauLounge,
+    alt: "Sunlit lounge with a cream sofa, green chairs and a round coffee table",
+  },
+  chateauFoyer: {
+    src: chateauFoyer,
+    alt: "Foyer with a round marble table, staircase and snooker table",
+  },
+  chateauDiningKitchen: {
+    src: chateauDiningKitchen,
+    alt: "Dining room opening into the kitchen, with marble floors",
+  },
+  chateauStreet: {
+    src: chateauStreet,
+    alt: "The Château from the street, behind a hedge and white railings",
+  },
   careExterior: {
     src: careExterior,
     alt: "Apricot Garden Care — single-storey home and private lawn at sunset",
@@ -155,7 +195,17 @@ export const galleries: Record<string, Photo[]> = {
     photos.courtyardGames,
     photos.courtyardDay,
   ],
-  "garden-chateau": [photos.chateauExterior],
+  "garden-chateau": [
+    photos.chateauFront,
+    photos.chateauLiving,
+    photos.chateauHall,
+    photos.chateauDining,
+    photos.chateauLounge,
+    photos.chateauFoyer,
+    photos.chateauDiningKitchen,
+    photos.chateauStreet,
+    photos.chateauExterior,
+  ],
   "garden-care": [
     photos.careExterior,
     photos.careLiving,

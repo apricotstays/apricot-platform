@@ -1,0 +1,36 @@
+---
+import { trust } from "@apricot/brand";
+
+interface Props {
+  class?: string;
+  align?: "center" | "left";
+  size?: "sm" | "xs";
+}
+const { class: cls = "", align = "center", size = "sm" } = Astro.props;
+---
+
+<p
+  class:list={[
+    "flex flex-wrap items-center gap-x-2 gap-y-1 text-stone-600",
+    size === "xs" ? "text-xs" : "text-sm",
+    align === "center" ? "justify-center" : "justify-start",
+    cls,
+  ]}
+>
+  <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" class="fill-gold">
+    <path d="M10 1.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.9z"></path>
+  </svg>
+  <span>
+    <span class="font-medium text-stone-800">{trust.rating}</span> host rating
+  </span>
+  <span class="inline-flex gap-x-2">
+    <span aria-hidden="true">·</span>
+    <span>{trust.reviews} Airbnb reviews</span>
+  </span>
+  {trust.superhost && (
+    <span class="inline-flex gap-x-2">
+      <span aria-hidden="true">·</span>
+      <span>Superhost</span>
+    </span>
+  )}
+</p>
