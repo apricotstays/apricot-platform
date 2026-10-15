@@ -3,6 +3,8 @@ import { clipRanges, mergeRanges, parseIcal, toIsoDate } from "../src/api/ical";
 
 // Raw text, CRLF line endings kept (Vite ?raw import).
 import sample from "./fixtures/airbnb-sample.ics?raw";
+// The Cottage's real export, saved 15 Oct 2026 (UIDs replaced; it held no guest data).
+import cottage from "./fixtures/airbnb-cottage-2026-10-15.ics?raw";
 
 const cal = (...events: string[]) =>
   ["BEGIN:VCALENDAR", "VERSION:2.0", ...events, "END:VCALENDAR"].join("\r\n");
@@ -23,6 +25,13 @@ describe("parseIcal", () => {
       { from: "2026-11-06", to: "2026-11-07" },
       { from: "2026-12-24", to: "2027-01-04" },
       { from: "2026-10-10", to: "2026-10-13" },
+    ]);
+  });
+
+  it("reads the Cottage's real Airbnb export", () => {
+    expect(parseIcal(cottage)).toEqual([
+      { from: "2026-10-13", to: "2026-11-01" },
+      { from: "2027-02-01", to: "2027-09-26" },
     ]);
   });
 
