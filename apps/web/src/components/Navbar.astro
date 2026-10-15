@@ -10,11 +10,13 @@ const { sticky = true } = Astro.props;
 const bookHref = contact.whatsappLink("Hi Apricot Stays, I'd like to check availability.");
 const leftLinks = [
   { name: "Home", href: "/" },
-  { name: "Our Story", href: "/#story" },
+  { name: "Our Story", href: "/our-story" },
   { name: "Amenities", href: "/#amenities" },
 ];
 const rightLinks = [{ name: "Our Homes", href: "/#collection" }];
 const allLinks = [...leftLinks, ...rightLinks];
+const here = Astro.url.pathname.replace(/\.html$/, "");
+const current = (href: string) => (href === here ? "page" : undefined);
 const link =
   "rounded-sm text-sm font-medium text-stone-600 transition-colors hover:text-apricot focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-4";
 ---
@@ -31,7 +33,7 @@ const link =
     <div class="hidden items-center md:grid md:grid-cols-3">
       <div class="flex items-center gap-8">
         {leftLinks.map((l) => (
-          <a href={l.href} class={link}>
+          <a href={l.href} class={link} aria-current={current(l.href)}>
             {l.name}
           </a>
         ))}
@@ -50,7 +52,7 @@ const link =
       </div>
       <div class="flex items-center justify-end gap-8">
         {rightLinks.map((l) => (
-          <a href={l.href} class={link}>
+          <a href={l.href} class={link} aria-current={current(l.href)}>
             {l.name}
           </a>
         ))}
@@ -101,6 +103,7 @@ const link =
           {allLinks.map((l) => (
             <a
               href={l.href}
+              aria-current={current(l.href)}
               class="block rounded-sm py-2 text-lg font-medium text-stone-600 hover:text-apricot"
             >
               {l.name}

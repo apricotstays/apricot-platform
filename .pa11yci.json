@@ -10,6 +10,7 @@
   },
   "urls": [
     "http://127.0.0.1:4321/",
+    "http://127.0.0.1:4321/our-story",
     "http://127.0.0.1:4321/stays/garden-cottage",
     "http://127.0.0.1:4321/stays/garden-courtyard",
     "http://127.0.0.1:4321/stays/garden-chateau",
