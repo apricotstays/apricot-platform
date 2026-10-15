@@ -8,7 +8,7 @@ import Icon from "../../components/Icon.astro";
 import TrustLine from "../../components/TrustLine.astro";
 import { properties, type Property } from "@apricot/schema";
 import { brand, contact } from "@apricot/brand";
-import { galleries } from "../../data/media";
+import { galleries, rooms } from "../../data/media";
 
 export const getStaticPaths = (() =>
   properties.map((p) => ({
@@ -23,6 +23,7 @@ const { property: p } = Astro.props;
 const gallery = galleries[p.slug];
 const [cover, ...rest] = gallery;
 const thumbs = rest.slice(0, 4);
+const namedRooms = rooms[p.slug] ?? [];
 
 const book = contact.whatsappLink(
   `Hi Apricot Stays, I'd like to book ${p.name}.\n\nDates:\nGuests:`,
@@ -158,6 +159,39 @@ const jsonLd = {
             </h2>
             <p class="leading-relaxed text-stone-600">{p.description}</p>
           </section>
+
+          {namedRooms.length > 0 && (
+            <section id="rooms" aria-labelledby="rooms-h">
+              <h2 id="rooms-h" class="mb-2 text-xl font-semibold text-stone-800">
+                The Five Rivers
+              </h2>
+              <p class="mb-8 leading-relaxed text-stone-600">
+                Five bedrooms, each named for one of the rivers that gave Punjab — Panj-aab, the
+                land of five waters — its name.
+              </p>
+              <div class="space-y-10">
+                {namedRooms.map((r) => (
+                  <figure>
+                    <Picture
+                      src={r.photo.src}
+                      alt={r.photo.alt}
+                      widths={[480, 800, 1200]}
+                      sizes="(min-width: 1024px) 768px, 100vw"
+                      formats={["avif", "webp"]}
+                      fallbackFormat="jpg"
+                      class="aspect-video w-full bg-stone-100 object-cover"
+                    />
+                    <figcaption class="mt-3 flex items-baseline gap-3">
+                      <span class="font-serif text-lg text-stone-800">{r.name}</span>
+                      <span class="text-xs tracking-[0.15em] text-stone-500 uppercase">
+                        {r.palette}
+                      </span>
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </section>
+          )}
 
           <section id="amenities" aria-labelledby="amenities-h">
             <h2 id="amenities-h" class="mb-6 text-xl font-semibold text-stone-800">

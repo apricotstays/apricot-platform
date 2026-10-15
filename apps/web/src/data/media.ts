@@ -27,6 +27,11 @@ import chateauLounge from "../assets/stays/chateau/lounge.jpg";
 import chateauFoyer from "../assets/stays/chateau/foyer.jpg";
 import chateauDiningKitchen from "../assets/stays/chateau/dining-kitchen.jpg";
 import chateauStreet from "../assets/stays/chateau/street-view.jpg";
+import roomChenab from "../assets/stays/chateau/room-chenab.jpg";
+import roomRavi from "../assets/stays/chateau/room-ravi.jpg";
+import roomBeas from "../assets/stays/chateau/room-beas.jpg";
+import roomSutlej from "../assets/stays/chateau/room-sutlej.jpg";
+import roomJhelum from "../assets/stays/chateau/room-jhelum.jpg";
 import careExterior from "../assets/stays/care/exterior-lawn.jpg";
 import careLiving from "../assets/stays/care/living-room.jpg";
 import careLivingWide from "../assets/stays/care/living-room-wide.jpg";
@@ -214,5 +219,57 @@ export const galleries: Record<string, Photo[]> = {
     photos.careDining,
     photos.careBathroom,
     photos.careLivingWide,
+  ],
+};
+
+export interface Room {
+  name: string;
+  palette: string;
+  photo: Photo;
+}
+
+/** Named bedrooms, shown as their own section on a stay page. Photos carry the owner's caption artwork. */
+export const rooms: Record<string, Room[]> = {
+  "garden-chateau": [
+    {
+      name: "Chenab Suite",
+      palette: "Indigo and silver",
+      photo: {
+        src: roomChenab,
+        alt: "Chenab Suite — bedroom in indigo and silver, with the caption: In the spirit of the Chenab, the river of Punjab's love legends.",
+      },
+    },
+    {
+      name: "Ravi Room",
+      palette: "Terracotta and copper",
+      photo: {
+        src: roomRavi,
+        alt: "Ravi Room — bedroom in terracotta and copper, with the caption: In the hush of dusk, the colour of the Ravi settles in.",
+      },
+    },
+    {
+      name: "Beas Room",
+      palette: "Sage and dusty blue",
+      photo: {
+        src: roomBeas,
+        alt: "Beas Room — bedroom in sage and dusty blue, with the caption: Vipasha, the fetterless one, settles into the room.",
+      },
+    },
+    {
+      name: "Sutlej Room",
+      palette: "Harvest gold and brass",
+      photo: {
+        src: roomSutlej,
+        alt: "Sutlej Room — bedroom in harvest gold and brass, with the caption: Harvest gold settles into the room.",
+      },
+    },
+    {
+      name: "Jhelum Room",
+      palette: "Emerald and chinar rust",
+      photo: {
+        src: roomJhelum,
+        alt: "Jhelum Room — bedroom in emerald and chinar rust, with the caption: Emerald green settles into chinar rust.",
+      },
+    },
   ],
 };
