@@ -84,4 +84,28 @@ export const properties: readonly Property[] = [
     bathrooms: 5,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1755107663054771918",
   },
+  {
+    slug: "garden-care",
+    name: "Apricot Garden Care",
+    locality: LOCALITY,
+    summary: "A calm, step-free home minutes from PGI and Homi Bhabha Cancer Hospital.",
+    description:
+      "A quiet ground-floor one-bedroom home for families visiting PGI Chandigarh or Homi Bhabha Cancer Hospital, both a few minutes away. No stairs, a bedroom that opens onto a private lawn, a fully equipped kitchen, RO drinking water and a washing machine — the everyday comforts that make a longer stay feel like home rather than a hotel.",
+    amenities: [
+      "Step-free, ground floor",
+      "Private lawn",
+      "Fully equipped kitchen",
+      "RO drinking water",
+      "Washing machine",
+      "Wi-Fi",
+      "Dedicated workspace",
+      "Free parking",
+      "Pets allowed",
+      "Gated estate",
+    ],
+    maxGuests: 2,
+    bedrooms: 1,
+    bathrooms: 1,
+    airbnbUrl: "https://www.airbnb.co.in/rooms/1679764480306760606",
+  },
 ];

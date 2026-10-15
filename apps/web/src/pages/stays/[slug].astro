@@ -31,8 +31,12 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${contact.addre
 type Fact = { icon: "users" | "bed" | "bath"; label: string };
 const facts: Fact[] = [
   { icon: "users", label: `Up to ${p.maxGuests} guests` },
-  ...(p.bedrooms ? [{ icon: "bed", label: `${p.bedrooms} bedrooms` } as Fact] : []),
-  ...(p.bathrooms ? [{ icon: "bath", label: `${p.bathrooms} bathrooms` } as Fact] : []),
+  ...(p.bedrooms
+    ? [{ icon: "bed", label: `${p.bedrooms} bedroom${p.bedrooms > 1 ? "s" : ""}` } as Fact]
+    : []),
+  ...(p.bathrooms
+    ? [{ icon: "bath", label: `${p.bathrooms} bathroom${p.bathrooms > 1 ? "s" : ""}` } as Fact]
+    : []),
 ];
 
 const jsonLd = {

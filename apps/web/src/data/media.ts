@@ -19,6 +19,13 @@ import cottageKitchenSink from "../assets/stays/cottage/kitchen-sink.jpg";
 import cottageGardenDusk from "../assets/stays/cottage/garden-dusk.jpg";
 import cottageGardenPath from "../assets/stays/cottage/garden-path.jpg";
 import chateauExterior from "../assets/stays/chateau/exterior.jpg";
+import careExterior from "../assets/stays/care/exterior-lawn.jpg";
+import careLiving from "../assets/stays/care/living-room.jpg";
+import careLivingWide from "../assets/stays/care/living-room-wide.jpg";
+import careBedroom from "../assets/stays/care/bedroom.jpg";
+import careKitchenette from "../assets/stays/care/kitchenette.jpg";
+import careDining from "../assets/stays/care/dining.jpg";
+import careBathroom from "../assets/stays/care/bathroom.jpg";
 
 export interface Photo {
   src: ImageMetadata;
@@ -94,6 +101,34 @@ export const photos = {
     src: chateauExterior,
     alt: "Apricot Garden Château — white columned facade at sunset",
   },
+  careExterior: {
+    src: careExterior,
+    alt: "Apricot Garden Care — single-storey home and private lawn at sunset",
+  },
+  careLiving: {
+    src: careLiving,
+    alt: "Bright living room with a teal sofa, armchairs and a glass door to the garden",
+  },
+  careLivingWide: {
+    src: careLivingWide,
+    alt: "Living room seating with full-length curtains",
+  },
+  careBedroom: {
+    src: careBedroom,
+    alt: "Bedroom with a dark upholstered double bed and white linen",
+  },
+  careKitchenette: {
+    src: careKitchenette,
+    alt: "Kitchen counter with sink, induction hob, kettle and microwave",
+  },
+  careDining: {
+    src: careDining,
+    alt: "Wooden dining table for four with a fruit bowl",
+  },
+  careBathroom: {
+    src: careBathroom,
+    alt: "Step-in shower area, wall-hung toilet and washbasin",
+  },
 } satisfies Record<string, Photo>;
 
 /** Gallery per stay, first photo is the cover. */
@@ -121,4 +156,13 @@ export const galleries: Record<string, Photo[]> = {
     photos.courtyardDay,
   ],
   "garden-chateau": [photos.chateauExterior],
+  "garden-care": [
+    photos.careExterior,
+    photos.careLiving,
+    photos.careBedroom,
+    photos.careKitchenette,
+    photos.careDining,
+    photos.careBathroom,
+    photos.careLivingWide,
+  ],
 };
