@@ -4,6 +4,11 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ## [Unreleased]
 
+### Added
+
+- Garden Cottage gallery: 8 real photos from the Cottage's Airbnb listing (sunset exterior, porch, bedroom ×2, kitchen ×2, garden ×2); the cottage now shows 9 photos instead of 1.
+- Garden Cottage Airbnb link.
+
 ### Changed
 
 - Homepage, The Garden Club: "privileges—like" → "privileges such as".

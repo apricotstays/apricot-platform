@@ -10,6 +10,14 @@ import courtyardBedroom from "../assets/stays/courtyard/bedroom.jpg";
 import courtyardBedroomDetail from "../assets/stays/courtyard/bedroom-detail.jpg";
 import courtyardDining from "../assets/stays/courtyard/dining.jpg";
 import cottageNight from "../assets/stays/cottage/exterior-night.jpg";
+import cottageSunset from "../assets/stays/cottage/exterior-sunset.jpg";
+import cottagePorch from "../assets/stays/cottage/porch.jpg";
+import cottageBedroom from "../assets/stays/cottage/bedroom.jpg";
+import cottageBedroomDoors from "../assets/stays/cottage/bedroom-doors.jpg";
+import cottageKitchen from "../assets/stays/cottage/kitchen.jpg";
+import cottageKitchenSink from "../assets/stays/cottage/kitchen-sink.jpg";
+import cottageGardenDusk from "../assets/stays/cottage/garden-dusk.jpg";
+import cottageGardenPath from "../assets/stays/cottage/garden-path.jpg";
 import chateauExterior from "../assets/stays/chateau/exterior.jpg";
 
 export interface Photo {
@@ -50,6 +58,38 @@ export const photos = {
   },
   courtyardDining: { src: courtyardDining, alt: "Dining table set for two by the garden window" },
   cottageNight: { src: cottageNight, alt: "Apricot Garden Cottage exterior lit at night" },
+  cottageSunset: {
+    src: cottageSunset,
+    alt: "Apricot Garden Cottage — white facade and lit porch against a pink sunset",
+  },
+  cottagePorch: {
+    src: cottagePorch,
+    alt: "Covered porch with two wooden chairs and a table, front door open",
+  },
+  cottageBedroom: {
+    src: cottageBedroom,
+    alt: "Cottage bedroom with a tufted king bed, floral quilt and a work chair",
+  },
+  cottageBedroomDoors: {
+    src: cottageBedroomDoors,
+    alt: "King bed beside French doors and a window with day-night blinds",
+  },
+  cottageKitchen: {
+    src: cottageKitchen,
+    alt: "White kitchen with open shelves, gas hob, kettle and microwave",
+  },
+  cottageKitchenSink: {
+    src: cottageKitchenSink,
+    alt: "L-shaped kitchen counter with sink under a garden window",
+  },
+  cottageGardenDusk: {
+    src: cottageGardenDusk,
+    alt: "Private lawn and lit garden wall at dusk",
+  },
+  cottageGardenPath: {
+    src: cottageGardenPath,
+    alt: "Stone path across the lawn with garden lights under an evening sky",
+  },
   chateauExterior: {
     src: chateauExterior,
     alt: "Apricot Garden Château — white columned facade at sunset",
@@ -58,7 +98,17 @@ export const photos = {
 
 /** Gallery per stay, first photo is the cover. */
 export const galleries: Record<string, Photo[]> = {
-  "garden-cottage": [photos.cottageNight],
+  "garden-cottage": [
+    photos.cottageSunset,
+    photos.cottagePorch,
+    photos.cottageBedroom,
+    photos.cottageKitchen,
+    photos.cottageGardenDusk,
+    photos.cottageBedroomDoors,
+    photos.cottageKitchenSink,
+    photos.cottageGardenPath,
+    photos.cottageNight,
+  ],
   "garden-courtyard": [
     photos.courtyardEvening,
     photos.courtyardLiving,

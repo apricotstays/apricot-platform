@@ -38,6 +38,7 @@ export const properties: readonly Property[] = [
       "Clubhouse access",
     ],
     maxGuests: 2,
+    airbnbUrl: "https://www.airbnb.co.in/rooms/1473200853156126236",
   },
   {
     slug: "garden-courtyard",
