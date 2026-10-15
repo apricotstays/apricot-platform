@@ -1,11 +1,15 @@
 {
-  // Static site served by Cloudflare Workers (assets only, no Worker code yet).
-  // Free plan: static asset requests are free and unmetered.
+  // Static site served by Cloudflare Workers. Static files are free and unmetered; only /api/*
+  // runs the Worker script (src/worker.ts). Secrets (ICAL_<SLUG>, one per home) are set in the
+  // Cloudflare dashboard, never in this file.
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "apricotstays-web",
   "compatibility_date": "2026-10-01",
+  "main": "src/worker.ts",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"],
     "html_handling": "drop-trailing-slash",
     "not_found_handling": "404-page",
   },
