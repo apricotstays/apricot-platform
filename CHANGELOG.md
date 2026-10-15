@@ -6,6 +6,16 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Added
 
+- New home: Apricot Garden Care (`/stays/garden-care`) — a step-free one-bedroom care stay near PGI and Homi Bhabha Cancer Hospital, with 7 photos from its Airbnb listing and its Airbnb link. Appears in Our Collection, the footer, Also on Airbnb, the sitemap and `llms.txt`.
+
+### Changed
+
+- Our Collection: 2×2 grid on tablet/desktop (was 3 across) to fit four homes.
+- Stay facts: singular "1 bedroom" / "1 bathroom".
+- Homepage meta description mentions the care stay.
+
+### Added
+
 - Garden Cottage gallery: 8 real photos from the Cottage's Airbnb listing (sunset exterior, porch, bedroom ×2, kitchen ×2, garden ×2); the cottage now shows 9 photos instead of 1.
 - Garden Cottage Airbnb link.
 

@@ -89,7 +89,7 @@ const jsonLd = {
 
 <Base
   title="Apricot Stays · Boutique homes in New Chandigarh"
-  description="A small collection of boutique homes at DLF Hyde Park, New Chandigarh — a garden cottage, a terracotta courtyard and a five-bedroom château. Book on WhatsApp."
+  description="A small collection of boutique homes at DLF Hyde Park, New Chandigarh — a garden cottage, a terracotta courtyard, a five-bedroom château and a care stay near PGI. Book on WhatsApp."
   og={{ title: "Apricot Stays · Stay like you live here", image: hero.src, imageAlt: hero.alt }}
   jsonLd={jsonLd}
 >
@@ -137,7 +137,7 @@ const jsonLd = {
             Our Collection
           </h2>
         </div>
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2">
           {properties.map((p) => {
             const cover = galleries[p.slug][0];
             return (
@@ -150,7 +150,7 @@ const jsonLd = {
                     src={cover.src}
                     alt={cover.alt}
                     widths={[400, 600, 900]}
-                    sizes="(min-width: 768px) 33vw, 100vw"
+                    sizes="(min-width: 768px) 50vw, 100vw"
                     formats={["avif", "webp"]}
                     fallbackFormat="jpg"
                     class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 motion-reduce:transform-none"
