@@ -28,6 +28,7 @@ ${homes}
 ## Pages
 
 - [Home](${brand.url}/): overview and contact
+- [Our Story](${brand.url}/our-story): why Apricot exists — Chandigarh's gardens, and Shivani, who keeps every home
 - [Privacy](${brand.url}/privacy): what data we handle (DPDP Act, 2023)
 `;
   return new Response(body, { headers: { "Content-Type": "text/plain; charset=utf-8" } });

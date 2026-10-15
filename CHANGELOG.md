@@ -6,6 +6,8 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Added
 
+- **Our Story page (`/our-story`) — DRAFT, not for release until Shivani's content and approval are in.** Seven sections: opening ("A garden of your own."), Meet Shivani, Everyone's private garden, How Shivani keeps every garden, Nerd, not herd, Four gardens to stay in, close. Page-only handbook palette (cream ground, forest green `#2f4a3a` headings, band and buttons, terracotta labels); the site theme is unchanged. Real photos only (Cottage garden path leads; one photo per home). Shivani's portrait and her answers are marked placeholders. Listed in the sitemap, `llms.txt` and the accessibility check.
+
 - Garden Château: "The Five Rivers" section — one photo per named bedroom (Chenab Suite, Ravi, Beas, Sutlej, Jhelum) with the owner's caption artwork kept uncropped, room name and palette as real text.
 - Garden Château gallery: 8 real photos from its Airbnb listing (front, street view, living room, lounge, foyer, hall with snooker table, dining ×2); the Château now shows 9 photos instead of 1. Bedroom photos held back until versions without caption overlays are available.
 - Trust line ("4.99 host rating · 93 Airbnb reviews · Superhost") under Our Collection and in each home's Book direct card. Text only — not in schema.org markup. Figures live in `packages/brand` (`trust`), checked Oct 2026.
@@ -14,6 +16,9 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 - Garden Cottage Airbnb link.
 
 ### Changed
+
+- Navigation and footer: "Our Story" now links to `/our-story` (was `/#story`); nav marks the current page.
+- Homepage Our Story section is now a short teaser (one photo, two lines, "Read our story" link); `#story` anchor kept.
 
 - Our Collection: 2×2 grid on tablet/desktop (was 3 across) to fit four homes.
 - Stay facts: singular "1 bedroom" / "1 bathroom".

@@ -259,50 +259,53 @@ const jsonLd = {
       </div>
     </section>
 
-    <!-- Our Story -->
-    <section id="story" class="scroll-mt-20 overflow-hidden bg-linen py-16 sm:py-20 lg:py-24">
+    <!-- Our Story (teaser; full story at /our-story) -->
+    <section id="story" class="scroll-mt-20 bg-linen py-16 sm:py-20 lg:py-24">
       <div class="mx-auto max-w-7xl px-6 lg:px-12">
-        <div class="flex flex-col items-center gap-16 lg:flex-row">
-          <div class="relative w-full lg:w-1/2">
-            <div class="reveal relative z-10 overflow-hidden shadow-2xl">
-              <Picture
-                src={photos.courtyardLiving.src}
-                alt={photos.courtyardLiving.alt}
-                widths={[480, 800, 1200]}
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                formats={["avif", "webp"]}
-                fallbackFormat="jpg"
-                class="h-[420px] w-full object-cover sm:h-[500px]"
-              />
-            </div>
-            <div class="reveal absolute -right-12 -bottom-12 z-20 hidden w-2/3 overflow-hidden border-8 border-white shadow-2xl md:block">
-              <Picture
-                src={photos.courtyardGames.src}
-                alt={photos.courtyardGames.alt}
-                widths={[400, 600]}
-                sizes="33vw"
-                formats={["avif", "webp"]}
-                fallbackFormat="jpg"
-                class="h-[300px] w-full object-cover"
-              />
-            </div>
+        <div class="flex flex-col items-center gap-12 lg:flex-row lg:gap-16">
+          <div class="reveal w-full lg:w-1/2">
+            <Picture
+              src={photos.courtyardEvening.src}
+              alt={photos.courtyardEvening.alt}
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              formats={["avif", "webp"]}
+              fallbackFormat="jpg"
+              class="h-[360px] w-full object-cover shadow-2xl sm:h-[460px]"
+            />
           </div>
-          <div class="w-full lg:w-1/2 lg:pl-12">
-            <div class="reveal">
-              <SectionRule />
-              <h2 class="mb-6 font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
-                Our Story
-              </h2>
-              <p class="mb-6 max-w-md font-sans text-base leading-7 font-normal text-stone-600">
-                Apricot Stays began with a single family cottage — a place to escape the city noise
-                and reconnect with the seasons.
-              </p>
-              <p class="mb-8 max-w-md font-sans text-base leading-7 font-normal text-stone-600">
-                Today it's a small collection of homes at DLF Hyde Park, New Chandigarh, each chosen
-                for its character and its ability to offer a true sanctuary. We believe in personal
-                hospitality, where every guest feels like an old friend returning home.
-              </p>
-            </div>
+          <div class="reveal w-full lg:w-1/2">
+            <div class="mb-5 h-px w-12 bg-bronze" aria-hidden="true"></div>
+            <h2 class="mb-6 font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
+              Our Story
+            </h2>
+            <p class="mb-5 max-w-md font-sans text-base leading-7 font-normal text-stone-600">
+              Chandigarh is India's Garden City. You can visit its gardens, but you can't stay in
+              one.
+            </p>
+            <p class="mb-8 max-w-md font-sans text-base leading-7 font-normal text-stone-600">
+              Apricot is a garden you stay in, kept by Shivani for every guest as if it were her
+              own.
+            </p>
+            <a
+              href="/our-story"
+              class="inline-flex min-h-11 items-center gap-2 font-sans text-[15px] font-semibold text-stone-800 underline underline-offset-[6px] hover:text-stone-950"
+            >
+              Read our story
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6"></path>
+              </svg>
+            </a>
           </div>
         </div>
       </div>
