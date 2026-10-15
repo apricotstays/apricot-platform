@@ -5,6 +5,7 @@ import Base from "../../layouts/Base.astro";
 import Navbar from "../../components/Navbar.astro";
 import Footer from "../../components/Footer.astro";
 import Icon from "../../components/Icon.astro";
+import TrustLine from "../../components/TrustLine.astro";
 import { properties, type Property } from "@apricot/schema";
 import { brand, contact } from "@apricot/brand";
 import { galleries } from "../../data/media";
@@ -246,6 +247,7 @@ const jsonLd = {
             <p class="mt-4 text-center text-xs text-stone-500">
               WhatsApp {contact.whatsappDisplay}
             </p>
+            <TrustLine size="xs" class="mt-4 border-t border-stone-100 pt-4" />
           </div>
         </aside>
       </div>
