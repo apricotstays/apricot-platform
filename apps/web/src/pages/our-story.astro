@@ -6,6 +6,7 @@ import Footer from "../components/Footer.astro";
 import Icon from "../components/Icon.astro";
 import { trust, contact } from "@apricot/brand";
 import { photos, type Photo } from "../data/media";
+import shivani from "../assets/team/shivani.jpg";
 
 /*
  * Our Story (/our-story). Copy and design: "Our Story — Shivani & the Garden" doc + design canvas.
@@ -153,30 +154,15 @@ const gapCls = "bg-[#e6d5bf] px-1.5 text-[#4a3b2b]";
     <section aria-labelledby="shivani-h" class="bg-[#f4ece0]">
       <div class="mx-auto flex max-w-[1200px] flex-col gap-12 px-6 py-16 lg:flex-row lg:items-start lg:gap-14 lg:py-[88px]">
         <div class="w-full max-w-[460px] lg:flex-1">
-          <!-- PLACEHOLDER: replace with Shivani's real portrait at a garden gate. -->
-          <div
-            role="img"
-            aria-label="Photo needed: portrait of Shivani at a garden gate, natural light"
-            class="flex aspect-[4/5] flex-col items-center justify-center gap-2.5 border-2 border-dashed border-[#b9a78f] bg-[#ebe0d0] p-6 text-center text-[#5a4c3c]"
-          >
-            <svg
-              width="40"
-              height="40"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-              <circle cx="12" cy="12" r="3.5"></circle>
-              <path d="M8 5l1.5-2h5L16 5"></path>
-            </svg>
-            <span class="text-[15px] font-semibold">[PHOTO: Shivani at a garden gate]</span>
-            <span class="text-[13px]">Natural light, real garden, no studio</span>
-          </div>
+          <Picture
+            src={shivani}
+            alt="Shivani Kapoor, co-founder of Apricot Stays, smiling"
+            widths={[460, 760]}
+            sizes="(min-width: 1024px) 460px, 100vw"
+            formats={["avif", "webp"]}
+            fallbackFormat="jpg"
+            class="block aspect-[4/5] w-full object-cover object-[50%_40%]"
+          />
         </div>
         <div class="flex min-w-0 flex-col gap-5 lg:flex-[1.4]">
           <p class={label}>Meet Shivani</p>
