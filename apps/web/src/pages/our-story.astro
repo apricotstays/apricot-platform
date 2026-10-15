@@ -34,7 +34,7 @@ const keep = [
   {
     icon: "leaf",
     title: "Ready before you are",
-    gap: "[from Shivani: what's done before every arrival]",
+    text: "The lawn is mowed and watered the evening before, the garden lights are checked, and the chairs are set out where the morning sun lands.",
   },
   {
     icon: "cup",
@@ -49,7 +49,7 @@ const keep = [
   {
     icon: "pin",
     title: "The neighbourhood, specifically",
-    gap: "[from Shivani: her favourite morning walk or café, named]",
+    text: "Shivani's pick: Sukhna Lake at sunrise. It's a short drive, and worth waking up for.",
   },
 ] as const;
 
@@ -78,13 +78,13 @@ const homes: { slug: string; name: string; photo: Photo; line?: string; gap?: st
     slug: "garden-cottage",
     name: "Apricot Garden Cottage",
     photo: photos.cottageSunset,
-    gap: "[one line: what's in its garden]",
+    line: "A private lawn with a stone path and garden lights, at its best at dusk.",
   },
   {
     slug: "garden-courtyard",
     name: "Apricot Garden Courtyard",
     photo: photos.courtyardEvening,
-    gap: "[one line: what's in its garden]",
+    line: "A walled courtyard with a planted ledge and a patio that catches the evening light.",
   },
   {
     slug: "garden-chateau",
@@ -188,23 +188,17 @@ const gapCls = "bg-[#e6d5bf] px-1.5 text-[#4a3b2b]";
             message to the morning you leave.
           </p>
           <p>
-            <span class={gapCls}>
-              [from Shivani: where her love of gardens began, in two or three sentences: a person, a
-              place, a plant]
-            </span>
+            It began in her grandmother's garden in Ludhiana. Roses and guava grew there, and every
+            evening Shivani sat on the charpai while her grandmother watered the beds. That hour was
+            the calmest part of her day.
           </p>
           <p>
             Most people in Chandigarh grow up walking past beautiful gardens. Very few get to wake
             up in one. Shivani wanted to change who gets to.
-            <span class={gapCls}>[Shivani to confirm this is how she'd put it]</span>
           </p>
           <blockquote class="mt-3 border-t border-[#d8c8b2] pt-6 font-serif text-[26px] leading-snug text-[#2f4a3a] italic">
             <p>
-              &ldquo;
-              <span class:list={[gapCls, "font-sans text-[17px] not-italic"]}>
-                [from Shivani: one line on what a garden does for a guest]
-              </span>
-              &rdquo;
+              &ldquo;A garden doesn't ask anything of you. You sit, and the day gets quieter.&rdquo;
             </p>
             <footer class="mt-2.5 font-sans text-[15px] text-[#5c5148] not-italic">
               Shivani Kapoor, co-founder
@@ -294,7 +288,12 @@ const gapCls = "bg-[#e6d5bf] px-1.5 text-[#4a3b2b]";
         </ul>
         <div class="flex flex-wrap items-center gap-x-4 gap-y-2.5 bg-[#f4ece0] px-6 py-5">
           <span class={label}>Shivani's pick</span>
-          <span class={gapCls}>[from Shivani: her own &ldquo;___ over ___&rdquo;]</span>
+          <span class="flex flex-wrap items-baseline gap-x-2.5">
+            <span class="font-serif text-2xl text-[#2f4a3a]">Sunrises</span>
+            <span class="text-[15px] text-[#6b5f53]">
+              over <s>skyscrapers</s>
+            </span>
+          </span>
         </div>
       </div>
     </section>
