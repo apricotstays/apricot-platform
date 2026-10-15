@@ -1,0 +1,187 @@
+---
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import { contact } from "@apricot/brand";
+import { club, menu } from "../data/club-menu";
+
+/*
+ * /menu — The City Club menu for guests already staying with us.
+ * Shared by WhatsApp and the QR card in each home. Not in the nav or sitemap; noindex.
+ * Menu pages are shown as images (in-page PDF viewers fail on iPhone); the PDF is a download.
+ */
+
+const tel = `tel:${club.phoneE164}`;
+const helpHref = contact.whatsappLink("Hi Apricot Stays, a question about ordering food.");
+const btn =
+  "inline-flex h-12 items-center justify-center gap-2 border border-stone-800 px-5 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-2 focus-visible:outline-none";
+const btnDark = `${btn} bg-stone-800 text-white hover:bg-stone-900`;
+const btnLight = `${btn} bg-white text-stone-800 hover:bg-stone-800 hover:text-white`;
+
+const steps = [
+  {
+    title: "Pick your dishes",
+    text: "Browse the menu below. Many dishes come in veg and chicken versions.",
+  },
+  {
+    title: `Call ${club.name}`,
+    text: `Kitchen open ${club.hours}. Tell them about any allergies.`,
+  },
+  {
+    title: "Give your address",
+    text: "Say which Apricot home you're staying in, with the house number, DLF Hyde Park. The club delivers to your door.",
+  },
+];
+---
+
+<Base
+  title={`${club.name} menu · Apricot Stays`}
+  description={`Order food from ${club.name}, DLF Hyde Park: menu, phone number and kitchen hours for Apricot Stays guests.`}
+  noindex
+>
+  <Navbar />
+
+  <main id="main" class="mx-auto w-full max-w-3xl px-6 pt-10 pb-16 sm:pt-14">
+    <p class="mb-3 text-xs font-medium tracking-[0.18em] text-stone-500 uppercase">
+      For our guests · DLF Hyde Park
+    </p>
+    <h1 class="mb-4 font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
+      Order from {club.name}
+    </h1>
+    <p class="mb-7 max-w-xl text-lg leading-relaxed text-stone-600">
+      Hungry? The kitchen at {club.name}, DLF Hyde Park, serves soups, kebabs, curries, pizzas and
+      more. Browse the menu, then call the club to order.
+    </p>
+
+    <div class="mb-3 flex flex-wrap gap-3">
+      <a href={tel} class={btnDark}>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"></path>
+        </svg>
+        Call to order · {club.phoneDisplay}
+      </a>
+      <a href={menu.pdf} class={btnLight} download>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"></path>
+        </svg>
+        Download menu (PDF)
+      </a>
+    </div>
+    <p class="mb-10 text-sm text-stone-500">
+      Menu as of {menu.asOf} · prices in ₹, taxes extra · menu, prices and hours are set by{" "}
+      {club.name}
+    </p>
+
+    <section class="border-t border-stone-200 py-8" aria-labelledby="how">
+      <h2 id="how" class="mb-5 font-serif text-2xl font-normal text-stone-900">
+        How to order
+      </h2>
+      <ol class="grid gap-5">
+        {steps.map((s, i) => (
+          <li class="grid grid-cols-[2rem_1fr] gap-4">
+            <span
+              class="grid h-8 w-8 place-items-center rounded-full border border-stone-300 font-serif text-sm text-stone-700"
+              aria-hidden="true"
+            >
+              {i + 1}
+            </span>
+            <div>
+              <p class="font-medium text-stone-900">{s.title}</p>
+              <p class="text-stone-600">{s.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="border-t border-stone-200 py-8" aria-labelledby="whats-on">
+      <h2 id="whats-on" class="mb-5 font-serif text-2xl font-normal text-stone-900">
+        What's on the menu
+      </h2>
+      <ul class="flex flex-wrap gap-2">
+        {menu.pages.map((p, i) => (
+          <li>
+            <a
+              href={`#page-${i + 1}`}
+              class="inline-block border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-700 hover:border-stone-400"
+            >
+              {p.title}
+              <span class="ml-1 text-stone-500">p{i + 1}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-4 text-sm text-stone-600">
+        On the menu, a dot marks veg dishes and a triangle marks non-veg. Calories and allergens are
+        listed for each dish. Tap a page to see it full size.
+      </p>
+    </section>
+
+    <section class="grid gap-6 border-t border-stone-200 py-8" aria-label="Menu pages">
+      {menu.pages.map((p, i) => (
+        <figure id={`page-${i + 1}`} class="scroll-mt-24 border border-stone-200 bg-white">
+          <a href={p.image.src} aria-label={`Open page ${i + 1} full size`}>
+            <Image
+              src={p.image}
+              alt={`${club.name} menu, page ${i + 1}: ${p.title}`}
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 768px) 720px, 100vw"
+              loading={i === 0 ? "eager" : "lazy"}
+              class="block h-auto w-full"
+            />
+          </a>
+          <figcaption class="flex justify-between border-t border-stone-200 px-3 py-2 text-sm text-stone-500">
+            <span>{p.title}</span>
+            <span>
+              Page {i + 1} of {menu.pages.length}
+            </span>
+          </figcaption>
+        </figure>
+      ))}
+    </section>
+
+    <p class="border-t border-stone-200 pt-8 text-sm leading-relaxed text-stone-600">
+      {club.name} runs its own kitchen; Apricot Stays doesn't. Need something else, or ordering for
+      a group?{" "}
+      <a
+        href={helpHref}
+        target="_blank"
+        rel="noopener"
+        class="font-medium text-stone-800 underline underline-offset-2"
+      >
+        WhatsApp us
+      </a>{" "}
+      and we'll help.
+    </p>
+  </main>
+
+  <Footer />
+
+  <!-- Phone: keep the call button in reach while scrolling the menu. -->
+  <div class="h-20 md:hidden" aria-hidden="true"></div>
+  <div class="fixed inset-x-0 bottom-0 z-40 flex gap-3 border-t border-stone-200 bg-white/95 px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur md:hidden">
+    <a href={tel} class={`${btnDark} flex-1`}>
+      Call {club.name}
+    </a>
+    <a href={helpHref} target="_blank" rel="noopener" class={`${btnLight} flex-1`}>
+      WhatsApp us
+    </a>
+  </div>
+</Base>
