@@ -38,6 +38,10 @@ jobs:
         run: npm test
 
       - name: Build
+        # Drafts on, so link and accessibility checks also cover Experiences & services pages that are
+        # not Live yet. Content comes from the committed snapshot (no Notion token in CI).
+        env:
+          SHOW_DRAFTS: "1"
         run: npm run build
 
       - name: Broken links (internal)

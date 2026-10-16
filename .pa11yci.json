@@ -16,6 +16,9 @@
     "http://127.0.0.1:4321/stays/garden-chateau",
     "http://127.0.0.1:4321/privacy",
     "http://127.0.0.1:4321/menu",
+    "http://127.0.0.1:4321/experiences",
+    "http://127.0.0.1:4321/experiences/car-wash",
+    "http://127.0.0.1:4321/experiences/naar-kasauli",
     "http://127.0.0.1:4321/404.html"
   ]
 }

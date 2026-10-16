@@ -1,0 +1,148 @@
+---
+import Base from "../../layouts/Base.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import ExperiencePhoto from "../../components/ExperiencePhoto.astro";
+import { contact } from "@apricot/brand";
+import { loadExperiences, SOFT_LAUNCH } from "../../experiences/load";
+import { groupBySection, priceLine, SECTION_SUBTITLES, slugify } from "../../experiences/core";
+
+/*
+ * /experiences — Experiences & services, arranged by Apricot Stays.
+ * Content: Notion database "Garden - Services & Experiences" (see src/experiences/).
+ * Soft launch: reachable from the footer only, noindex, not in the sitemap (SOFT_LAUNCH).
+ */
+const { listings } = await loadExperiences();
+const groups = groupBySection(listings);
+const kinds = new Set(listings.map((l) => l.kind));
+const showTabs = kinds.size > 1;
+const askHref = contact.whatsappLink("Hi Apricot Stays, I'm looking for something during my stay:");
+const btnDark =
+  "inline-flex h-12 items-center justify-center gap-2 bg-stone-800 px-6 text-sm font-medium text-white transition-colors hover:bg-stone-900 focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-2 focus-visible:outline-none";
+const tabs = [
+  { id: "show-all", label: "All" },
+  { id: "show-experience", label: "Experiences" },
+  { id: "show-service", label: "Services" },
+];
+---
+
+<Base
+  title="Experiences & services · Apricot Stays"
+  description="Things to do around Chandigarh and services at your Apricot home, arranged by Apricot Stays. Book on WhatsApp."
+  noindex={SOFT_LAUNCH}
+>
+  <Navbar />
+
+  <main id="main" class="es bg-white">
+    <div class="container mx-auto px-6 pt-12 pb-6 sm:pt-16">
+      <h1 class="mb-3 font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
+        Experiences &amp; services
+      </h1>
+      <p class="mb-8 max-w-xl text-lg leading-relaxed text-stone-600">
+        Arranged by Apricot Stays, from people we know. Book on WhatsApp, and we look after the
+        rest.
+      </p>
+
+      {showTabs && (
+        <fieldset class="tabs inline-flex gap-1 rounded-full border border-stone-300 p-1">
+          <legend class="sr-only">Show</legend>
+          {tabs.map((t, i) => (
+            <span class="relative">
+              <input
+                type="radio"
+                name="show"
+                id={t.id}
+                class="peer absolute inset-0 opacity-0"
+                checked={i === 0}
+              />
+              <label
+                for={t.id}
+                class="flex h-11 cursor-pointer items-center rounded-full px-5 text-sm font-medium text-stone-600 peer-checked:bg-stone-800 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-apricot peer-focus-visible:ring-offset-2"
+              >
+                {t.label}
+              </label>
+            </span>
+          ))}
+        </fieldset>
+      )}
+    </div>
+
+    <div class="container mx-auto space-y-14 px-6 pt-6 pb-16">
+      {groups.length === 0 && (
+        <p class="max-w-xl text-stone-600">
+          New experiences are on their way. Tell us what you're looking for and we'll arrange it.
+        </p>
+      )}
+      {groups.map((g) => (
+        <section aria-labelledby={`sec-${slugify(g.title)}`} class="es-section">
+          <h2
+            id={`sec-${slugify(g.title)}`}
+            class="font-serif text-2xl font-normal text-stone-900 sm:text-3xl"
+          >
+            {g.title}
+          </h2>
+          {SECTION_SUBTITLES[g.title] && (
+            <p class="mt-1 text-sm text-stone-500">{SECTION_SUBTITLES[g.title]}</p>
+          )}
+          <ul class="mt-6 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {g.listings.map((l) => (
+              <li data-kind={l.kind}>
+                <a href={`/experiences/${l.slug}`} class="group block">
+                  <div class="relative aspect-square overflow-hidden rounded-xl bg-stone-100">
+                    <ExperiencePhoto
+                      listing={l}
+                      widths={[400, 600, 800]}
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      class="transition-transform duration-500 group-hover:scale-105"
+                    />
+                    {l.badge && (
+                      <span class="absolute top-3 left-3 rounded-full bg-white px-3 py-1 text-xs font-bold text-stone-900">
+                        {l.badge}
+                      </span>
+                    )}
+                    {l.status === "Draft" && (
+                      <span class="absolute top-3 right-3 rounded-full bg-stone-900 px-3 py-1 text-xs font-bold text-white">
+                        Draft (preview only)
+                      </span>
+                    )}
+                  </div>
+                  <p class="mt-3 text-xs font-bold tracking-[0.12em] text-stone-500 uppercase">
+                    {l.kind}
+                  </p>
+                  <h3 class="mt-1 font-medium text-stone-900 group-hover:underline">{l.title}</h3>
+                  <p class="mt-1 text-sm text-stone-600">{priceLine(l)}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      <div class="flex flex-col items-start justify-between gap-4 rounded-xl bg-linen p-6 sm:flex-row sm:items-center sm:p-8">
+        <div>
+          <h2 class="font-serif text-2xl font-normal text-stone-900">
+            Looking for something else?
+          </h2>
+          <p class="mt-1 text-stone-600">
+            Tell us what you need. If we know someone good, we'll arrange it.
+          </p>
+        </div>
+        <a href={askHref} target="_blank" rel="noopener" class={btnDark}>
+          Ask on WhatsApp
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Base>
+
+<style>
+  /* Tabs without JavaScript: the checked radio hides the other kind and any row left empty. */
+  .es:has(#show-experience:checked) [data-kind="Service"],
+  .es:has(#show-service:checked) [data-kind="Experience"],
+  .es:has(#show-experience:checked) .es-section:not(:has([data-kind="Experience"])),
+  .es:has(#show-service:checked) .es-section:not(:has([data-kind="Service"])) {
+    display: none;
+  }
+</style>
