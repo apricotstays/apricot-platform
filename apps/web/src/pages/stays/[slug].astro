@@ -7,9 +7,11 @@ import Footer from "../../components/Footer.astro";
 import Icon from "../../components/Icon.astro";
 import TrustLine from "../../components/TrustLine.astro";
 import AvailabilityCalendar from "../../components/AvailabilityCalendar.astro";
+import GuestReviews from "../../components/GuestReviews.astro";
 import { fromLine, properties, ratesChecked, type Property } from "@apricot/schema";
 import { brand, contact } from "@apricot/brand";
 import { galleries, rooms } from "../../data/media";
+import { reviews } from "../../data/reviews";
 
 export const getStaticPaths = (() =>
   properties.map((p) => ({
@@ -25,6 +27,7 @@ const gallery = galleries[p.slug];
 const [cover, ...rest] = gallery;
 const thumbs = rest.slice(0, 4);
 const namedRooms = rooms[p.slug] ?? [];
+const homeReviews = reviews[p.slug];
 
 const book = contact.whatsappLink(
   `Hi Apricot Stays, I'd like to book ${p.name}.\n\nDates:\nGuests:`,
@@ -194,6 +197,8 @@ const jsonLd = {
               </div>
             </section>
           )}
+
+          {homeReviews && <GuestReviews data={homeReviews} airbnbUrl={p.airbnbUrl} />}
 
           <section id="amenities" aria-labelledby="amenities-h">
             <h2 id="amenities-h" class="mb-6 text-xl font-semibold text-stone-800">
