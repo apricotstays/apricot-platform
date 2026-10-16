@@ -6,6 +6,8 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Added
 
+- **Bedrooms and bathrooms for Garden Cottage and Garden Courtyard** (1 bedroom · 1 bathroom each, from their Airbnb listings, Oct 2026). Their pages now show the same facts row as the Château and Care, and schema.org gets `numberOfRooms`. Data only; no design change.
+
 - **Starting prices on every home ("From ₹X / night").** Garden Cottage from ₹5,500, Garden Courtyard from ₹8,500, Garden Château from ₹45,000, Garden Care from ₹4,500 (rates set by the owner, Oct 2026). Shown under each home in Our Collection (with one line: starting weekday rates, exact price for your dates on WhatsApp, rates checked Oct 2026), at the top of each home's Book direct card, in the phone booking bar, in `llms.txt`, and as schema.org `priceRange`. Rates live in `packages/schema` (`fromPerNight`, plus `ratesChecked`) — update by hand. Existing styles only; no design change. Replaces the "no prices on the site" rule. Unit tests for the formatting and the four rates.
 
 - **Experiences & services: shareable tab links and row order from Notion.** The All / Experiences / Services tabs are now links, so `apricotstays.in/experiences#experiences` and `#services` open already filtered and can be sent to guests (still no JavaScript: CSS `:target`; Back/Forward work). The order of the rows ("At your door", "Day trips", …) now follows the order of the options in the Notion "Section" property — drag an option up in Notion and the row moves at the next build. Falls back to the built-in order if Notion can't be read.
