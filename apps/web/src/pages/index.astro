@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import Icon from "../components/Icon.astro";
 import TrustLine from "../components/TrustLine.astro";
+import MushroomGardenCard from "../components/MushroomGardenCard.astro";
 import SectionRule from "../components/SectionRule.astro";
 import { fromLine, properties, ratesChecked } from "@apricot/schema";
 import { brand, contact } from "@apricot/brand";
@@ -171,6 +172,7 @@ const jsonLd = {
               </a>
             );
           })}
+          <MushroomGardenCard />
         </div>
         <p class="mt-10 text-center text-sm text-stone-500">
           Starting weekday rates. We confirm the exact price for your dates on WhatsApp. Rates
