@@ -1,0 +1,61 @@
+---
+/**
+ * "What guests say" on a home's page: Airbnb listing line, up to 3 quoted reviews
+ * (first name + month, "via Airbnb"), and a link to the listing. While a home is new it shows
+ * "New to the collection" with the host line and reviews from guests at our other homes.
+ * Text only — no review/rating structured data.
+ */
+import TrustLine from "./TrustLine.astro";
+import Icon from "./Icon.astro";
+import { listingLine, type HomeReviews } from "../data/reviews";
+
+interface Props {
+  data: HomeReviews;
+  airbnbUrl?: string;
+}
+const { data, airbnbUrl } = Astro.props;
+const line = listingLine(data);
+const cols = data.reviews.length >= 3 ? "md:grid-cols-3" : "md:grid-cols-2";
+---
+
+{data.reviews.length > 0 && (
+  <section id="reviews" aria-labelledby="reviews-h">
+    <h2 id="reviews-h" class="mb-2 text-xl font-semibold text-stone-800">
+      {data.isNew ? "New to the collection" : "What guests say"}
+    </h2>
+    {data.isNew ? (
+      <>
+        <p class="mb-3 leading-relaxed text-stone-600">
+          This home opened this season, so it has no reviews of its own yet. Here is what guests say
+          about staying with Shiva and Shivani at our other homes.
+        </p>
+        <TrustLine align="left" class="mb-6" />
+      </>
+    ) : (
+      line && <p class="mb-6 text-sm text-stone-600">{line}</p>
+    )}
+    <div class:list={["grid grid-cols-1 gap-4", cols]}>
+      {data.reviews.map((r) => (
+        <figure class="flex flex-col justify-between gap-4 border border-stone-200 p-5">
+          <blockquote class="font-serif leading-relaxed text-stone-700 italic">
+            <p>“{r.text}”</p>
+          </blockquote>
+          <figcaption class="text-sm text-stone-500">
+            {r.name}, {r.month}
+            {r.stayedAt && <> · stayed at {r.stayedAt}</>} · via Airbnb
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+    {!data.isNew && airbnbUrl && data.listing && (
+      <a
+        href={airbnbUrl}
+        target="_blank"
+        rel="noopener"
+        class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-stone-800 underline underline-offset-4"
+      >
+        Read all {data.listing.count} reviews on Airbnb <Icon name="external" size={14} />
+      </a>
+    )}
+  </section>
+)}
