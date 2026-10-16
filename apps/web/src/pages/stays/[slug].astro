@@ -7,7 +7,7 @@ import Footer from "../../components/Footer.astro";
 import Icon from "../../components/Icon.astro";
 import TrustLine from "../../components/TrustLine.astro";
 import AvailabilityCalendar from "../../components/AvailabilityCalendar.astro";
-import { properties, type Property } from "@apricot/schema";
+import { fromLine, properties, ratesChecked, type Property } from "@apricot/schema";
 import { brand, contact } from "@apricot/brand";
 import { galleries, rooms } from "../../data/media";
 
@@ -52,6 +52,7 @@ const jsonLd = {
   brand: { "@id": `${brand.url}/#organization`, name: brand.name },
   telephone: contact.whatsappE164,
   numberOfRooms: p.bedrooms,
+  priceRange: fromLine(p),
   amenityFeature: p.amenities.map((a) => ({
     "@type": "LocationFeatureSpecification",
     name: a,
@@ -208,7 +209,7 @@ const jsonLd = {
             </ul>
           </section>
 
-          <AvailabilityCalendar slug={p.slug} name={p.name} />
+          <AvailabilityCalendar slug={p.slug} name={p.name} priceLine={fromLine(p)} />
 
           <section id="location" aria-labelledby="location-h">
             <h2 id="location-h" class="mb-6 text-xl font-semibold text-stone-800">
@@ -259,8 +260,9 @@ const jsonLd = {
         <aside class="lg:sticky lg:top-8 lg:self-start" aria-label="Book this stay">
           <div class="border border-stone-200 p-6 shadow-sm">
             <p class="mb-1 font-serif text-2xl text-stone-800">Book direct</p>
+            <p class="mb-2 text-lg text-stone-800">{fromLine(p)}</p>
             <p class="mb-6 text-sm text-stone-600">
-              Message us with your dates — we'll confirm availability and rates.
+              Message us with your dates — we'll confirm availability and the exact price.
             </p>
             <!-- Dates line: shown only when this home's availability calendar has loaded. -->
             <a
@@ -313,6 +315,9 @@ const jsonLd = {
             )}
             <p class="mt-4 text-center text-xs text-stone-500">
               WhatsApp {contact.whatsappDisplay}
+            </p>
+            <p class="mt-1 text-center text-xs text-stone-500">
+              Starting weekday rate · checked {ratesChecked}
             </p>
             <TrustLine size="xs" class="mt-4 border-t border-stone-100 pt-4" />
           </div>

@@ -3,7 +3,8 @@
  * these types describe what the website reads from it.
  *
  * Content source: the Replit site (Oct 2026). Only facts the owner had published there are
- * included; prices are deliberately omitted (rates are quoted on WhatsApp).
+ * included. Each home carries a starting nightly rate ("From ₹X / night"), set by the owner
+ * (Oct 2026); the exact price for given dates is still confirmed on WhatsApp.
  */
 export interface Property {
   slug: string;
@@ -16,9 +17,21 @@ export interface Property {
   maxGuests: number;
   bedrooms?: number;
   bathrooms?: number;
+  /** Starting nightly rate in rupees — shown as "From ₹X / night". Set by the owner; update by hand. */
+  fromPerNight: number;
   /** Public Airbnb listing, when one exists. */
   airbnbUrl?: string;
 }
+
+/** When the starting rates were last checked (shown next to them). Update with the rates. */
+export const ratesChecked = "Oct 2026";
+
+const rupee = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 });
+/** "₹5,500" */
+export const formatRupees = (n: number): string => `₹${rupee.format(n)}`;
+/** "From ₹5,500 / night" */
+export const fromLine = (p: Pick<Property, "fromPerNight">): string =>
+  `From ${formatRupees(p.fromPerNight)} / night`;
 
 const LOCALITY = "DLF Hyde Park, New Chandigarh";
 
@@ -38,6 +51,7 @@ export const properties: readonly Property[] = [
       "Clubhouse access",
     ],
     maxGuests: 2,
+    fromPerNight: 5_500,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1473200853156126236",
   },
   {
@@ -56,6 +70,7 @@ export const properties: readonly Property[] = [
       "Clubhouse access",
     ],
     maxGuests: 2,
+    fromPerNight: 8_500,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1603439898679095327",
   },
   {
@@ -82,6 +97,7 @@ export const properties: readonly Property[] = [
     maxGuests: 10,
     bedrooms: 5,
     bathrooms: 5,
+    fromPerNight: 45_000,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1755107663054771918",
   },
   {
@@ -106,6 +122,7 @@ export const properties: readonly Property[] = [
     maxGuests: 2,
     bedrooms: 1,
     bathrooms: 1,
+    fromPerNight: 4_500,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1679764480306760606",
   },
 ];

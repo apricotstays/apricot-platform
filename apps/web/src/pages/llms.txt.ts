@@ -1,20 +1,20 @@
 import type { APIRoute } from "astro";
 import { brand, contact } from "@apricot/brand";
-import { properties } from "@apricot/schema";
+import { fromLine, properties, ratesChecked } from "@apricot/schema";
 
 // https://llmstxt.org — a plain summary for AI assistants and agents.
 export const GET: APIRoute = () => {
   const homes = properties
     .map(
       (p) =>
-        `- [${p.name}](${brand.url}/stays/${p.slug}): ${p.summary} Up to ${p.maxGuests} guests.`,
+        `- [${p.name}](${brand.url}/stays/${p.slug}): ${p.summary} Up to ${p.maxGuests} guests. ${fromLine(p)}.`,
     )
     .join("\n");
   const body = `# ${brand.name}
 
 > ${brand.name} is a small collection of boutique, home-style short-stay homes at ${contact.address.locality}, ${contact.address.region}, India. "${brand.tagline}"
 
-Enquiries and direct bookings are handled on WhatsApp. Rates are quoted on request.
+Enquiries and direct bookings are handled on WhatsApp. Each home lists a starting weekday rate (checked ${ratesChecked}); the exact price for given dates is confirmed on WhatsApp.
 
 ## Homes
 
