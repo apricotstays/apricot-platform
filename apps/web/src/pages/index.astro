@@ -6,7 +6,7 @@ import Footer from "../components/Footer.astro";
 import Icon from "../components/Icon.astro";
 import TrustLine from "../components/TrustLine.astro";
 import SectionRule from "../components/SectionRule.astro";
-import { properties } from "@apricot/schema";
+import { fromLine, properties, ratesChecked } from "@apricot/schema";
 import { brand, contact } from "@apricot/brand";
 import { galleries, photos } from "../data/media";
 
@@ -82,6 +82,7 @@ const jsonLd = {
         addressCountry: contact.address.country,
       },
       geo: { "@type": "GeoCoordinates", ...contact.address.geo },
+      priceRange: fromLine(p),
       ...(p.airbnbUrl ? { sameAs: [p.airbnbUrl] } : {}),
     })),
   ],
@@ -165,11 +166,16 @@ const jsonLd = {
                   <p class="font-sans text-xs font-light tracking-[0.2em] text-stone-500 uppercase">
                     {p.locality}
                   </p>
+                  <p class="mt-2 font-sans text-sm text-stone-700">{fromLine(p)}</p>
                 </div>
               </a>
             );
           })}
         </div>
+        <p class="mt-10 text-center text-sm text-stone-500">
+          Starting weekday rates. We confirm the exact price for your dates on WhatsApp. Rates
+          checked {ratesChecked}.
+        </p>
       </div>
     </section>
 
@@ -371,7 +377,7 @@ const jsonLd = {
           Ready to unwind?
         </h2>
         <p class="mb-8 text-lg text-stone-300">
-          Message us on WhatsApp for availability and rates.
+          Message us on WhatsApp for availability and the price for your dates.
         </p>
         <a
           href={availability}
