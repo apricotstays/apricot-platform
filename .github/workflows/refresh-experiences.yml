@@ -1,0 +1,28 @@
+name: Refresh Experiences & services
+
+# Rebuilds the live site so edits in the Notion database appear. Runs nightly, and on demand from
+# GitHub → Actions → "Refresh Experiences & services" → Run workflow (works from the GitHub app too).
+# Needs the repository secret CF_DEPLOY_HOOK: the deploy hook URL from Cloudflare (Workers & Pages →
+# apricotstays-web → Settings → Builds → Deploy Hooks, branch main). Treat it like a password.
+
+on:
+  schedule:
+    - cron: "30 21 * * *" # 03:00 IST
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger Cloudflare build of main
+        env:
+          HOOK: ${{ secrets.CF_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::warning::CF_DEPLOY_HOOK secret not set; nothing to do."
+            exit 0
+          fi
+          curl -fsS -X POST "$HOOK" -o /dev/null -w "Cloudflare answered HTTP %{http_code}\n"

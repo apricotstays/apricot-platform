@@ -1,0 +1,39 @@
+---
+// A Notion photo, downloaded and resized at build time (Notion's own links expire after an hour,
+// so the page never points at them). No photo yet → a plain panel with an icon, never a stock image.
+import { Image } from "astro:assets";
+import Icon from "./Icon.astro";
+import type { Listing } from "../experiences/core";
+
+interface Props {
+  listing: Listing;
+  index?: number;
+  widths: number[];
+  sizes: string;
+  class?: string;
+  eager?: boolean;
+}
+const { listing: l, index = 0, widths, sizes, class: className, eager = false } = Astro.props;
+const photo = l.photos[index];
+const alt = photo ? `${l.title}${index > 0 ? ` (photo ${index + 1})` : ""}` : "";
+---
+
+{photo ? (
+  <Image
+    src={photo.url}
+    alt={alt}
+    inferSize
+    widths={widths}
+    sizes={sizes}
+    format="webp"
+    loading={eager ? "eager" : "lazy"}
+    class:list={["h-full w-full object-cover", className]}
+  />
+) : (
+  <div
+    class:list={["flex h-full w-full items-center justify-center bg-linen text-bronze", className]}
+    aria-hidden="true"
+  >
+    <Icon name={l.where === "We pick you up" ? "car" : "home"} size={40} />
+  </div>
+)}

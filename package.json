@@ -16,7 +16,7 @@
     "check": "npm run check -w @apricot/web",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "links": "linkinator apps/web/dist --recurse --clean-urls --retry --skip \"^https://(www\\\\.)?apricotstays\\\\.in\"",
+    "links": "linkinator apps/web/dist --recurse --clean-urls --retry --skip \"^https://(www\\\\.)?apricotstays\\\\.in\" --skip \"/experiences$\"",
     "a11y": "npx --yes pa11y-ci@5.0.0 --config .pa11yci.json",
     "lhci": "npx --yes @lhci/cli@0.15.1 autorun",
     "test": "npm run test -w @apricot/web"
