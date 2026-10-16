@@ -8,8 +8,8 @@
  * Drafts show on preview builds (any branch except main) and when SHOW_DRAFTS=1 (CI), never on
  * production. See selectListings() for the rules.
  */
-import { selectListings, type Listing, type ListingRow } from "./core";
-import { fetchRows } from "./notion";
+import { SECTION_ORDER, selectListings, type Listing, type ListingRow } from "./core";
+import { fetchRows, fetchSectionOrder } from "./notion";
 import snapshot from "./snapshot.json";
 
 /**
@@ -29,6 +29,8 @@ const env =
 
 export interface Loaded {
   listings: Listing[];
+  /** Row order on the listing page (from Notion's Section options, else SECTION_ORDER). */
+  sectionOrder: readonly string[];
   source: "notion" | "snapshot";
   showDrafts: boolean;
 }
@@ -45,14 +47,24 @@ function allowedPhoto(url: string): boolean {
 async function load(): Promise<Loaded> {
   const branch = env.WORKERS_CI_BRANCH;
   const showDrafts = env.SHOW_DRAFTS === "1" || (!!branch && branch !== "main");
+  const databaseId = env.NOTION_EXPERIENCES_DB || DEFAULT_DATABASE_ID;
   let rows: ListingRow[] = snapshot as ListingRow[];
   let source: Loaded["source"] = "snapshot";
+  let sectionOrder: readonly string[] = SECTION_ORDER;
   if (env.NOTION_TOKEN) {
     try {
-      rows = await fetchRows(env.NOTION_TOKEN, env.NOTION_EXPERIENCES_DB || DEFAULT_DATABASE_ID);
+      rows = await fetchRows(env.NOTION_TOKEN, databaseId);
       source = "notion";
     } catch (err) {
       console.warn(`[experiences] Notion read failed, using snapshot: ${String(err)}`);
+    }
+    if (source === "notion") {
+      try {
+        const fromNotion = await fetchSectionOrder(env.NOTION_TOKEN, databaseId);
+        if (fromNotion.length) sectionOrder = fromNotion;
+      } catch (err) {
+        console.warn(`[experiences] Section order not read, using default: ${String(err)}`);
+      }
     }
   }
   rows = rows.map((r) => {
@@ -62,12 +74,12 @@ async function load(): Promise<Loaded> {
     }
     return { ...r, photos };
   });
-  const { listings, skipped } = selectListings(rows, showDrafts);
+  const { listings, skipped } = selectListings(rows, showDrafts, sectionOrder);
   console.info(
-    `[experiences] source=${source} drafts=${showDrafts ? "shown" : "hidden"} pages=${listings.length}`,
+    `[experiences] source=${source} drafts=${showDrafts ? "shown" : "hidden"} pages=${listings.length} sections=${sectionOrder.join(" > ")}`,
   );
   for (const s of skipped) console.info(`[experiences] not shown: ${s}`);
-  return { listings, source, showDrafts };
+  return { listings, sectionOrder, source, showDrafts };
 }
 
 let cached: Promise<Loaded> | undefined;

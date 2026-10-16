@@ -11,18 +11,22 @@ import { groupBySection, priceLine, SECTION_SUBTITLES, slugify } from "../../exp
  * /experiences — Experiences & services, arranged by Apricot Stays.
  * Content: Notion database "Garden - Services & Experiences" (see src/experiences/).
  * Soft launch: reachable from the footer only, noindex, not in the sitemap (SOFT_LAUNCH).
+ *
+ * Shareable filtered views, no JavaScript: /experiences#experiences and /experiences#services.
+ * The tabs are plain links; CSS :target hides the other kind (style block at the end).
+ * Row order follows the Section options in Notion (loadExperiences → sectionOrder).
  */
-const { listings } = await loadExperiences();
-const groups = groupBySection(listings);
+const { listings, sectionOrder } = await loadExperiences();
+const groups = groupBySection(listings, sectionOrder);
 const kinds = new Set(listings.map((l) => l.kind));
 const showTabs = kinds.size > 1;
 const askHref = contact.whatsappLink("Hi Apricot Stays, I'm looking for something during my stay:");
 const btnDark =
   "inline-flex h-12 items-center justify-center gap-2 bg-stone-800 px-6 text-sm font-medium text-white transition-colors hover:bg-stone-900 focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-2 focus-visible:outline-none";
 const tabs = [
-  { id: "show-all", label: "All" },
-  { id: "show-experience", label: "Experiences" },
-  { id: "show-service", label: "Services" },
+  { key: "all", label: "All" },
+  { key: "experiences", label: "Experiences" },
+  { key: "services", label: "Services" },
 ];
 ---
 
@@ -34,6 +38,9 @@ const tabs = [
   <Navbar />
 
   <main id="main" class="es bg-white">
+    <!-- Targets for /experiences#experiences and #services (filtering is pure CSS). -->
+    <span id="experiences" class="es-anchor" aria-hidden="true"></span>
+    <span id="services" class="es-anchor" aria-hidden="true"></span>
     <div class="container mx-auto px-6 pt-12 pb-6 sm:pt-16">
       <h1 class="mb-3 font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
         Experiences &amp; services
@@ -44,26 +51,17 @@ const tabs = [
       </p>
 
       {showTabs && (
-        <fieldset class="tabs inline-flex gap-1 rounded-full border border-stone-300 p-1">
-          <legend class="sr-only">Show</legend>
-          {tabs.map((t, i) => (
-            <span class="relative">
-              <input
-                type="radio"
-                name="show"
-                id={t.id}
-                class="peer absolute inset-0 opacity-0"
-                checked={i === 0}
-              />
-              <label
-                for={t.id}
-                class="flex h-11 cursor-pointer items-center rounded-full px-5 text-sm font-medium text-stone-600 peer-checked:bg-stone-800 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-apricot peer-focus-visible:ring-offset-2"
-              >
-                {t.label}
-              </label>
-            </span>
+        <nav aria-label="Show" class="inline-flex gap-1 rounded-full border border-stone-300 p-1">
+          {tabs.map((t) => (
+            <a
+              href={`#${t.key}`}
+              data-tab={t.key}
+              class="es-tab flex h-11 items-center rounded-full px-5 text-sm font-medium text-stone-600 hover:text-stone-900 focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-2 focus-visible:outline-none"
+            >
+              {t.label}
+            </a>
           ))}
-        </fieldset>
+        </nav>
       )}
     </div>
 
@@ -138,11 +136,24 @@ const tabs = [
 </Base>
 
 <style>
-  /* Tabs without JavaScript: the checked radio hides the other kind and any row left empty. */
-  .es:has(#show-experience:checked) [data-kind="Service"],
-  .es:has(#show-service:checked) [data-kind="Experience"],
-  .es:has(#show-experience:checked) .es-section:not(:has([data-kind="Experience"])),
-  .es:has(#show-service:checked) .es-section:not(:has([data-kind="Service"])) {
+  /*
+   * Filtering without JavaScript. /experiences#experiences or #services makes that anchor the
+   * :target; the other kind, and any row left empty, are hidden. #all (or no hash) shows everything.
+   */
+  .es-anchor {
+    display: block;
+    scroll-margin-top: 6rem;
+  }
+  .es:has(#experiences:target) [data-kind="Service"],
+  .es:has(#services:target) [data-kind="Experience"],
+  .es:has(#experiences:target) .es-section:not(:has([data-kind="Experience"])),
+  .es:has(#services:target) .es-section:not(:has([data-kind="Service"])) {
     display: none;
+  }
+  .es:not(:has(#experiences:target, #services:target)) .es-tab[data-tab="all"],
+  .es:has(#experiences:target) .es-tab[data-tab="experiences"],
+  .es:has(#services:target) .es-tab[data-tab="services"] {
+    background: #292524;
+    color: #fff;
   }
 </style>
