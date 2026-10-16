@@ -91,6 +91,9 @@ const h2 = "mb-5 font-serif text-2xl font-normal text-stone-900";
           </div>
         )}
       </div>
+      {l.photoCredit && l.photos.length > 0 && (
+        <p class="-mt-10 mb-12 text-xs text-stone-500">{l.photoCredit}</p>
+      )}
     </div>
 
     <div class="container mx-auto px-6 pb-16">

@@ -21,7 +21,8 @@
     "status": "Draft",
     "order": 1,
     "leadTime": "Book 1 day before",
-    "whatsappText": "Hi Apricot Stays, I'd like a car wash at my home."
+    "whatsappText": "Hi Apricot Stays, I'd like a car wash at my home.",
+    "photoCredit": ""
   },
   {
     "name": "Home-style tiffin, lunch and dinner",
@@ -45,7 +46,8 @@
     "status": "Draft",
     "order": 2,
     "leadTime": "Order by [CUT-OFF] for the next meal",
-    "whatsappText": "Hi Apricot Stays, I'd like to order tiffin."
+    "whatsappText": "Hi Apricot Stays, I'd like to order tiffin.",
+    "photoCredit": ""
   },
   {
     "name": "Tasting menu at NAAR, Kasauli: we drive, you dine",
@@ -69,6 +71,7 @@
     "status": "Draft",
     "order": 1,
     "leadTime": "Ask [X] days ahead",
-    "whatsappText": "Hi Apricot Stays, I'd like the NAAR Kasauli drive."
+    "whatsappText": "Hi Apricot Stays, I'd like the NAAR Kasauli drive.",
+    "photoCredit": "Photos: NAAR"
   }
 ]

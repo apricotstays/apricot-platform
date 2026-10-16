@@ -16,6 +16,7 @@ export interface ListingRow {
   slug: string;
   section: string;
   photos: { url: string; name: string }[];
+  photoCredit: string;
   badge: string;
   description: string;
   where: string;
@@ -55,6 +56,7 @@ export interface Listing {
   order: number;
   badge: string;
   photos: { url: string; name: string }[];
+  photoCredit: string;
   description: string;
   where: string;
   duration: string;
@@ -168,6 +170,7 @@ export function toListing(row: ListingRow): Listing | null {
     order: row.order ?? 999,
     badge: row.badge.trim(),
     photos: row.photos.filter((p) => p.url),
+    photoCredit: (row.photoCredit ?? "").trim(),
     description: row.description.trim(),
     where: row.where.trim(),
     duration: row.duration.trim(),

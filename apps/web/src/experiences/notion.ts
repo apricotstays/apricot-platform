@@ -62,6 +62,7 @@ export function pageToRow(page: Page): ListingRow {
     slug: text(p["Slug"]),
     section: text(p["Section"]),
     photos: files(p["Photos"]),
+    photoCredit: text(p["Photo credit"]),
     badge: text(p["Badge"]),
     description: text(p["Description"]),
     where: text(p["Where"]),

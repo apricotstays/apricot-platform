@@ -20,6 +20,7 @@ const row = (over: Partial<ListingRow> = {}): ListingRow => ({
   slug: "car-wash",
   section: "At your door",
   photos: [],
+  photoCredit: "",
   badge: "",
   description: "Washed in the driveway.",
   where: "Your home",
