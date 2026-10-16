@@ -75,8 +75,12 @@ export interface Listing {
   placeholders: string[];
 }
 
-/** Rows on the listing page, in this order. Unknown sections are added after these. */
-export const SECTION_ORDER = ["At your door", "Day trips"] as const;
+/**
+ * Default order of rows on the listing page. The live order comes from Notion: the order of the
+ * options in the "Section" property (drag them in Notion → Section → Edit property). This list is
+ * only the fallback when Notion can't be read. Sections not listed are added after, A–Z.
+ */
+export const SECTION_ORDER: readonly string[] = ["At your door", "Day trips"];
 
 export const SECTION_SUBTITLES: Record<string, string> = {
   "At your door": "We send someone to your Apricot home",
@@ -202,12 +206,16 @@ export interface SelectResult {
  * - Previews (showDrafts): Live + Draft, placeholders allowed, so pages can be reviewed before launch.
  * Paused rows never show. Duplicate slugs: the first (by section/order) wins.
  */
-export function selectListings(rows: ListingRow[], showDrafts: boolean): SelectResult {
+export function selectListings(
+  rows: ListingRow[],
+  showDrafts: boolean,
+  sectionOrder: readonly string[] = SECTION_ORDER,
+): SelectResult {
   const skipped: string[] = [];
   const out: Listing[] = [];
   const seen = new Set<string>();
   const all = rows.map(toListing).filter((l): l is Listing => l !== null);
-  for (const l of sortListings(all)) {
+  for (const l of sortListings(all, sectionOrder)) {
     const visible = l.status === "Live" || (showDrafts && l.status === "Draft");
     if (!visible) {
       skipped.push(`${l.title}: ${l.status}`);
@@ -227,24 +235,30 @@ export function selectListings(rows: ListingRow[], showDrafts: boolean): SelectR
   return { listings: out, skipped };
 }
 
-function sectionRank(s: string): number {
-  const i = (SECTION_ORDER as readonly string[]).indexOf(s);
-  return i === -1 ? SECTION_ORDER.length : i;
+function sectionRank(s: string, order: readonly string[]): number {
+  const i = order.indexOf(s);
+  return i === -1 ? order.length : i;
 }
 
-export function sortListings(ls: Listing[]): Listing[] {
+export function sortListings(
+  ls: Listing[],
+  sectionOrder: readonly string[] = SECTION_ORDER,
+): Listing[] {
   return [...ls].sort(
     (a, b) =>
-      sectionRank(a.section) - sectionRank(b.section) ||
+      sectionRank(a.section, sectionOrder) - sectionRank(b.section, sectionOrder) ||
       a.section.localeCompare(b.section) ||
       a.order - b.order ||
       a.title.localeCompare(b.title),
   );
 }
 
-export function groupBySection(ls: Listing[]): { title: string; listings: Listing[] }[] {
+export function groupBySection(
+  ls: Listing[],
+  sectionOrder: readonly string[] = SECTION_ORDER,
+): { title: string; listings: Listing[] }[] {
   const groups = new Map<string, Listing[]>();
-  for (const l of sortListings(ls)) {
+  for (const l of sortListings(ls, sectionOrder)) {
     groups.set(l.section, [...(groups.get(l.section) ?? []), l]);
   }
   return [...groups].map(([title, listings]) => ({ title, listings }));

@@ -115,3 +115,26 @@ export async function fetchRows(
   } while (cursor);
   return rows;
 }
+
+/**
+ * Order of the options in the database's "Section" select property, as arranged in Notion.
+ * Empty if the property is missing or not a select. Throws on API errors.
+ */
+export async function fetchSectionOrder(
+  token: string,
+  databaseId: string,
+  fetchImpl: Fetch = fetch,
+): Promise<string[]> {
+  const res = await fetchImpl(`https://api.notion.com/v1/databases/${databaseId}`, {
+    headers: { Authorization: `Bearer ${token}`, "Notion-Version": NOTION_VERSION },
+  });
+  if (!res.ok) {
+    throw new Error(`Notion API ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  }
+  const data = (await res.json()) as {
+    properties?: Record<string, { type: string; select?: { options?: { name: string }[] } }>;
+  };
+  const section = data.properties?.["Section"];
+  if (section?.type !== "select") return [];
+  return (section.select?.options ?? []).map((o) => o.name);
+}

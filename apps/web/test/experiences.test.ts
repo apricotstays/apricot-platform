@@ -11,7 +11,7 @@ import {
   toListing,
   type ListingRow,
 } from "../src/experiences/core";
-import { fetchRows, pageToRow } from "../src/experiences/notion";
+import { fetchRows, fetchSectionOrder, pageToRow } from "../src/experiences/notion";
 import snapshot from "../src/experiences/snapshot.json";
 
 const row = (over: Partial<ListingRow> = {}): ListingRow => ({
@@ -129,6 +129,23 @@ describe("selectListings", () => {
     ]);
   });
 
+  it("follows a section order from Notion, unknown sections last", () => {
+    const { listings } = selectListings(
+      [
+        row(),
+        row({ name: "NAAR", slug: "naar", section: "Day trips", kind: "Experience" }),
+        row({ name: "Other", slug: "other", section: "Zzz" }),
+      ],
+      false,
+      ["Day trips", "At your door"],
+    );
+    expect(groupBySection(listings, ["Day trips", "At your door"]).map((g) => g.title)).toEqual([
+      "Day trips",
+      "At your door",
+      "Zzz",
+    ]);
+  });
+
   it("the committed snapshot builds three preview pages and nothing public yet", () => {
     expect(selectListings(snapshot as ListingRow[], true).listings.map((l) => l.slug)).toEqual([
       "car-wash",
@@ -190,6 +207,28 @@ describe("Notion", () => {
     expect(url).toBe("https://api.notion.com/v1/databases/db1/query");
     expect(init.headers.Authorization).toBe("Bearer secret_t");
     expect(JSON.parse(init.body)).toEqual({ page_size: 100, start_cursor: "c2" });
+  });
+
+  it("reads the Section option order from the database schema", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          properties: {
+            Section: {
+              type: "select",
+              select: { options: [{ name: "Day trips" }, { name: "At your door" }] },
+            },
+          },
+        }),
+      ),
+    );
+    expect(await fetchSectionOrder("t", "db1", fetchMock as unknown as typeof fetch)).toEqual([
+      "Day trips",
+      "At your door",
+    ]);
+    expect(fetchMock.mock.calls[0][0]).toBe("https://api.notion.com/v1/databases/db1");
+    const noSection = vi.fn().mockResolvedValue(new Response(JSON.stringify({ properties: {} })));
+    expect(await fetchSectionOrder("t", "db1", noSection as unknown as typeof fetch)).toEqual([]);
   });
 
   it("throws on API errors (the loader then falls back to the snapshot)", async () => {
