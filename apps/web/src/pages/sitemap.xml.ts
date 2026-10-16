@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { properties } from "@apricot/schema";
 
-// Keep in sync with pages in src/pages (excluding 404).
+// Keep in sync with pages in src/pages (excluding 404 and /menu, a noindex page for in-house guests).
 const paths = ["/", "/our-story", ...properties.map((p) => `/stays/${p.slug}`), "/privacy"];
 
 export const GET: APIRoute = ({ site }) => {
