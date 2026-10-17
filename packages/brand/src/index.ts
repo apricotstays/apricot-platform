@@ -56,3 +56,13 @@ export const trust = {
   superhost: true,
   checked: "Oct 2026",
 } as const;
+
+/**
+ * "Powered by STAIZ" credit in the site footer — STAIZ is the operating system
+ * Apricot Stays runs on (our B2B product). Set `url` once the STAIZ site is live
+ * and the credit becomes a link; while it's null it renders as plain text.
+ */
+export const poweredBy = {
+  name: "STAIZ",
+  url: null as string | null,
+} as const;
