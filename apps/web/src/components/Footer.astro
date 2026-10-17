@@ -1,5 +1,6 @@
 ---
-import { contact, poweredBy } from "@apricot/brand";
+import { contact } from "@apricot/brand";
+import StaizMark from "./StaizMark.astro";
 import { properties } from "@apricot/schema";
 import { loadExperiences } from "../experiences/load";
 
@@ -90,19 +91,7 @@ const item = "text-stone-500 transition-colors hover:text-stone-900";
     <div class="flex flex-col items-center justify-between gap-4 border-t border-stone-200 pt-8 text-sm text-stone-500 md:flex-row">
       <p>&copy; {year} Apricot Stays. All rights reserved.</p>
       <p class="text-xs tracking-[0.15em] uppercase">
-        Powered by{" "}
-        {poweredBy.url ? (
-          <a
-            href={poweredBy.url}
-            target="_blank"
-            rel="noopener"
-            class="font-medium text-stone-700 hover:text-stone-900"
-          >
-            {poweredBy.name}
-          </a>
-        ) : (
-          <span class="font-medium text-stone-700">{poweredBy.name}</span>
-        )}
+        Powered by <StaizMark />
       </p>
       <a href="/privacy" class="hover:text-stone-800">
         Privacy

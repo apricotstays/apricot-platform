@@ -1,0 +1,23 @@
+---
+/**
+ * The STAIZ wordmark as text: ST·AI·Z with "AI" in the apricot accent, a nod to
+ * the AI inside STAIZ. Links to the STAIZ site once `poweredBy.url` is set.
+ */
+import { poweredBy } from "@apricot/brand";
+---
+
+{poweredBy.url ? (
+  <a
+    href={poweredBy.url}
+    target="_blank"
+    rel="noopener"
+    class="font-medium text-stone-700 hover:text-stone-900"
+    aria-label="STAIZ"
+  >
+    ST<span class="text-apricot">AI</span>Z
+  </a>
+) : (
+  <span class="font-medium text-stone-700" aria-label="STAIZ">
+    ST<span class="text-apricot">AI</span>Z
+  </span>
+)}

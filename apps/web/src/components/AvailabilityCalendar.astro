@@ -1,4 +1,5 @@
 ---
+import StaizMark from "./StaizMark.astro";
 /**
  * Availability calendar for one home. Starts hidden and only appears once /api/availability
  * answers with fresh data (≤ 24 h old). Any failure (no secret for this home, Airbnb down,
@@ -86,6 +87,9 @@ const chevron = (d: string) =>
     </button>
   </div>
   <p class="mt-4 border-t border-stone-100 pt-4 text-sm text-stone-500" data-avail-updated></p>
+  <p class="mt-2 text-xs tracking-[0.15em] text-stone-500 uppercase">
+    Live availability · powered by <StaizMark />
+  </p>
 </section>
 
 <!-- Phone only: sticky booking bar, shown once the calendar has been scrolled into view. -->
