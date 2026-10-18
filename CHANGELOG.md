@@ -4,6 +4,10 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ## [Unreleased]
 
+### Changed
+
+- **Garden Shop: Birds of the Garden posters now shown in white frames.** All ten poster images replaced with CK's white-frame versions (same birds, borders and numbering); "black frame" → "white frame" in the collection specs, product details and image descriptions. (CK, 19 Oct 2026.)
+
 ### Added
 
 - **Garden Shop v1: shelves, collection pages and product pages; "Birds of the Garden" framed posters.** `/shop` now opens with a button per collection (name, product type, "from" price) and one sideways-scrolling shelf per collection, in the order set by `position` — Birds of the Garden first (marked New), then Words of the Garden (the tumblers). Each shelf has "See all" leading to a collection page (`/shop/birds-of-the-garden`, `/shop/words-of-the-garden`: full grid, price and specs, an Order button on every card, and a link to the other collection). Every design has its own product page (`/shop/<collection>/<item>`, e.g. `/shop/birds-of-the-garden/indian-grey-hornbill`): large image, price, a short description, "Order on WhatsApp", details (size, frame or material, delivery), "More from …" and "Pairs well with". New collection: ten A4 framed watercolour posters of Chandigarh garden birds, ₹999 each (the Indian grey hornbill — Chandigarh's state bird — through to a coppersmith barbet on apricot blossom). The tumbler collection is now named "Words of the Garden". Still soft launch: noindex, not in the sitemap, footer link only. Data: `src/data/shop.ts` (`collections`); shared parts in `src/components/shop/`. Product descriptions drafted by Claude for CK's review. Mockups approved by CK 19 Oct 2026.
