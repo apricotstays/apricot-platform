@@ -4,6 +4,10 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ## [Unreleased]
 
+### Added
+
+- **Garden Shop: "Birds of the Garden" framed prints.** Ten A4 framed watercolours of garden birds of Chandigarh (Indian grey hornbill — Chandigarh's state bird — rose-ringed parakeet, Indian roller, red-whiskered bulbul, purple sunbird, common hoopoe, oriental magpie-robin, white-throated kingfisher, Asian koel, coppersmith barbet on apricot blossom), each on its own soft English-colour mat. ₹999 each, printed to order by Qikink, ordered on WhatsApp. The shop is now organised in collections (Tumblers, Birds of the Garden) with jump links at the top; each collection has its own price, specs and numbering, and the WhatsApp message names the collection. Images in `src/assets/shop/prints/`; data in `src/data/shop.ts` (`collections`). Tests cover every collection. Approved by CK 19 Oct 2026.
+
 ### Changed
 
 - **Garden Shop: removed "A garden is not an amenity. It is a reason."** (CK, 18 Oct 2026). Ten designs remain, renumbered No. 01–10 in the same order (Jasmine is now No. 01, Apricot No. 10); image files renamed to match.

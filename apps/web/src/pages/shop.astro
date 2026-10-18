@@ -4,19 +4,20 @@ import Base from "../layouts/Base.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import { contact } from "@apricot/brand";
-import { formatPrice, orderMessage, products, shop } from "../data/shop";
+import { collections, formatPrice, orderMessage } from "../data/shop";
 
 /*
- * /shop — The Garden Shop. Tumblers carrying lines from our garden, printed to order (Qikink)
+ * /shop — The Garden Shop. Tumblers and framed bird prints, printed to order (Qikink)
  * and ordered on WhatsApp: pre-filled message → UPI → printed and shipped.
  * Soft launch: linked from the footer only, noindex, not in the sitemap, until the first
- * printed sample is approved. Palette is page-scoped (Our Story's cream and forest green).
- * Products and price: src/data/shop.ts.
+ * printed samples are approved. Palette is page-scoped (Our Story's cream and forest green).
+ * Collections, prices and designs: src/data/shop.ts.
  */
-const price = formatPrice(shop.price);
 const askHref = contact.whatsappLink("Hi Apricot Stays, a question about the Garden Shop.");
 const btn =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#2f4a3a] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#223729] focus-visible:ring-2 focus-visible:ring-[#2f4a3a] focus-visible:ring-offset-2 focus-visible:outline-none";
+const chip =
+  "inline-flex min-h-11 items-center rounded-full border border-[#2f4a3a]/30 bg-white px-5 text-sm font-semibold text-[#2f4a3a] hover:border-[#2f4a3a] focus-visible:ring-2 focus-visible:ring-[#2f4a3a] focus-visible:ring-offset-2 focus-visible:outline-none";
 const steps = [
   {
     title: "Tap “Order on WhatsApp”",
@@ -27,8 +28,8 @@ const steps = [
     text: "We reply with the total and a payment request. Send us the delivery address.",
   },
   {
-    title: "It's printed and shipped",
-    text: "Each tumbler is made to order. We share the tracking link in the same chat.",
+    title: "It's made and shipped",
+    text: "Everything is printed to order. We share the tracking link in the same chat.",
   },
   {
     title: "Sending it as a gift?",
@@ -39,88 +40,107 @@ const steps = [
 
 <Base
   title="The Garden Shop · Apricot Stays"
-  description={`Tumblers wrapped in our garden, each carrying one line from it. ${price} each, printed to order and delivered across India. Order on WhatsApp.`}
+  description="Tumblers carrying lines from our garden, and framed watercolours of the birds that visit it. Printed to order, delivered across India. Order on WhatsApp."
   noindex
 >
   <Navbar />
 
   <main id="main" class="bg-[#fbf7f0] text-[#3b3631]">
-    <section class="container mx-auto flex flex-wrap items-end justify-between gap-10 px-6 pt-14 pb-10 sm:pt-20">
-      <div class="max-w-2xl min-w-0 flex-[1_1_520px]">
-        <p class="mb-3 text-xs font-semibold tracking-[0.18em] text-[#2f4a3a] uppercase">
-          The Garden Shop
-        </p>
-        <h1 class="font-serif text-5xl leading-[1.08] font-medium text-[#2f4a3a] sm:text-6xl">
-          Take the garden home.
-        </h1>
-        <p class="mt-5 max-w-xl text-lg leading-relaxed">
-          Tumblers wrapped in our garden, each carrying one line from it. Keep one for your own slow
-          mornings, or send one to someone who needs a quieter day.
-        </p>
-      </div>
-      <div class="flex-[0_1_340px] rounded-2xl border border-[#e6d5bf] bg-white px-6 py-5">
-        <p class="font-serif text-2xl text-[#2f4a3a]">{price} each</p>
-        <p class="mt-1 text-[15px] leading-relaxed">
-          {shop.specs}. Printed to order and delivered anywhere in India.
-        </p>
-      </div>
+    <section class="container mx-auto px-6 pt-14 pb-8 sm:pt-20">
+      <p class="mb-3 text-xs font-semibold tracking-[0.18em] text-[#2f4a3a] uppercase">
+        The Garden Shop
+      </p>
+      <h1 class="font-serif text-5xl leading-[1.08] font-medium text-[#2f4a3a] sm:text-6xl">
+        Take the garden home.
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed">
+        Tumblers carrying lines from our garden, and watercolours of the birds that visit it.
+        Printed to order and delivered anywhere in India.
+      </p>
+      <nav aria-label="Collections" class="mt-7 flex flex-wrap gap-3">
+        {collections.map((c) => (
+          <a href={`#${c.id}`} class={chip}>
+            {c.title} · {formatPrice(c.price)}
+          </a>
+        ))}
+      </nav>
     </section>
 
-    <section aria-labelledby="designs-h" class="container mx-auto px-6 pb-16">
-      <h2 id="designs-h" class="sr-only">
-        Designs
-      </h2>
-      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {products.map((p, i) => (
-          <li class="flex flex-col overflow-hidden rounded-2xl border border-[#e6d5bf] bg-white">
-            <div class="relative aspect-[3/4] bg-[#d6dee4]">
-              <Image
-                src={p.image}
-                alt={`Apricot Stays tumbler with ${p.artwork} and the line “${p.quote}”`}
-                widths={[360, 540, 720]}
-                sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                loading={i < 4 ? "eager" : "lazy"}
-                class="h-full w-full object-cover"
-              />
-              <span class="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold">
-                No. {p.no}
-              </span>
-            </div>
-            <div class="flex flex-1 flex-col gap-4 p-5">
-              <p class="flex-1 font-serif text-[19px] leading-snug text-[#2f4a3a]">“{p.quote}”</p>
-              <div class="flex flex-wrap items-center justify-between gap-3">
-                <span class="font-semibold">{price}</span>
-                <a
-                  href={contact.whatsappLink(orderMessage(p))}
-                  target="_blank"
-                  rel="noopener"
-                  class={btn}
-                  aria-label={`Order No. ${p.no} on WhatsApp`}
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z" />
-                  </svg>
-                  Order on WhatsApp
-                </a>
+    {collections.map((c, ci) => (
+      <section
+        id={c.id}
+        aria-labelledby={`${c.id}-h`}
+        class="container mx-auto scroll-mt-24 px-6 pt-8 pb-16"
+      >
+        <div class="mb-8 flex flex-wrap items-end justify-between gap-6 border-t border-[#e6d5bf] pt-10">
+          <div class="max-w-2xl min-w-0 flex-[1_1_480px]">
+            <h2 id={`${c.id}-h`} class="font-serif text-4xl font-medium text-[#2f4a3a]">
+              {c.title}
+            </h2>
+            <p class="mt-3 text-[17px] leading-relaxed">{c.intro}</p>
+          </div>
+          <div class="flex-[0_1_340px] rounded-2xl border border-[#e6d5bf] bg-white px-6 py-5">
+            <p class="font-serif text-2xl text-[#2f4a3a]">{formatPrice(c.price)} each</p>
+            <p class="mt-1 text-[15px] leading-relaxed">{c.specs}.</p>
+          </div>
+        </div>
+        <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {c.items.map((item, i) => (
+            <li class="flex flex-col overflow-hidden rounded-2xl border border-[#e6d5bf] bg-white">
+              <div class="relative bg-[#d6dee4]" style={`aspect-ratio: ${c.aspect}`}>
+                <Image
+                  src={item.image}
+                  alt={item.alt}
+                  widths={[360, 540, 720]}
+                  sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  loading={ci === 0 && i < 4 ? "eager" : "lazy"}
+                  class="h-full w-full object-cover"
+                />
+                <span class="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold">
+                  No. {item.no}
+                </span>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <p class="mt-6 text-sm text-[#6b5f52]">
-        Product pictures are design previews; colours on the printed tumbler may vary slightly.
-      </p>
-    </section>
+              <div class="flex flex-1 flex-col gap-4 p-5">
+                <div class="flex-1">
+                  <p class="font-serif text-[19px] leading-snug text-[#2f4a3a]">
+                    {c.quoted ? `“${item.title}”` : item.title}
+                  </p>
+                  {item.note && <p class="mt-1 text-sm text-[#6b5f52]">{item.note}</p>}
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                  <span class="font-semibold">{formatPrice(c.price)}</span>
+                  <a
+                    href={contact.whatsappLink(orderMessage(c, item))}
+                    target="_blank"
+                    rel="noopener"
+                    class={btn}
+                    aria-label={`Order ${c.title} No. ${item.no} on WhatsApp`}
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z" />
+                    </svg>
+                    Order on WhatsApp
+                  </a>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-6 text-sm text-[#6b5f52]">
+          Pictures are design previews; colours in print may vary slightly.
+        </p>
+      </section>
+    ))}
 
     <section aria-labelledby="how-h" class="bg-[#2f4a3a] text-[#f4ece0]">
       <div class="container mx-auto px-6 py-16">
@@ -152,8 +172,8 @@ const steps = [
           <div>
             <dt class="font-semibold">Staying with us?</dt>
             <dd class="mt-1">
-              The tumbler in your home is ours to keep for the next guest. Scan the card beside it
-              to order your own.
+              The tumbler and prints in your home are ours to keep for the next guest. Scan the card
+              beside them to order your own.
             </dd>
           </div>
           <div>
