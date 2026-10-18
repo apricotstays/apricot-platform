@@ -110,7 +110,7 @@ const bird = (
   title,
   note,
   description,
-  alt: `Framed A4 poster: watercolour of a ${title.toLowerCase()} ${scene}, on a ${mat} border, in a black frame`,
+  alt: `Framed A4 poster: watercolour of a ${title.toLowerCase()} ${scene}, on a ${mat} border, in a white frame`,
   image,
 });
 
@@ -233,10 +233,10 @@ const unsorted: ShopCollection[] = [
     unit: "framed poster",
     // CK, 19 Oct 2026; Qikink A4 framed ≈ ₹410 incl. shipping + GST.
     price: 999,
-    specs: "A4 poster on 300 gsm art paper, in a black frame, with a hanging kit",
+    specs: "A4 poster on 300 gsm art paper, in a white frame, with a hanging kit",
     details: [
       { label: "Size", value: "A4 poster (21 × 29.7 cm)" },
-      { label: "Frame", value: "Black, about 1 inch, with a hanging kit" },
+      { label: "Frame", value: "White, about 1 inch, with a hanging kit" },
       { label: "Paper", value: "300 gsm art paper; the coloured border is printed" },
       { label: "Delivery", value: DELIVERY },
     ],
