@@ -4,6 +4,10 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ## [Unreleased]
 
+### Changed
+
+- **Garden Shop: removed "A garden is not an amenity. It is a reason."** (CK, 18 Oct 2026). Ten designs remain, renumbered No. 01–10 in the same order (Jasmine is now No. 01, Apricot No. 10); image files renamed to match.
+
 ### Added
 
 - **The Garden Shop (`/shop`), soft launch.** Eleven 20 oz tumblers, each wrapped in watercolour garden artwork and carrying one line from our garden (CK's own copy; No. 11 is Shivani's line from Our Story). ₹1,199 each. Each card has "Order on WhatsApp", which opens a message naming the design and its number; payment by UPI; printed to order by Qikink and shipped to the customer. "How ordering works", gift note, damage policy and an Our Story quote. Page-scoped Our Story palette (cream, forest green); site header and footer unchanged apart from one "The Garden Shop" link in the footer's Explore list. Noindex and not in the sitemap until the first printed sample is approved. Products and price in `src/data/shop.ts`; images in `src/assets/shop/` (design previews, labelled as such). Unit tests for numbering, price formatting and the order message; `/shop` added to the accessibility check. Mockup approved by CK 18 Oct 2026.
