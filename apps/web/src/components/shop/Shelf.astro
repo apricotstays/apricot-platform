@@ -1,0 +1,97 @@
+---
+import { Image } from "astro:assets";
+import {
+  displayTitle,
+  formatPrice,
+  productHref,
+  type ShopCollection,
+  type ShopItem,
+} from "../../data/shop";
+
+/*
+ * One horizontal shelf of product cards. Used for collections on /shop and for
+ * "More from …" on product pages. Cards link to product pages; the last card is "See all".
+ */
+interface Props {
+  collection: ShopCollection;
+  items?: ShopItem[];
+  heading?: string;
+  eager?: boolean;
+  id?: string;
+  /** Show the eyebrow ("Framed posters · from ₹999 · New") and blurb. */
+  full?: boolean;
+}
+const {
+  collection: c,
+  items = c.items,
+  heading = c.title,
+  eager = false,
+  id,
+  full = true,
+} = Astro.props;
+const page = `/shop/${c.slug}`;
+const headingId = `${id ?? c.slug}-h`;
+---
+
+<section id={id} aria-labelledby={headingId} class="container mx-auto scroll-mt-6 pt-10 pb-2">
+  <div class="mb-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 px-6">
+    <div class="min-w-0">
+      {full && (
+        <p class="mb-1 text-xs font-semibold tracking-[0.16em] text-[#8a5a3c] uppercase">
+          {c.kind} · from {formatPrice(c.price)}
+          {c.badge && ` · ${c.badge}`}
+        </p>
+      )}
+      <h2 id={headingId} class="font-serif text-3xl font-medium text-[#2f4a3a]">
+        {heading}
+      </h2>
+      {full && <p class="mt-1 text-[15px] text-[#6b5f52]">{c.blurb}</p>}
+    </div>
+    <a
+      href={page}
+      class="inline-flex min-h-11 items-center text-[15px] font-semibold text-[#2f4a3a] underline underline-offset-[6px] hover:text-[#1d3024]"
+    >
+      See all {c.items.length}
+      <span aria-hidden="true">&nbsp;→</span>
+    </a>
+  </div>
+  <ul class="flex snap-x snap-mandatory scroll-px-6 gap-3.5 overflow-x-auto px-6 pt-0.5 pb-5">
+    {items.map((item, i) => (
+      <li class="w-[200px] shrink-0 snap-start">
+        <a
+          href={productHref(c, item)}
+          class="flex h-full flex-col overflow-hidden rounded-[14px] border border-[#e6d5bf] bg-white focus-visible:ring-2 focus-visible:ring-[#2f4a3a] focus-visible:ring-offset-2 focus-visible:outline-none"
+        >
+          <span class="block bg-[#d6dee4]" style={`aspect-ratio: ${c.aspect}`}>
+            <Image
+              src={item.image}
+              alt={item.alt}
+              widths={[200, 400]}
+              sizes="200px"
+              loading={eager && i < 5 ? "eager" : "lazy"}
+              class="h-full w-full object-cover"
+            />
+          </span>
+          <span class="flex flex-1 flex-col gap-1 px-3 pt-2.5 pb-3">
+            <span class="flex-1 font-serif text-[15px] leading-snug text-[#2f4a3a]">
+              {displayTitle(c, item)}
+            </span>
+            <span class="text-[13px] font-semibold">{formatPrice(c.price)}</span>
+          </span>
+        </a>
+      </li>
+    ))}
+    <li class="w-[150px] shrink-0 snap-start">
+      <a
+        href={page}
+        class="flex h-full min-h-40 flex-col items-center justify-center gap-1.5 rounded-[14px] border border-dashed border-[#c9b79a] p-4 text-center text-[#2f4a3a] hover:border-[#2f4a3a] focus-visible:ring-2 focus-visible:ring-[#2f4a3a] focus-visible:ring-offset-2 focus-visible:outline-none"
+      >
+        <span class="font-serif text-xl">See all {c.items.length}</span>
+        <span class="text-sm">
+          {c.title}
+          <span aria-hidden="true"> →</span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</section>

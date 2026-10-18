@@ -1,0 +1,61 @@
+---
+import Base from "../../layouts/Base.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import Shelf from "../../components/shop/Shelf.astro";
+import ShopInfo from "../../components/shop/ShopInfo.astro";
+import { collections, fromPrice } from "../../data/shop";
+
+/*
+ * /shop — The Garden Shop home: jump buttons to each collection, then one shelf per collection
+ * (in `position` order), each linking to /shop/<collection> and to product pages.
+ * Printed to order (Qikink), ordered on WhatsApp. Soft launch: footer link only, noindex,
+ * not in the sitemap. Palette is page-scoped (Our Story's cream and forest green).
+ * Planned for ~4+ collections: a row of round collection thumbnails and a sticky
+ * "Jump to a collection" bar (mockups approved by CK, 19 Oct 2026).
+ */
+const chip =
+  "inline-flex min-h-11 flex-col justify-center rounded-full border border-[#c9b79a] bg-white px-[18px] py-2 text-[#2f4a3a] hover:border-[#2f4a3a] focus-visible:ring-2 focus-visible:ring-[#2f4a3a] focus-visible:ring-offset-2 focus-visible:outline-none";
+---
+
+<Base
+  title="The Garden Shop · Apricot Stays"
+  description="Framed posters of the birds that visit our gardens, and tumblers carrying words from them. Made to order, delivered across India. Order on WhatsApp."
+  noindex
+>
+  <Navbar />
+
+  <main id="main" class="bg-[#fbf7f0] text-[#3b3631]">
+    <section class="container mx-auto px-6 pt-12 sm:pt-16">
+      <p class="mb-3 text-xs font-semibold tracking-[0.18em] text-[#2f4a3a] uppercase">
+        The Garden Shop
+      </p>
+      <h1 class="font-serif text-5xl leading-[1.08] font-medium text-[#2f4a3a] sm:text-6xl">
+        Take the garden home.
+      </h1>
+      <p class="mt-4 max-w-2xl text-lg leading-relaxed">
+        Framed posters of the birds that visit our gardens, and tumblers carrying words from them.
+        Made to order and delivered anywhere in India.
+      </p>
+      <nav aria-label="Collections" class="mt-6 flex flex-wrap gap-2.5">
+        {collections.map((c) => (
+          <a href={`#${c.slug}`} class={chip}>
+            <span class="text-[15px] font-semibold">{c.title}</span>
+            <span class="text-xs text-[#6b5f52]">
+              {c.kind} · {fromPrice(c)}
+            </span>
+          </a>
+        ))}
+      </nav>
+    </section>
+
+    {collections.map((c, i) => (
+      <Shelf collection={c} id={c.slug} eager={i === 0} />
+    ))}
+
+    <div class="pt-10"></div>
+    <ShopInfo />
+  </main>
+
+  <Footer />
+</Base>
