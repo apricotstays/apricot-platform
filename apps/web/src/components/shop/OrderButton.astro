@@ -1,0 +1,32 @@
+---
+/* "Order on WhatsApp" pill. `size="lg"` is the full-width button on product pages. */
+interface Props {
+  href: string;
+  label?: string;
+  ariaLabel?: string;
+  size?: "sm" | "lg";
+}
+const { href, label = "Order on WhatsApp", ariaLabel, size = "sm" } = Astro.props;
+const cls =
+  size === "lg"
+    ? "flex min-h-13 w-full items-center justify-center gap-2.5 rounded-full bg-[#2f4a3a] px-6 text-base font-semibold text-white transition-colors hover:bg-[#223729] focus-visible:ring-2 focus-visible:ring-[#2f4a3a] focus-visible:ring-offset-2 focus-visible:outline-none"
+    : "inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#2f4a3a] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#223729] focus-visible:ring-2 focus-visible:ring-[#2f4a3a] focus-visible:ring-offset-2 focus-visible:outline-none";
+const icon = size === "lg" ? 18 : 15;
+---
+
+<a href={href} target="_blank" rel="noopener" class={cls} aria-label={ariaLabel}>
+  <svg
+    width={icon}
+    height={icon}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"></path>
+  </svg>
+  {label}
+</a>
