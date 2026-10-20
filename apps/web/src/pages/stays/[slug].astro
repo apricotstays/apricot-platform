@@ -8,7 +8,7 @@ import Icon from "../../components/Icon.astro";
 import TrustLine from "../../components/TrustLine.astro";
 import AvailabilityCalendar from "../../components/AvailabilityCalendar.astro";
 import GuestReviews from "../../components/GuestReviews.astro";
-import { fromLine, properties, ratesChecked, type Property } from "@apricot/schema";
+import { fromLine, properties, ratesChecked, to24h, type Property } from "@apricot/schema";
 import { brand, contact } from "@apricot/brand";
 import { galleries, rooms } from "../../data/media";
 import { reviews } from "../../data/reviews";
@@ -34,6 +34,29 @@ const book = contact.whatsappLink(
 );
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${contact.address.geo.latitude},${contact.address.geo.longitude}`;
 
+const pol = p.policy;
+const directPerks = [
+  `Free cancellation ${pol.freeCancellation.toLowerCase()}`,
+  "Full stay credit instead of a partial refund",
+  "Late checkout until 2 PM when the home is free",
+  "Talk to the hosts on WhatsApp, before and during your stay",
+];
+type KnowCard = { icon: "clock" | "home" | "shield"; title: string; lines: readonly string[] };
+const knowCards: KnowCard[] = [
+  {
+    icon: "clock",
+    title: "Check-in & checkout",
+    lines: [
+      `Check-in from ${pol.checkIn}`,
+      "Self check-in until 8 PM; later by arrangement",
+      `Checkout by ${pol.checkOut}`,
+      "Late checkout until 2 PM when the home is free (direct bookings)",
+    ],
+  },
+  { icon: "home", title: "House rules", lines: pol.rules },
+  { icon: "shield", title: "Cancellation", lines: pol.cancellation },
+];
+
 type Fact = { icon: "users" | "bed" | "bath"; label: string };
 const facts: Fact[] = [
   { icon: "users", label: `Up to ${p.maxGuests} guests` },
@@ -56,6 +79,9 @@ const jsonLd = {
   telephone: contact.whatsappE164,
   numberOfRooms: p.bedrooms,
   priceRange: fromLine(p),
+  checkinTime: to24h(pol.checkIn),
+  checkoutTime: to24h(pol.checkOut),
+  petsAllowed: pol.pets === "Welcome",
   amenityFeature: p.amenities.map((a) => ({
     "@type": "LocationFeatureSpecification",
     name: a,
@@ -216,6 +242,34 @@ const jsonLd = {
 
           <AvailabilityCalendar slug={p.slug} name={p.name} priceLine={fromLine(p)} />
 
+          <section id="things-to-know" aria-labelledby="know-h">
+            <h2 id="know-h" class="mb-2 text-xl font-semibold text-stone-800">
+              Things to know
+            </h2>
+            <p class="mb-6 text-stone-600">
+              The short version. Everything else is on our{" "}
+              <a href="/policies" class="font-medium text-stone-800 underline underline-offset-4">
+                stay policies &amp; FAQ
+              </a>{" "}
+              page.
+            </p>
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+              {knowCards.map((c) => (
+                <div class="border border-stone-200 p-5">
+                  <h3 class="mb-3 flex items-center gap-2 font-semibold text-stone-800">
+                    <Icon name={c.icon} size={18} />
+                    {c.title}
+                  </h3>
+                  <ul class="space-y-1.5 text-sm leading-relaxed text-stone-600">
+                    {c.lines.map((l) => (
+                      <li>{l}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+
           <section id="location" aria-labelledby="location-h">
             <h2 id="location-h" class="mb-6 text-xl font-semibold text-stone-800">
               Location
@@ -292,6 +346,23 @@ const jsonLd = {
                 </span>
               </span>
             </a>
+            <div class="mb-5 bg-linen p-4">
+              <p class="mb-2 text-sm font-semibold text-stone-800">Why book with us directly</p>
+              <ul class="space-y-1.5 text-sm leading-snug text-stone-700">
+                {directPerks.map((perk) => (
+                  <li class="flex gap-2">
+                    <Icon name="check" size={16} class="mt-0.5 shrink-0" />
+                    <span>{perk}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="/policies"
+                class="mt-2 inline-block text-xs font-medium text-stone-800 underline underline-offset-4"
+              >
+                How our policies work
+              </a>
+            </div>
             <a
               href={book}
               target="_blank"
