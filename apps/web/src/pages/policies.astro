@@ -1,0 +1,293 @@
+---
+import Base from "../layouts/Base.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import { contact } from "@apricot/brand";
+import { policiesUpdated, properties } from "@apricot/schema";
+
+const wa = contact.whatsappLink("Hi Apricot Stays, I have a question about booking.");
+const shortName = (name: string) => name.replace(/^Apricot /, "");
+
+const faq: { group: string; items: { q: string; a: string }[] }[] = [
+  {
+    group: "Before your stay",
+    items: [
+      {
+        q: "How do I book?",
+        a: "Message us on WhatsApp with your dates and number of guests. We confirm the price, and your dates are held once the advance is paid.",
+      },
+      {
+        q: "Is the price on the site final?",
+        a: "It's the starting weekday rate. Weekends and festivals cost more, so we confirm the exact total for your dates on WhatsApp.",
+      },
+      {
+        q: "Can I bring my pet?",
+        a: "Yes, at the Garden Cottage, Garden Courtyard and Garden Care, and at the Garden Château on request. There's a one-time cleaning fee of ₹1,000 per pet; please keep pets off beds and sofas.",
+      },
+      {
+        q: "Is Garden Care suitable for patients and caregivers?",
+        a: "Yes. It's a step-free, ground-floor one-bedroom home a few minutes from PGI and Homi Bhabha Cancer Hospital, for two guests. Longer stays are welcome, and you can change or cancel for free up to 48 hours before.",
+      },
+    ],
+  },
+  {
+    group: "During your stay",
+    items: [
+      {
+        q: "How does check-in work?",
+        a: "We send directions and check-in details on WhatsApp on the day you arrive. Self check-in runs until 8 PM; arriving later is fine, just tell us.",
+      },
+      {
+        q: "Can we order food?",
+        a: "Yes. The City Club in DLF Hyde Park delivers to the door from 9:30 AM to 10 PM. Ask us for the menu link.",
+      },
+      {
+        q: "Who do I contact if something goes wrong?",
+        a: `Message us on WhatsApp at ${contact.whatsappDisplay}. You talk to us, the hosts, not a call centre.`,
+      },
+    ],
+  },
+  {
+    group: "After your stay",
+    items: [
+      {
+        q: "Can I get an invoice?",
+        a: "Yes. Ask us on WhatsApp and we'll send one.",
+      },
+    ],
+  },
+];
+---
+
+<Base
+  title="Stay policies & FAQ · Apricot Stays"
+  description="Cancellation, payment, check-in times, house rules and answers to common questions for Apricot Stays' homes at DLF Hyde Park, New Chandigarh."
+>
+  <Navbar sticky={false} />
+
+  <main id="main" class="mx-auto w-full max-w-7xl px-6 pt-12 pb-20 lg:px-12">
+    <article class="prose-apricot max-w-[72ch]">
+      <p class="eyebrow">Before you book</p>
+      <h1>Stay policies &amp; FAQ</h1>
+      <p class="meta">Last updated {policiesUpdated}</p>
+
+      <p>
+        Everything you'd want to know before booking, in plain words. When you book with us
+        directly, these are the terms. Questions?{" "}
+        <a href={wa} target="_blank" rel="noopener">
+          Message us on WhatsApp
+        </a>
+        .
+      </p>
+
+      <h2 id="at-a-glance">At a glance</h2>
+      <div class="mt-4 overflow-x-auto border border-stone-200">
+        <table class="w-full min-w-[640px] text-left text-sm">
+          <thead class="bg-stone-50 text-stone-800">
+            <tr>
+              <th scope="col" class="px-4 py-3 font-semibold">
+                Home
+              </th>
+              <th scope="col" class="px-4 py-3 font-semibold">
+                Check-in / out
+              </th>
+              <th scope="col" class="px-4 py-3 font-semibold">
+                Guests
+              </th>
+              <th scope="col" class="px-4 py-3 font-semibold">
+                Pets
+              </th>
+              <th scope="col" class="px-4 py-3 font-semibold">
+                Free cancellation
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {properties.map((p) => (
+              <tr class="border-t border-stone-200 text-stone-600">
+                <th scope="row" class="px-4 py-3 font-semibold text-stone-800">
+                  <a href={`/stays/${p.slug}`}>{shortName(p.name)}</a>
+                </th>
+                <td class="px-4 py-3">
+                  {p.policy.checkIn} / {p.policy.checkOut}
+                </td>
+                <td class="px-4 py-3">{p.maxGuests}</td>
+                <td class="px-4 py-3">{p.policy.pets}</td>
+                <td class="px-4 py-3">{p.policy.freeCancellation}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="cancellation">Cancellation &amp; changes</h2>
+      <p>
+        Plans change. We'd rather you come later than not at all, so you always get more back as a
+        stay credit than as a refund.
+      </p>
+      <ul>
+        <li>
+          <strong>Garden Cottage and Garden Courtyard:</strong> full refund up to 14 days before
+          check-in. Between 7 and 14 days, 50% back or 100% as stay credit. Under 7 days,
+          non-refundable.
+        </li>
+        <li>
+          <strong>Garden Château:</strong> full refund up to 30 days before. Between 7 and 30 days,
+          50% back or 100% as stay credit. Under 7 days, non-refundable. Diwali week, 24 December –
+          2 January and booked events are non-refundable but can be moved once.
+        </li>
+        <li>
+          <strong>Garden Care:</strong> change or cancel for free up to 48 hours before check-in.
+          Within 48 hours, we keep the first night and refund the rest. Hospital dates move, and we
+          understand.
+        </li>
+        <li>
+          <strong>One free date change</strong> if you're more than 7 days out (Château: 30), to new
+          dates within 6 months, subject to availability.
+        </li>
+        <li>
+          <strong>Stay credit</strong> works at any Apricot home for 12 months.
+        </li>
+        <li>
+          <strong>Changed your mind straight away?</strong> Cancel within 24 hours of booking for a
+          full refund, as long as check-in is more than 7 days away.
+        </li>
+        <li>
+          <strong>If we ever have to cancel,</strong> you get a full refund plus 10% extra as stay
+          credit.
+        </li>
+        <li>Refunds go back the way you paid, within 7 working days.</li>
+      </ul>
+
+      <h2 id="payment">Payment</h2>
+      <ul>
+        <li>
+          50% by UPI or bank transfer confirms your booking; the rest is due 7 days before check-in.
+          Booking within 7 days of arrival? Please pay in full.
+        </li>
+        <li>Your advance counts toward the cancellation terms above.</li>
+        <li>
+          Garden Château only: a refundable security deposit of ₹20,000, collected 48 hours before
+          arrival and returned within 3 working days of checkout. Any deduction comes with photos
+          and a breakdown.
+        </li>
+      </ul>
+
+      <h2 id="check-in">Check-in &amp; checkout</h2>
+      <ul>
+        <li>
+          Check-in from 2 PM (Garden Château: 3 PM). Self check-in runs until 8 PM; arriving later
+          is fine, just tell us.
+        </li>
+        <li>Checkout by 12 PM (Garden Château: 11 AM).</li>
+        <li>
+          Early check-in or late checkout is free when the home is empty the night before or after;
+          we confirm the day before. Direct guests can stay until 2 PM whenever the home is free.
+        </li>
+        <li>
+          Before you leave: gather used towels, put rubbish in the bins, switch things off and lock
+          up. No need to strip the beds.
+        </li>
+      </ul>
+
+      <h2 id="house-rules">House rules</h2>
+      <p>
+        Our homes sit in a residential society, among neighbours and gardens. A few things we ask:
+      </p>
+      <ol>
+        <li>
+          Share a government photo ID for each adult before arrival; the society gate needs it too.
+          We use it only for your stay and keep it no longer than the law requires.
+        </li>
+        <li>
+          Only registered guests stay overnight. Visitors are welcome until 10 PM; let us know who's
+          coming.
+        </li>
+        <li>Quiet hours are 10 PM – 7 AM, with no music outdoors after 10 PM.</li>
+        <li>
+          No parties or events. At the Garden Château, birthdays and family dinners are welcome
+          within 10 guests; anything larger by arrangement, with a higher deposit.
+        </li>
+        <li>
+          No smoking indoors. The garden is fine, except at Garden Care, where there's no smoking
+          anywhere on the premises.
+        </li>
+        <li>Pets are welcome (Château on request); please keep them off beds and sofas.</li>
+        <li>Please leave the flowers in the garden for the next guests.</li>
+        <li>If something breaks, tell us. We'll sort it out without fuss.</li>
+      </ol>
+
+      <section class="direct mt-10 bg-linen p-6" aria-labelledby="direct-h">
+        <h2 id="direct-h" class="!mt-0">
+          Why book with us directly
+        </h2>
+        <ul>
+          <li>Fairer cancellation, with full stay credit instead of a partial refund.</li>
+          <li>One free date change.</li>
+          <li>Late checkout until 2 PM when the home is free.</li>
+          <li>You talk to us, the hosts, on WhatsApp from first message to checkout.</li>
+        </ul>
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener"
+          class="cta mt-5 inline-flex min-h-12 items-center rounded-full bg-apricot px-6 text-sm font-medium text-white no-underline hover:bg-apricot/90"
+        >
+          Message us on WhatsApp
+        </a>
+      </section>
+
+      <h2 id="faq">FAQ</h2>
+      {faq.map((g) => (
+        <div class="mt-6">
+          <h3 class="mb-2 text-xs font-semibold tracking-[0.15em] text-stone-500 uppercase">
+            {g.group}
+          </h3>
+          {g.items.map((it) => (
+            <details class="border-t border-stone-200 py-4 last:border-b">
+              <summary class="cursor-pointer font-semibold text-stone-800">{it.q}</summary>
+              <p class="mt-2">{it.a}</p>
+            </details>
+          ))}
+        </div>
+      ))}
+    </article>
+  </main>
+
+  <Footer />
+</Base>
+
+<style>
+  @reference "../styles/global.css";
+  .prose-apricot :global(.eyebrow) {
+    @apply mb-4 font-sans text-xs font-semibold tracking-[0.2em] text-stone-500 uppercase;
+  }
+  .prose-apricot :global(h1) {
+    @apply mb-2 font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl;
+  }
+  .prose-apricot :global(.meta) {
+    @apply mb-8 text-sm text-stone-500;
+  }
+  .prose-apricot :global(h2) {
+    @apply mt-10 mb-3 font-serif text-2xl font-normal text-stone-900;
+  }
+  .prose-apricot :global(p),
+  .prose-apricot :global(li) {
+    @apply leading-7 text-stone-600;
+  }
+  .prose-apricot :global(p + p) {
+    @apply mt-4;
+  }
+  .prose-apricot :global(strong) {
+    @apply font-semibold text-stone-800;
+  }
+  .prose-apricot :global(ul) {
+    @apply mt-4 ml-5 list-disc space-y-2;
+  }
+  .prose-apricot :global(ol) {
+    @apply mt-4 ml-5 list-decimal space-y-2;
+  }
+  .prose-apricot :global(a:not(.cta)) {
+    @apply font-medium text-stone-900 underline underline-offset-4;
+  }
+</style>

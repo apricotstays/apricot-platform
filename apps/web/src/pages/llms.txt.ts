@@ -7,7 +7,7 @@ export const GET: APIRoute = () => {
   const homes = properties
     .map(
       (p) =>
-        `- [${p.name}](${brand.url}/stays/${p.slug}): ${p.summary} Up to ${p.maxGuests} guests. ${fromLine(p)}.`,
+        `- [${p.name}](${brand.url}/stays/${p.slug}): ${p.summary} Up to ${p.maxGuests} guests. ${fromLine(p)}. Check-in ${p.policy.checkIn}, checkout ${p.policy.checkOut}. Free cancellation ${p.policy.freeCancellation.toLowerCase()}. Pets: ${p.policy.pets.toLowerCase()}.`,
     )
     .join("\n");
   const body = `# ${brand.name}
@@ -29,6 +29,7 @@ ${homes}
 
 - [Home](${brand.url}/): overview and contact
 - [Our Story](${brand.url}/our-story): why Apricot exists — Chandigarh's gardens, and Shivani, who keeps every home
+- [Stay policies & FAQ](${brand.url}/policies): cancellation, payment, check-in times, house rules, why book direct
 - [Privacy](${brand.url}/privacy): what data we handle (DPDP Act, 2023)
 `;
   return new Response(body, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
