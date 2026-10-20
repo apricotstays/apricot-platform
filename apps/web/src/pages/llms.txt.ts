@@ -7,7 +7,7 @@ export const GET: APIRoute = () => {
   const homes = properties
     .map(
       (p) =>
-        `- [${p.name}](${brand.url}/stays/${p.slug}): ${p.summary} Up to ${p.maxGuests} guests. ${fromLine(p)}. Check-in ${p.policy.checkIn}, checkout ${p.policy.checkOut}. Free cancellation ${p.policy.freeCancellation.toLowerCase()}. Pets: ${p.policy.pets.toLowerCase()}.`,
+        `- [${p.name}](${brand.url}/stays/${p.slug}): ${p.summary} Up to ${p.maxGuests} guests. ${fromLine(p)}. Check-in ${p.policy.checkIn}, checkout ${p.policy.checkOut}. Free cancellation ${p.policy.freeCancellation.toLowerCase()}. Minimum stay: ${p.policy.minStay}. Pets: ${p.policy.pets.toLowerCase()}.`,
     )
     .join("\n");
   const body = `# ${brand.name}

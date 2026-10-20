@@ -6,6 +6,10 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Added
 
+- **Minimum stay.** 2 nights when the stay includes a Friday or Saturday night, at all four homes; 1 night otherwise, and 1 night is fine within 3 days of arrival. Shown in each home's "Things to know" (check-in card), as a column in the /policies at-a-glance table and under Check-in & checkout, and in llms.txt. Data: `minStay` + `minStayRule` in `packages/schema/src/index.ts`, pinned in `apps/web/test/policies.test.ts`. CK, 20 Oct 2026.
+
+### Added
+
 - **Stay policies & FAQ (`/policies`), "Things to know" on each home's page, and "Why book with us directly".** New page with an at-a-glance table for the four homes, cancellation and changes (Cottage and Courtyard: free up to 14 days before; Château: 30 days, peak dates non-refundable but movable once; Garden Care: free change or cancellation up to 48 hours before; stay credit worth more than cash; one free date change), payment (50% advance, balance 7 days before; Château ₹20,000 refundable deposit), check-in and checkout (2 PM / 12 PM; Château 3 PM / 11 AM), eight house rules and an 8-question FAQ. Each home's page gets a three-card "Things to know" block (check-in & checkout, house rules, cancellation) after the availability calendar, and the Book direct card gets four direct-booking perks (no discount). Footer link, sitemap and llms.txt (times, cancellation and pets per home). schema.org adds `checkinTime`, `checkoutTime` and `petsAllowed`. One source of truth: `policy` per home in `packages/schema/src/index.ts`, pinned by `apps/web/test/policies.test.ts`. Terms approved by CK 20 Oct 2026; mockups on the "Policies & FAQ mockups (v1)" canvas.
 
 ### Changed

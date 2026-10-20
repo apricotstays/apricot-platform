@@ -35,6 +35,8 @@ export interface StayPolicy {
   /** "12 PM" */
   checkOut: string;
   pets: "Welcome" | "On request";
+  /** Minimum stay, short form for tables: "2 nights at weekends". */
+  minStay: string;
   /** Short form for tables and the phone bar: "Up to 14 days before". */
   freeCancellation: string;
   /** Cancellation lines for the "Things to know" block, most generous first. */
@@ -53,6 +55,12 @@ export const to24h = (t: string): string => {
 
 /** When the stay policies last changed (shown on /policies). */
 export const policiesUpdated = "October 2026";
+
+/** CK, 20 Oct 2026: 2 nights when the stay includes a Friday or Saturday night, at every home. */
+const WEEKEND_MIN_STAY = "2 nights at weekends";
+/** The full rule, shown on stay pages and /policies. */
+export const minStayRule =
+  "2 nights if your stay includes a Friday or Saturday night; 1 night otherwise. Within 3 days of arrival, 1 night is fine.";
 
 const STANDARD_CANCELLATION = [
   "Free cancellation up to 14 days before check-in",
@@ -97,6 +105,7 @@ export const properties: readonly Property[] = [
       checkIn: "2 PM",
       checkOut: "12 PM",
       pets: "Welcome",
+      minStay: WEEKEND_MIN_STAY,
       freeCancellation: "Up to 14 days before",
       cancellation: STANDARD_CANCELLATION,
       rules: [
@@ -131,6 +140,7 @@ export const properties: readonly Property[] = [
       checkIn: "2 PM",
       checkOut: "12 PM",
       pets: "Welcome",
+      minStay: WEEKEND_MIN_STAY,
       freeCancellation: "Up to 14 days before",
       cancellation: STANDARD_CANCELLATION,
       rules: [
@@ -171,6 +181,7 @@ export const properties: readonly Property[] = [
       checkIn: "3 PM",
       checkOut: "11 AM",
       pets: "On request",
+      minStay: WEEKEND_MIN_STAY,
       freeCancellation: "Up to 30 days before",
       cancellation: [
         "Free cancellation up to 30 days before check-in",
@@ -214,6 +225,7 @@ export const properties: readonly Property[] = [
       checkIn: "2 PM",
       checkOut: "12 PM",
       pets: "Welcome",
+      minStay: WEEKEND_MIN_STAY,
       freeCancellation: "Up to 48 hours before",
       cancellation: [
         "Free change or cancellation up to 48 hours before check-in",

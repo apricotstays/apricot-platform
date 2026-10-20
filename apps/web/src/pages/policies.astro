@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import { contact } from "@apricot/brand";
-import { policiesUpdated, properties } from "@apricot/schema";
+import { minStayRule, policiesUpdated, properties } from "@apricot/schema";
 
 const wa = contact.whatsappLink("Hi Apricot Stays, I have a question about booking.");
 const shortName = (name: string) => name.replace(/^Apricot /, "");
@@ -82,7 +82,7 @@ const faq: { group: string; items: { q: string; a: string }[] }[] = [
 
       <h2 id="at-a-glance">At a glance</h2>
       <div class="mt-4 overflow-x-auto border border-stone-200">
-        <table class="w-full min-w-[640px] text-left text-sm">
+        <table class="w-full min-w-[760px] text-left text-sm">
           <thead class="bg-stone-50 text-stone-800">
             <tr>
               <th scope="col" class="px-4 py-3 font-semibold">
@@ -96,6 +96,9 @@ const faq: { group: string; items: { q: string; a: string }[] }[] = [
               </th>
               <th scope="col" class="px-4 py-3 font-semibold">
                 Pets
+              </th>
+              <th scope="col" class="px-4 py-3 font-semibold">
+                Minimum stay
               </th>
               <th scope="col" class="px-4 py-3 font-semibold">
                 Free cancellation
@@ -113,6 +116,7 @@ const faq: { group: string; items: { q: string; a: string }[] }[] = [
                 </td>
                 <td class="px-4 py-3">{p.maxGuests}</td>
                 <td class="px-4 py-3">{p.policy.pets}</td>
+                <td class="px-4 py-3">{p.policy.minStay}</td>
                 <td class="px-4 py-3">{p.policy.freeCancellation}</td>
               </tr>
             ))}
@@ -180,6 +184,9 @@ const faq: { group: string; items: { q: string; a: string }[] }[] = [
           is fine, just tell us.
         </li>
         <li>Checkout by 12 PM (Garden Château: 11 AM).</li>
+        <li>
+          <strong>Minimum stay:</strong> {minStayRule}
+        </li>
         <li>
           Early check-in or late checkout is free when the home is empty the night before or after;
           we confirm the day before. Direct guests can stay until 2 PM whenever the home is free.
