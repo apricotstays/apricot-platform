@@ -8,7 +8,10 @@ import { minStayRule, policiesUpdated, properties } from "@apricot/schema";
 const wa = contact.whatsappLink("Hi Apricot Stays, I have a question about booking.");
 const shortName = (name: string) => name.replace(/^Apricot /, "");
 
-const faq: { group: string; items: { q: string; a: string }[] }[] = [
+const faq: {
+  group: string;
+  items: { q: string; a: string; link?: { href: string; text: string } }[];
+}[] = [
   {
     group: "Before your stay",
     items: [
@@ -53,6 +56,16 @@ const faq: { group: string; items: { q: string; a: string }[] }[] = [
       {
         q: "Can I get an invoice?",
         a: "Yes. Ask us on WhatsApp and we'll send one.",
+      },
+    ],
+  },
+  {
+    group: "About Apricot",
+    items: [
+      {
+        q: "Why is it called Apricot?",
+        a: "Roses and apricots grew in our co-founder Shivani's grandmother's garden in Ludhiana. We named Apricot after that garden, and each of our homes has a garden of its own.",
+        link: { href: "/our-story", text: "Read our story" },
       },
     ],
   },
@@ -253,7 +266,17 @@ const faq: { group: string; items: { q: string; a: string }[] }[] = [
           {g.items.map((it) => (
             <details class="border-t border-stone-200 py-4 last:border-b">
               <summary class="cursor-pointer font-semibold text-stone-800">{it.q}</summary>
-              <p class="mt-2">{it.a}</p>
+              <p class="mt-2">
+                {it.a}
+                {it.link && (
+                  <>
+                    {" "}
+                    <a href={it.link.href} class="underline">
+                      {it.link.text}
+                    </a>
+                  </>
+                )}
+              </p>
             </details>
           ))}
         </div>
