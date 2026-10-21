@@ -12,6 +12,7 @@ import { fromLine, properties, ratesChecked, to24h, type Property } from "@apric
 import { brand, contact } from "@apricot/brand";
 import { galleries, rooms } from "../../data/media";
 import { reviews } from "../../data/reviews";
+import { allAmenities, amenityGroups } from "../../data/amenities";
 
 export const getStaticPaths = (() =>
   properties.map((p) => ({
@@ -68,6 +69,10 @@ const facts: Fact[] = [
     ? [{ icon: "bath", label: `${p.bathrooms} bathroom${p.bathrooms > 1 ? "s" : ""}` } as Fact]
     : []),
 ];
+// Beds go right after bedrooms.
+facts.splice(p.bedrooms ? 2 : 1, 0, { icon: "bed", label: p.beds });
+const groups = amenityGroups[p.slug] ?? [];
+const everyAmenity = allAmenities(p.slug);
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -83,7 +88,7 @@ const jsonLd = {
   checkinTime: to24h(pol.checkIn),
   checkoutTime: to24h(pol.checkOut),
   petsAllowed: pol.pets === "Welcome",
-  amenityFeature: p.amenities.map((a) => ({
+  amenityFeature: (everyAmenity.length ? everyAmenity : p.amenities).map((a) => ({
     "@type": "LocationFeatureSpecification",
     name: a,
     value: true,
@@ -218,9 +223,25 @@ const jsonLd = {
                       <span class="text-xs tracking-[0.15em] text-stone-500 uppercase">
                         {r.palette}
                       </span>
+                      <span class="text-sm text-stone-700">{r.bed}</span>
                     </figcaption>
                   </figure>
                 ))}
+              </div>
+            </section>
+          )}
+
+          {namedRooms.length === 0 && (
+            <section id="sleep" aria-labelledby="sleep-h">
+              <h2 id="sleep-h" class="mb-6 text-xl font-semibold text-stone-800">
+                Where you'll sleep
+              </h2>
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div class="border border-stone-200 p-5">
+                  <Icon name="bed" size={24} />
+                  <p class="mt-3 font-semibold text-stone-800">Bedroom</p>
+                  <p class="text-sm text-stone-600">{p.beds}</p>
+                </div>
               </div>
             </section>
           )}
@@ -239,6 +260,28 @@ const jsonLd = {
                 </li>
               ))}
             </ul>
+            {everyAmenity.length > p.amenities.length && (
+              <details class="group mt-6">
+                <summary class="inline-flex min-h-11 cursor-pointer list-none items-center border border-stone-800 px-5 text-sm font-medium text-stone-800 hover:bg-stone-50 [&::-webkit-details-marker]:hidden">
+                  <span class="group-open:hidden">Show all {everyAmenity.length} amenities</span>
+                  <span class="hidden group-open:inline">Show fewer</span>
+                </summary>
+                <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-6 border border-stone-200 p-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {groups.map((g) => (
+                    <div>
+                      <h3 class="mb-2 text-xs font-semibold tracking-[0.08em] text-stone-800 uppercase">
+                        {g.name}
+                      </h3>
+                      <ul class="space-y-1 text-sm text-stone-600">
+                        {g.items.map((i) => (
+                          <li>{i}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            )}
           </section>
 
           <AvailabilityCalendar slug={p.slug} name={p.name} priceLine={fromLine(p)} />

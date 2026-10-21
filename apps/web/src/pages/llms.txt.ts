@@ -1,14 +1,18 @@
 import type { APIRoute } from "astro";
 import { brand, contact } from "@apricot/brand";
 import { fromLine, properties, ratesChecked } from "@apricot/schema";
+import { waysToStay } from "../data/ways-to-stay";
 
 // https://llmstxt.org — a plain summary for AI assistants and agents.
 export const GET: APIRoute = () => {
   const homes = properties
     .map(
       (p) =>
-        `- [${p.name}](${brand.url}/stays/${p.slug}): ${p.summary} Up to ${p.maxGuests} guests. ${fromLine(p)}. Check-in ${p.policy.checkIn}, checkout ${p.policy.checkOut}. Free cancellation ${p.policy.freeCancellation.toLowerCase()}. Minimum stay: ${p.policy.minStay}. Pets: ${p.policy.pets.toLowerCase()}.`,
+        `- [${p.name}](${brand.url}/stays/${p.slug}): ${p.summary} Up to ${p.maxGuests} guests. ${fromLine(p)}. Check-in ${p.policy.checkIn}, checkout ${p.policy.checkOut}. Free cancellation ${p.policy.freeCancellation.toLowerCase()}. Minimum stay: ${p.policy.minStay}. Beds: ${p.beds}. Pets: ${p.policy.pets.toLowerCase()}.`,
     )
+    .join("\n");
+  const ways = waysToStay
+    .map((w) => `- [${w.title}](${brand.url}/ways-to-stay/${w.slug}): ${w.cardLine}`)
     .join("\n");
   const body = `# ${brand.name}
 
@@ -19,6 +23,10 @@ Enquiries and direct bookings are handled on WhatsApp. Each home lists a startin
 ## Homes
 
 ${homes}
+
+## Ways to stay
+
+${ways}
 
 ## How to enquire or book
 

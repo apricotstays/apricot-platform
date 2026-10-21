@@ -225,6 +225,8 @@ export const galleries: Record<string, Photo[]> = {
 export interface Room {
   name: string;
   palette: string;
+  /** "King bed" (CK, 21 Oct 2026). */
+  bed: string;
   photo: Photo;
 }
 
@@ -233,6 +235,7 @@ export const rooms: Record<string, Room[]> = {
   "garden-chateau": [
     {
       name: "Chenab Suite",
+      bed: "King bed",
       palette: "Indigo and silver",
       photo: {
         src: roomChenab,
@@ -241,6 +244,7 @@ export const rooms: Record<string, Room[]> = {
     },
     {
       name: "Ravi Room",
+      bed: "King bed",
       palette: "Terracotta and copper",
       photo: {
         src: roomRavi,
@@ -249,6 +253,7 @@ export const rooms: Record<string, Room[]> = {
     },
     {
       name: "Beas Room",
+      bed: "King bed",
       palette: "Sage and dusty blue",
       photo: {
         src: roomBeas,
@@ -257,6 +262,7 @@ export const rooms: Record<string, Room[]> = {
     },
     {
       name: "Sutlej Room",
+      bed: "King bed",
       palette: "Harvest gold and brass",
       photo: {
         src: roomSutlej,
@@ -265,6 +271,7 @@ export const rooms: Record<string, Room[]> = {
     },
     {
       name: "Jhelum Room",
+      bed: "King bed",
       palette: "Emerald and chinar rust",
       photo: {
         src: roomJhelum,

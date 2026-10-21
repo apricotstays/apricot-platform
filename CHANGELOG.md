@@ -6,6 +6,10 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Added
 
+- **Ways to stay: three use-case pages and a homepage row.** "What brings you to Chandigarh?" after Our Collection, with cards in CK's order: A garden for two (Garden Cottage, Garden Courtyard) → `/ways-to-stay/garden-for-two`, Family gatherings (Garden Château) → `/ways-to-stay/family-gatherings`, Hospital & treatment visits (Garden Care) → `/ways-to-stay/hospital-visits`. Each page: headline, intro, cover photo, six reasons, the home(s) with guests, beds and "from" price, a pre-filled WhatsApp message and links to the other two. Copy uses only facts already on the site. schema.org `CollectionPage`; sitemap and llms.txt updated. Data: `src/data/ways-to-stay.ts`.
+- **Full amenities list per home.** Highlights stay as before (the Cottage's now match the approved mockup), plus "Show all N amenities", which expands a grouped list (Garden & outdoors, Bedroom & laundry, Bathroom, Kitchen & dining, Work & entertainment, Comfort, Arrival & parking, The estate, Services). Cottage 39, Courtyard 18, Château 14, Care 14 — from each Airbnb amenities list (21 Oct 2026) plus facts already on the site; nothing unconfirmed. Also feeds schema.org `amenityFeature`. Data: `src/data/amenities.ts`.
+- **Beds.** Every home's facts row now shows its beds (1 king bed; Château 5 king beds), with a "Where you'll sleep" card on the Cottage, Courtyard and Care pages and "King bed" on each Five Rivers caption at the Château (CK, 21 Oct 2026). Also in llms.txt.
+
 - **Minimum stay.** 2 nights when the stay includes a Friday or Saturday night, at all four homes; 1 night otherwise, and 1 night is fine within 3 days of arrival. Shown in each home's "Things to know" (check-in card), as a column in the /policies at-a-glance table and under Check-in & checkout, and in llms.txt. Data: `minStay` + `minStayRule` in `packages/schema/src/index.ts`, pinned in `apps/web/test/policies.test.ts`. CK, 20 Oct 2026.
 
 ### Added

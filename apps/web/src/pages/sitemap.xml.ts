@@ -1,11 +1,13 @@
 import type { APIRoute } from "astro";
 import { properties } from "@apricot/schema";
+import { waysToStay } from "../data/ways-to-stay";
 
 // Keep in sync with pages in src/pages (excluding 404, /menu (a noindex page for in-house guests) and /shop (noindex during soft launch)).
 const paths = [
   "/",
   "/our-story",
   ...properties.map((p) => `/stays/${p.slug}`),
+  ...waysToStay.map((w) => `/ways-to-stay/${w.slug}`),
   "/policies",
   "/privacy",
 ];
