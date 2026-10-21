@@ -6,6 +6,14 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Added
 
+- **Why Apricot?** The name comes from Shivani's grandmother's garden in Ludhiana, where roses and apricots grew. Our Story's Meet Shivani section gets one line after that paragraph: "That's where our name comes from. Apricot is her grandmother's garden, shared." (with a small apricot sketch, anchor `#name`). The /policies FAQ gets an "About Apricot" group with "Why is it called Apricot?" linking to Our Story; FAQ answers can now carry a link. llms.txt's Our Story line mentions the origin. Mockups B + D approved by CK, 21 Oct 2026.
+
+### Fixed
+
+- **Our Story typo:** "Roses and guava grew there" → "Roses and apricots grew there" (CK, 21 Oct 2026).
+
+### Added
+
 - **Ways to stay: three use-case pages and a homepage row.** "What brings you to Chandigarh?" after Our Collection, with cards in CK's order: A garden for two (Garden Cottage, Garden Courtyard) → `/ways-to-stay/garden-for-two`, Family gatherings (Garden Château) → `/ways-to-stay/family-gatherings`, Hospital & treatment visits (Garden Care) → `/ways-to-stay/hospital-visits`. Each page: headline, intro, cover photo, six reasons, the home(s) with guests, beds and "from" price, a pre-filled WhatsApp message and links to the other two. Copy uses only facts already on the site. schema.org `CollectionPage`; sitemap and llms.txt updated. Data: `src/data/ways-to-stay.ts`.
 - **Full amenities list per home.** Highlights stay as before (the Cottage's now match the approved mockup), plus "Show all N amenities", which expands a grouped list (Garden & outdoors, Bedroom & laundry, Bathroom, Kitchen & dining, Work & entertainment, Comfort, Arrival & parking, The estate, Services). Cottage 39, Courtyard 20, Château 25, Care 21 — from each Airbnb amenities list (21 Oct 2026), facts already on the site and items CK confirmed per home; nothing unconfirmed. Also feeds schema.org `amenityFeature`. Data: `src/data/amenities.ts`.
 - **Beds.** Every home's facts row now shows its beds (1 king bed; Château 5 king beds), with a "Where you'll sleep" card on the Cottage, Courtyard and Care pages and "King bed" on each Five Rivers caption at the Château (CK, 21 Oct 2026). Also in llms.txt.
