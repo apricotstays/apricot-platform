@@ -2,7 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
-import { contact } from "@apricot/brand";
+import { contact, promise } from "@apricot/brand";
 import { minStayRule, policiesUpdated, properties } from "@apricot/schema";
 
 const wa = contact.whatsappLink("Hi Apricot Stays, I have a question about booking.");
@@ -91,6 +91,10 @@ const faq: {
           Message us on WhatsApp
         </a>
         .
+      </p>
+
+      <p>
+        <strong>{promise.name}.</strong> {promise.line}
       </p>
 
       <h2 id="at-a-glance">At a glance</h2>

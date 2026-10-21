@@ -76,3 +76,11 @@ describe("amenity depth (CK confirmed extras, 21 Oct 2026)", () => {
     });
   });
 });
+
+describe("garden promise (option A, CK 21 Oct 2026)", () => {
+  it("names the promise and gives every home its private garden line", async () => {
+    const { promise } = await import("@apricot/brand");
+    expect(promise.name).toBe("A garden of your own");
+    for (const p of properties) expect(p.garden, p.slug).toMatch(/^Private /);
+  });
+});

@@ -29,13 +29,13 @@ export const waysToStay: readonly WayToStay[] = [
     cardLine: "Quiet weekends and slow mornings for couples.",
     headline: "A garden of your own, for the two of you",
     intro:
-      "Two small homes in DLF Hyde Park, each with its own garden: a sunlit cottage with a back lawn, and a terracotta courtyard that glows in the evening. One king bed, a kitchen, and nowhere you have to be.",
+      "Two small homes in DLF Hyde Park, each with its own garden: a sunlit cottage with a private garden, and a terracotta courtyard that glows in the evening. One king bed, a kitchen, and nowhere you have to be.",
     homes: ["garden-cottage", "garden-courtyard"],
     featuresTitle: "Made for slow days",
     features: [
       {
         title: "Your own garden",
-        text: "A private back garden at the Cottage, a private courtyard with garden lighting at the Courtyard.",
+        text: "A private garden at the Cottage, a private courtyard with garden lighting at the Courtyard.",
       },
       {
         title: "Just the two of you",

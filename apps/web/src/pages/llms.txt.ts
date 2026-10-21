@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { brand, contact } from "@apricot/brand";
+import { brand, contact, promise } from "@apricot/brand";
 import { fromLine, properties, ratesChecked } from "@apricot/schema";
 import { waysToStay } from "../data/ways-to-stay";
 
@@ -8,7 +8,7 @@ export const GET: APIRoute = () => {
   const homes = properties
     .map(
       (p) =>
-        `- [${p.name}](${brand.url}/stays/${p.slug}): ${p.summary} Up to ${p.maxGuests} guests. ${fromLine(p)}. Check-in ${p.policy.checkIn}, checkout ${p.policy.checkOut}. Free cancellation ${p.policy.freeCancellation.toLowerCase()}. Minimum stay: ${p.policy.minStay}. Beds: ${p.beds}. Pets: ${p.policy.pets.toLowerCase()}.`,
+        `- [${p.name}](${brand.url}/stays/${p.slug}): ${p.summary} Up to ${p.maxGuests} guests. ${fromLine(p)}. Check-in ${p.policy.checkIn}, checkout ${p.policy.checkOut}. Free cancellation ${p.policy.freeCancellation.toLowerCase()}. Minimum stay: ${p.policy.minStay}. Garden: ${p.garden}. Beds: ${p.beds}. Pets: ${p.policy.pets.toLowerCase()}.`,
     )
     .join("\n");
   const ways = waysToStay
@@ -17,6 +17,8 @@ export const GET: APIRoute = () => {
   const body = `# ${brand.name}
 
 > ${brand.name} is a small collection of boutique, home-style short-stay homes at ${contact.address.locality}, ${contact.address.region}, India. "${brand.tagline}"
+
+The Apricot promise — ${promise.name}: ${promise.line}
 
 Enquiries and direct bookings are handled on WhatsApp. Each home lists a starting weekday rate (checked ${ratesChecked}); the exact price for given dates is confirmed on WhatsApp.
 

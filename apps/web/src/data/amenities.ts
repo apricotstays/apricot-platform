@@ -16,7 +16,7 @@ export const amenitiesChecked = "Oct 2026";
 
 export const amenityGroups: Record<string, readonly AmenityGroup[]> = {
   "garden-cottage": [
-    { name: "Garden & outdoors", items: ["Private back garden", "Private patio", "Garden view"] },
+    { name: "Garden & outdoors", items: ["Private garden", "Private patio", "Garden view"] },
     {
       name: "Bedroom & laundry",
       items: [
