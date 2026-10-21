@@ -6,6 +6,8 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Added
 
+- **The Apricot promise: "A garden of your own."** A named promise (benchmark: "Named signature promise"): every home has its own private garden, lawn or courtyard, never shared. New homepage band under the hero listing each home's garden; a badge under each stay page's title; one line in the Book direct card; a line at the top of /policies; llms.txt and the homepage meta description. Text in `promise` (`packages/brand/src/index.ts`) and `garden` per home (`packages/schema/src/index.ts`). Option A chosen by CK, 21 Oct 2026 (mockups: "Release 3 mockups" canvas).
+
 - **Why Apricot?** The name comes from Shivani's grandmother's garden in Ludhiana, where roses and apricots grew. Our Story's Meet Shivani section gets one line after that paragraph: "That's where our name comes from. Apricot is her grandmother's garden, shared." (with a small apricot sketch, anchor `#name`). The /policies FAQ gets an "About Apricot" group with "Why is it called Apricot?" linking to Our Story; FAQ answers can now carry a link. llms.txt's Our Story line mentions the origin. Mockups B + D approved by CK, 21 Oct 2026.
 
 ### Fixed

@@ -9,7 +9,7 @@ import TrustLine from "../../components/TrustLine.astro";
 import AvailabilityCalendar from "../../components/AvailabilityCalendar.astro";
 import GuestReviews from "../../components/GuestReviews.astro";
 import { fromLine, properties, ratesChecked, to24h, type Property } from "@apricot/schema";
-import { brand, contact } from "@apricot/brand";
+import { brand, contact, promise } from "@apricot/brand";
 import { galleries, rooms } from "../../data/media";
 import { reviews } from "../../data/reviews";
 import { allAmenities, amenityGroups } from "../../data/amenities";
@@ -123,6 +123,15 @@ const jsonLd = {
       </nav>
       <p class="mb-2 text-sm tracking-wider text-stone-500 uppercase">{p.locality}</p>
       <h1 class="font-serif text-3xl font-bold text-stone-800 md:text-4xl">{p.name}</h1>
+      <a
+        href="/#promise"
+        class="mt-4 inline-flex items-center gap-2 border border-stone-300 px-4 py-2.5 text-sm text-stone-800 hover:bg-stone-50"
+      >
+        <Icon name="sprout" size={18} />
+        <span>
+          <strong class="font-semibold">{promise.name}</strong> · {p.garden.toLowerCase()}
+        </span>
+      </a>
     </div>
 
     <!-- Gallery -->
@@ -364,6 +373,11 @@ const jsonLd = {
           <div class="border border-stone-200 p-6 shadow-sm">
             <p class="mb-1 font-serif text-2xl text-stone-800">Book direct</p>
             <p class="mb-2 text-lg text-stone-800">{fromLine(p)}</p>
+            <p class="mb-3 text-sm text-stone-700">
+              Every stay comes with{" "}
+              <strong class="font-semibold">{promise.name.toLowerCase()}</strong>:{" "}
+              {p.garden.toLowerCase()}, never shared.
+            </p>
             <p class="mb-6 text-sm text-stone-600">
               Message us with your dates — we'll confirm availability and the exact price.
             </p>

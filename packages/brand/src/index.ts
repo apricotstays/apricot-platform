@@ -24,6 +24,12 @@ export const fonts = {
   sans: '"DM Sans Variable", "DM Sans", system-ui, sans-serif',
 } as const;
 
+/** The Apricot promise (CK chose option A, 21 Oct 2026). Every home has its own private outdoor space. */
+export const promise = {
+  name: "A garden of your own",
+  line: "Every Apricot home comes with its own private garden, lawn or courtyard. Never shared, never a common area.",
+} as const;
+
 export const brand = {
   name: "Apricot Stays",
   tagline: "Stay like you live here.",

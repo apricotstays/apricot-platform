@@ -8,7 +8,7 @@ import TrustLine from "../components/TrustLine.astro";
 import MushroomGardenCard from "../components/MushroomGardenCard.astro";
 import SectionRule from "../components/SectionRule.astro";
 import { fromLine, properties, ratesChecked } from "@apricot/schema";
-import { brand, contact } from "@apricot/brand";
+import { brand, contact, promise } from "@apricot/brand";
 import { galleries, photos } from "../data/media";
 import { waysToStay } from "../data/ways-to-stay";
 
@@ -93,7 +93,7 @@ const jsonLd = {
 
 <Base
   title="Apricot Stays · Boutique homes in New Chandigarh"
-  description="A small collection of boutique homes at DLF Hyde Park, New Chandigarh — a garden cottage, a terracotta courtyard, a five-bedroom château and a care stay near PGI. Book on WhatsApp."
+  description="A small collection of boutique homes at DLF Hyde Park, New Chandigarh — a garden cottage, a terracotta courtyard, a five-bedroom château and a care stay near PGI, each with a garden of its own. Book on WhatsApp."
   og={{ title: "Apricot Stays · Stay like you live here", image: hero.src, imageAlt: hero.alt }}
   jsonLd={jsonLd}
 >
@@ -127,6 +127,36 @@ const jsonLd = {
       >
         <source src="/media/hero.mp4" type="video/mp4" media="(min-width: 768px)" />
       </video>
+    </section>
+
+    <!-- The Apricot promise -->
+    <section id="promise" class="bg-linen py-14 sm:py-16">
+      <div class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:px-12">
+        <div>
+          <p class="mb-3 font-sans text-xs font-semibold tracking-[0.2em] text-[#2f4a3a] uppercase">
+            The Apricot promise
+          </p>
+          <h2 class="font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
+            {promise.name}.
+          </h2>
+          <p class="mt-4 max-w-xl text-base leading-7 text-stone-700">
+            {promise.line} Step out in the morning and it's yours.
+          </p>
+        </div>
+        <ul class="space-y-3 text-[15px] text-stone-700">
+          {properties.map((p) => (
+            <li class="flex flex-col gap-0.5 border-b border-stone-300/60 pb-3 sm:flex-row sm:gap-4">
+              <a
+                href={`/stays/${p.slug}`}
+                class="font-semibold text-stone-900 hover:text-apricot sm:w-44 sm:shrink-0"
+              >
+                {p.name.replace(/^Apricot /, "")}
+              </a>
+              <span>{p.garden}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
 
     <!-- Our Collection -->

@@ -18,6 +18,8 @@ export interface Property {
   maxGuests: number;
   bedrooms?: number;
   bathrooms?: number;
+  /** This home's private outdoor space, for the "A garden of your own" promise. */
+  garden: string;
   /** Beds, as shown in the facts row and "Where you'll sleep": "1 king bed". From Airbnb / CK (Oct 2026). */
   beds: string;
   /** Starting nightly rate in rupees — shown as "From ₹X / night". Set by the owner; update by hand. */
@@ -107,6 +109,7 @@ export const properties: readonly Property[] = [
     maxGuests: 2,
     bedrooms: 1,
     bathrooms: 1,
+    garden: "Private back garden",
     beds: "1 king bed",
     fromPerNight: 5_500,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1473200853156126236",
@@ -143,6 +146,7 @@ export const properties: readonly Property[] = [
     maxGuests: 2,
     bedrooms: 1,
     bathrooms: 1,
+    garden: "Private courtyard with garden lighting",
     beds: "1 king bed",
     fromPerNight: 8_500,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1603439898679095327",
@@ -185,6 +189,7 @@ export const properties: readonly Property[] = [
     maxGuests: 10,
     bedrooms: 5,
     bathrooms: 5,
+    garden: "Private stone courtyard and lawn",
     beds: "5 king beds",
     fromPerNight: 45_000,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1755107663054771918",
@@ -230,6 +235,7 @@ export const properties: readonly Property[] = [
     maxGuests: 2,
     bedrooms: 1,
     bathrooms: 1,
+    garden: "Private lawn off the bedroom",
     beds: "1 king bed",
     fromPerNight: 4_500,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1679764480306760606",
