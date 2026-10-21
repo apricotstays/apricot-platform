@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { properties, to24h } from "@apricot/schema";
+import { minStayRule, properties, to24h } from "@apricot/schema";
 
 describe("stay policies", () => {
   it("converts times for schema.org", () => {
@@ -30,5 +30,10 @@ describe("stay policies", () => {
       expect(p.policy.cancellation.length, p.slug).toBeLessThanOrEqual(4);
       expect(p.policy.cancellation[0], p.slug).toMatch(/^Free/);
     }
+  });
+
+  it("sets a 2-night weekend minimum at every home (CK, 20 Oct 2026)", () => {
+    for (const p of properties) expect(p.policy.minStay, p.slug).toBe("2 nights at weekends");
+    expect(minStayRule).toMatch(/Friday or Saturday/);
   });
 });

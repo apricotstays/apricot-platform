@@ -1,0 +1,156 @@
+---
+import type { GetStaticPaths } from "astro";
+import { Picture } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import Icon from "../../components/Icon.astro";
+import { fromLine, properties } from "@apricot/schema";
+import { brand, contact } from "@apricot/brand";
+import { galleries } from "../../data/media";
+import { waysToStay, type WayToStay } from "../../data/ways-to-stay";
+
+export const getStaticPaths = (() =>
+  waysToStay.map((w) => ({
+    params: { slug: w.slug },
+    props: { way: w },
+  }))) satisfies GetStaticPaths;
+
+interface Props {
+  way: WayToStay;
+}
+const { way: w } = Astro.props;
+const homes = w.homes.map((slug) => properties.find((p) => p.slug === slug)!);
+const cover = galleries[homes[0].slug][0];
+const others = waysToStay.filter((o) => o.slug !== w.slug);
+const wa = contact.whatsappLink(w.whatsapp);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: `${w.title} · ${brand.name}`,
+  url: `${brand.url}/ways-to-stay/${w.slug}`,
+  description: w.intro,
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: homes.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: { "@id": `${brand.url}/stays/${p.slug}#lodging`, name: p.name },
+    })),
+  },
+};
+---
+
+<Base
+  title={`${w.title} · Apricot Stays, New Chandigarh`}
+  description={`${w.headline}. ${w.cardLine}`}
+  og={{ image: cover.src, imageAlt: cover.alt }}
+  jsonLd={jsonLd}
+>
+  <Navbar sticky={false} />
+
+  <main id="main" class="bg-white">
+    <div class="mx-auto max-w-4xl px-6 pt-12 pb-20">
+      <nav aria-label="Breadcrumb" class="mb-6 text-sm text-stone-500">
+        <a href="/#ways-to-stay" class="hover:text-stone-800">
+          Ways to stay
+        </a>
+        <span aria-hidden="true"> / </span>
+        <span aria-current="page">{w.title}</span>
+      </nav>
+      <p class="mb-3 text-xs font-semibold tracking-[0.2em] text-stone-500 uppercase">
+        Ways to stay · {w.title}
+      </p>
+      <h1 class="font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
+        {w.headline}
+      </h1>
+      <p class="mt-5 text-lg leading-8 text-stone-600">{w.intro}</p>
+
+      <div class="mt-10 aspect-[16/9] overflow-hidden bg-stone-100">
+        <Picture
+          src={cover.src}
+          alt={cover.alt}
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 896px) 848px, 100vw"
+          formats={["avif", "webp"]}
+          fallbackFormat="jpg"
+          loading="eager"
+          fetchpriority="high"
+          class="h-full w-full object-cover"
+        />
+      </div>
+
+      <h2 class="mt-14 mb-6 font-serif text-3xl font-normal text-stone-900">{w.featuresTitle}</h2>
+      <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {w.features.map((f) => (
+          <li class="border border-stone-200 p-5">
+            <h3 class="mb-1.5 font-semibold text-stone-800">{f.title}</h3>
+            <p class="text-[15px] leading-relaxed text-stone-600">{f.text}</p>
+          </li>
+        ))}
+      </ul>
+
+      <h2 class="mt-14 mb-6 font-serif text-3xl font-normal text-stone-900">
+        {homes.length > 1 ? "The homes" : "The home"}
+      </h2>
+      <div class="grid gap-6 sm:grid-cols-2">
+        {homes.map((p) => {
+          // One home: skip the cover photo already shown above.
+          const img = galleries[p.slug][homes.length > 1 ? 0 : 1];
+          return (
+            <a href={`/stays/${p.slug}`} class="group block">
+              <div class="aspect-[4/3] overflow-hidden bg-stone-100">
+                <Picture
+                  src={img.src}
+                  alt={img.alt}
+                  widths={[400, 800]}
+                  sizes="(min-width: 640px) 50vw, 100vw"
+                  formats={["avif", "webp"]}
+                  fallbackFormat="jpg"
+                  class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 motion-reduce:transform-none"
+                />
+              </div>
+              <p class="mt-4 font-serif text-xl text-stone-900 group-hover:text-apricot">
+                {p.name}
+              </p>
+              <p class="mt-1 text-sm text-stone-600">
+                Up to {p.maxGuests} guests · {p.beds} · {fromLine(p)}
+              </p>
+              <p class="mt-2 text-sm font-medium text-stone-800 underline underline-offset-4">
+                Photos, calendar and reviews
+              </p>
+            </a>
+          );
+        })}
+      </div>
+
+      <div class="mt-14 flex flex-col gap-5 bg-linen p-7 sm:flex-row sm:items-center sm:justify-between">
+        <p class="text-stone-700">{w.ctaLine}</p>
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-apricot px-6 text-sm font-medium text-white transition-colors hover:bg-apricot/90"
+        >
+          <Icon name="whatsapp" size={18} />
+          Message us on WhatsApp
+        </a>
+      </div>
+
+      <nav aria-label="Other ways to stay" class="mt-12 border-t border-stone-200 pt-6 text-sm">
+        <span class="mr-4 text-stone-500">Other ways to stay:</span>
+        {others.map((o) => (
+          <a
+            href={`/ways-to-stay/${o.slug}`}
+            class="mr-6 font-medium text-stone-800 underline underline-offset-4"
+          >
+            {o.title}
+          </a>
+        ))}
+      </nav>
+    </div>
+  </main>
+
+  <Footer />
+</Base>

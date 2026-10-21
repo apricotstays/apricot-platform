@@ -13,10 +13,13 @@ export interface Property {
   /** One-line card summary. */
   summary: string;
   description: string;
+  /** Highlights shown before "Show all"; the full grouped list is in apps/web/src/data/amenities.ts. */
   amenities: readonly string[];
   maxGuests: number;
   bedrooms?: number;
   bathrooms?: number;
+  /** Beds, as shown in the facts row and "Where you'll sleep": "1 king bed". From Airbnb / CK (Oct 2026). */
+  beds: string;
   /** Starting nightly rate in rupees — shown as "From ₹X / night". Set by the owner; update by hand. */
   fromPerNight: number;
   /** Public Airbnb listing, when one exists. */
@@ -35,6 +38,8 @@ export interface StayPolicy {
   /** "12 PM" */
   checkOut: string;
   pets: "Welcome" | "On request";
+  /** Minimum stay, short form for tables: "2 nights at weekends". */
+  minStay: string;
   /** Short form for tables and the phone bar: "Up to 14 days before". */
   freeCancellation: string;
   /** Cancellation lines for the "Things to know" block, most generous first. */
@@ -53,6 +58,12 @@ export const to24h = (t: string): string => {
 
 /** When the stay policies last changed (shown on /policies). */
 export const policiesUpdated = "October 2026";
+
+/** CK, 20 Oct 2026: 2 nights when the stay includes a Friday or Saturday night, at every home. */
+const WEEKEND_MIN_STAY = "2 nights at weekends";
+/** The full rule, shown on stay pages and /policies. */
+export const minStayRule =
+  "2 nights if your stay includes a Friday or Saturday night; 1 night otherwise. Within 3 days of arrival, 1 night is fine.";
 
 const STANDARD_CANCELLATION = [
   "Free cancellation up to 14 days before check-in",
@@ -82,21 +93,28 @@ export const properties: readonly Property[] = [
     description:
       "A serene garden retreat nestled in the lush greenery of DLF Hyde Park, New Chandigarh. Surrounded by plants, sunshine and peaceful vibes, it's perfect for writers, remote workers or couples. Enjoy a cosy reading nook, blooming garden views, hanging plants and sunlit corners. 24/7 power backup and high-speed internet included.",
     amenities: [
+      "Private back garden",
       "Fast Wi-Fi (100 Mbps)",
-      "Garden view",
+      "Dedicated workspace",
+      "Kitchen",
+      "Washing machine",
+      "Air conditioning",
+      "Self check-in",
+      "Free covered parking",
+      "Pets allowed",
       "24/7 power backup",
-      "Gated security",
-      "Clubhouse access",
     ],
     maxGuests: 2,
     bedrooms: 1,
     bathrooms: 1,
+    beds: "1 king bed",
     fromPerNight: 5_500,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1473200853156126236",
     policy: {
       checkIn: "2 PM",
       checkOut: "12 PM",
       pets: "Welcome",
+      minStay: WEEKEND_MIN_STAY,
       freeCancellation: "Up to 14 days before",
       cancellation: STANDARD_CANCELLATION,
       rules: [
@@ -125,12 +143,14 @@ export const properties: readonly Property[] = [
     maxGuests: 2,
     bedrooms: 1,
     bathrooms: 1,
+    beds: "1 king bed",
     fromPerNight: 8_500,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1603439898679095327",
     policy: {
       checkIn: "2 PM",
       checkOut: "12 PM",
       pets: "Welcome",
+      minStay: WEEKEND_MIN_STAY,
       freeCancellation: "Up to 14 days before",
       cancellation: STANDARD_CANCELLATION,
       rules: [
@@ -165,12 +185,14 @@ export const properties: readonly Property[] = [
     maxGuests: 10,
     bedrooms: 5,
     bathrooms: 5,
+    beds: "5 king beds",
     fromPerNight: 45_000,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1755107663054771918",
     policy: {
       checkIn: "3 PM",
       checkOut: "11 AM",
       pets: "On request",
+      minStay: WEEKEND_MIN_STAY,
       freeCancellation: "Up to 30 days before",
       cancellation: [
         "Free cancellation up to 30 days before check-in",
@@ -208,12 +230,14 @@ export const properties: readonly Property[] = [
     maxGuests: 2,
     bedrooms: 1,
     bathrooms: 1,
+    beds: "1 king bed",
     fromPerNight: 4_500,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1679764480306760606",
     policy: {
       checkIn: "2 PM",
       checkOut: "12 PM",
       pets: "Welcome",
+      minStay: WEEKEND_MIN_STAY,
       freeCancellation: "Up to 48 hours before",
       cancellation: [
         "Free change or cancellation up to 48 hours before check-in",
