@@ -64,3 +64,15 @@ describe("ways to stay", () => {
     expect(new Set(waysToStay.map((w) => w.slug)).size).toBe(waysToStay.length);
   });
 });
+
+describe("amenity depth (CK confirmed extras, 21 Oct 2026)", () => {
+  it("lists 20+ amenities at every home", () => {
+    const counts = Object.fromEntries(properties.map((p) => [p.slug, allAmenities(p.slug).length]));
+    expect(counts).toEqual({
+      "garden-cottage": 39,
+      "garden-courtyard": 20,
+      "garden-chateau": 25,
+      "garden-care": 21,
+    });
+  });
+});
