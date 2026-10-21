@@ -95,7 +95,7 @@ export const properties: readonly Property[] = [
     description:
       "A serene garden retreat nestled in the lush greenery of DLF Hyde Park, New Chandigarh. Surrounded by plants, sunshine and peaceful vibes, it's perfect for writers, remote workers or couples. Enjoy a cosy reading nook, blooming garden views, hanging plants and sunlit corners. 24/7 power backup and high-speed internet included.",
     amenities: [
-      "Private back garden",
+      "Private garden",
       "Fast Wi-Fi (100 Mbps)",
       "Dedicated workspace",
       "Kitchen",
@@ -109,7 +109,7 @@ export const properties: readonly Property[] = [
     maxGuests: 2,
     bedrooms: 1,
     bathrooms: 1,
-    garden: "Private back garden",
+    garden: "Private garden",
     beds: "1 king bed",
     fromPerNight: 5_500,
     airbnbUrl: "https://www.airbnb.co.in/rooms/1473200853156126236",
