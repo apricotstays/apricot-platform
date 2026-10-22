@@ -1,0 +1,166 @@
+---
+/**
+ * Full-screen photo viewer for a home's gallery (design audit item 16).
+ * Any element with data-viewer-open="<index>" opens it at that photo. Links keep a real href
+ * (the large image), so without JavaScript a tap still shows the photo.
+ * Keyboard: ← → to move, Esc to close (native <dialog>). Touch: swipe left/right.
+ */
+interface Props {
+  /** Large image URLs, in gallery order (built by the page with getImage). */
+  photos: { url: string; alt: string }[];
+}
+const { photos } = Astro.props;
+---
+
+<dialog
+  data-viewer
+  data-photos={JSON.stringify(photos)}
+  aria-label="Photo viewer"
+  class="m-0 h-full max-h-none w-full max-w-none bg-stone-950 p-0 text-white backdrop:bg-stone-950"
+>
+  <div class="flex h-full flex-col">
+    <div class="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <p class="min-w-0 truncate text-sm text-stone-300" aria-live="polite">
+        <span data-viewer-count></span>
+        <span class="text-stone-400"> · </span>
+        <span data-viewer-caption></span>
+      </p>
+      <button
+        type="button"
+        class="inline-flex min-h-11 shrink-0 items-center gap-2 rounded px-3 text-sm font-medium text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
+        data-viewer-close
+      >
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+        Close
+      </button>
+    </div>
+    <div class="relative flex min-h-0 flex-1 items-center justify-center px-2 pb-6 sm:px-16">
+      <img data-viewer-img alt="" class="max-h-full max-w-full object-contain select-none" />
+      <button
+        type="button"
+        class="viewer-arrow left-2 sm:left-4"
+        aria-label="Previous photo"
+        data-viewer-prev
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M15 18l-6-6 6-6"></path>
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="viewer-arrow right-2 sm:right-4"
+        aria-label="Next photo"
+        data-viewer-next
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M9 18l6-6-6-6"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<style is:global>
+  .viewer-arrow {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    width: 44px;
+    height: 44px;
+    transform: translateY(-50%);
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.12);
+    color: #fff;
+  }
+  .viewer-arrow:hover {
+    background: rgb(255 255 255 / 0.22);
+  }
+  .viewer-arrow:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+  body.viewer-open {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  type Photo = { url: string; alt: string };
+  const dlg = document.querySelector<HTMLDialogElement>("[data-viewer]");
+  if (dlg && typeof dlg.showModal === "function") {
+    const photos = JSON.parse(dlg.dataset.photos ?? "[]") as Photo[];
+    const img = dlg.querySelector<HTMLImageElement>("[data-viewer-img]")!;
+    const count = dlg.querySelector<HTMLElement>("[data-viewer-count]")!;
+    const caption = dlg.querySelector<HTMLElement>("[data-viewer-caption]")!;
+    let i = 0;
+    let opener: HTMLElement | null = null;
+
+    const show = (n: number) => {
+      i = (n + photos.length) % photos.length;
+      img.src = photos[i].url;
+      img.alt = photos[i].alt;
+      count.textContent = `${i + 1} / ${photos.length}`;
+      caption.textContent = photos[i].alt;
+      // Warm the next photo so swiping feels instant.
+      const next = new Image();
+      next.src = photos[(i + 1) % photos.length].url;
+    };
+
+    document.addEventListener("click", (e) => {
+      const el = (e.target as HTMLElement).closest<HTMLElement>("[data-viewer-open]");
+      if (!el || !photos.length) return;
+      e.preventDefault();
+      opener = el;
+      show(Number(el.dataset.viewerOpen) || 0);
+      dlg.showModal();
+      document.body.classList.add("viewer-open");
+    });
+    dlg.querySelector("[data-viewer-prev]")!.addEventListener("click", () => show(i - 1));
+    dlg.querySelector("[data-viewer-next]")!.addEventListener("click", () => show(i + 1));
+    dlg.querySelector("[data-viewer-close]")!.addEventListener("click", () => dlg.close());
+    dlg.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") show(i - 1);
+      if (e.key === "ArrowRight") show(i + 1);
+    });
+    dlg.addEventListener("close", () => {
+      document.body.classList.remove("viewer-open");
+      opener?.focus();
+    });
+    let x0: number | null = null;
+    dlg.addEventListener("touchstart", (e) => (x0 = e.touches[0].clientX), { passive: true });
+    dlg.addEventListener("touchend", (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) show(dx < 0 ? i + 1 : i - 1);
+      x0 = null;
+    });
+  }
+</script>

@@ -92,18 +92,20 @@ const chevron = (d: string) =>
   </p>
 </section>
 
-<!-- Phone only: sticky booking bar, shown once the calendar has been scrolled into view. -->
+<!-- Phone only: booking bar, always in reach of the thumb (design audit item 15). Shown on load
+     (even if the calendar can't load); the calendar script fills in the dates once picked. -->
 <div
   class="fixed inset-x-0 bottom-0 z-40 m-0 flex flex-col gap-2.5 border-t border-stone-200 bg-white px-5 pt-3 pb-5 shadow-[0_-2px_8px_rgba(0,0,0,0.06)] lg:hidden"
   data-avail-bar
+  data-price={priceLine}
   hidden
 >
   <div class="flex items-center justify-between gap-2">
     <div>
       <p class="font-semibold text-stone-800" data-avail-summary>
-        No dates picked
+        {priceLine}
       </p>
-      <p class="text-xs text-stone-500">{priceLine} · exact price on WhatsApp</p>
+      <p class="text-xs text-stone-500">Weekday rate · exact price on WhatsApp</p>
     </div>
     <button
       type="button"
@@ -181,7 +183,7 @@ const chevron = (d: string) =>
   }
   .avail-day[data-s="range"] {
     border-radius: 0;
-    background: #ffe1df;
+    background: #f6e3dc;
     color: #3a2a2a;
   }
   .avail-day[data-s="end"] {
@@ -269,18 +271,34 @@ const chevron = (d: string) =>
       months.push([new Date(first * DAY).getUTCFullYear(), new Date(first * DAY).getUTCMonth()]);
     }
 
-    const grid = $("[data-avail-months]")!;
-    const prev = $<HTMLButtonElement>("[data-avail-prev]")!;
-    const next = $<HTMLButtonElement>("[data-avail-next]")!;
+    type View = {
+      grid: HTMLElement;
+      prev: HTMLButtonElement;
+      next: HTMLButtonElement;
+      mi: number;
+      count: () => number;
+    };
     const wide = matchMedia("(min-width: 768px)");
+    const views: View[] = [];
+    const addView = (root: ParentNode, count: () => number) => {
+      const grid = root.querySelector<HTMLElement>("[data-avail-months]");
+      const prev = root.querySelector<HTMLButtonElement>("[data-avail-prev]");
+      const next = root.querySelector<HTMLButtonElement>("[data-avail-next]");
+      if (grid && prev && next) views.push({ grid, prev, next, mi: 0, count });
+    };
+    addView(sec, () => (wide.matches ? 2 : 1));
+    // The same calendar, one month at a time, inside the Book direct card (design audit item 14).
+    const pop = $("[data-avail-pop]");
+    if (pop) addView(pop, () => 1);
+    const popToggle = $<HTMLButtonElement>("[data-avail-dates]");
     const defaultHref = $<HTMLAnchorElement>("[data-avail-book]")?.href ?? wa;
-    let mi = 0;
+    const bar = $("[data-avail-bar]");
+    let active: View = views[0];
     let ci: number | null = null;
     let co: number | null = null;
     let focus = today;
     let note = "";
 
-    const show = () => (wide.matches ? 2 : 1);
     const monthOf = (d: number) =>
       months.findIndex(([y, m]) => y === dt(d).getUTCFullYear() && m === dt(d).getUTCMonth());
 
@@ -296,9 +314,9 @@ const chevron = (d: string) =>
       return ["free", b ? "free for check-out" : "free", true] as const;
     }
 
-    function drawMonths(moveFocus: boolean) {
-      grid.textContent = "";
-      for (const [y, m] of months.slice(mi, mi + show())) {
+    function drawMonths(v: View, moveFocus: boolean) {
+      v.grid.textContent = "";
+      for (const [y, m] of months.slice(v.mi, v.mi + v.count())) {
         const box = document.createElement("div");
         box.className = "min-w-0 flex-[1_1_260px]";
         const h = document.createElement("h3");
@@ -334,15 +352,15 @@ const chevron = (d: string) =>
           g.append(b);
         }
         box.append(h, g);
-        grid.append(box);
+        v.grid.append(box);
       }
-      prev.disabled = mi === 0;
-      next.disabled = mi + show() >= months.length;
-      if (moveFocus) grid.querySelector<HTMLElement>(`[data-d="${focus}"]`)?.focus();
+      v.prev.disabled = v.mi === 0;
+      v.next.disabled = v.mi + v.count() >= months.length;
+      if (moveFocus) v.grid.querySelector<HTMLElement>(`[data-d="${focus}"]`)?.focus();
     }
 
     function update(moveFocus = false) {
-      drawMonths(moveFocus);
+      for (const v of views) drawMonths(v, moveFocus && v === active);
       const range = ci !== null && co !== null;
       const n = range ? co! - ci! : 0;
       const nights = `${n} night${n === 1 ? "" : "s"}`;
@@ -354,20 +372,22 @@ const chevron = (d: string) =>
             : `${fmt(ci!)} – ${fmt(co!)}`;
       }
       const msg = `Hi, are ${span} (${nights}) free at ${name}?`;
-      $("[data-avail-hint]")!.textContent =
+      const hint =
         ci === null
           ? "Pick your check-in date"
           : co === null
             ? "Now pick your check-out date"
             : `${span} · ${nights}`;
+      for (const h of $$("[data-avail-hint]")) h.textContent = hint;
       $("[data-avail-summary]")!.textContent = range
         ? `${span} · ${nights}`
         : ci !== null
           ? `From ${fmt(ci)} · pick check-out`
-          : "No dates picked";
-      const noteEl = $("[data-avail-note]")!;
-      noteEl.textContent = note;
-      noteEl.hidden = !note;
+          : (bar?.dataset.price ?? "");
+      for (const noteEl of $$("[data-avail-note]")) {
+        noteEl.textContent = note;
+        noteEl.hidden = !note;
+      }
       $("[data-avail-in]")!.textContent = ci !== null ? fmtW(ci) : "Add date";
       $("[data-avail-out]")!.textContent = co !== null ? fmtW(co) : "Add date";
       $("[data-avail-msg]")!.hidden = !range;
@@ -379,46 +399,77 @@ const chevron = (d: string) =>
       for (const c of $$("[data-avail-clear]")) c.hidden = ci === null;
     }
 
-    function pick(d: number) {
+    function setPop(open: boolean) {
+      if (!pop || !popToggle) return;
+      pop.hidden = !open;
+      popToggle.setAttribute("aria-expanded", String(open));
+      if (open) {
+        const v = views[views.length - 1];
+        const fm = monthOf(ci ?? today);
+        v.mi = Math.max(0, fm);
+        active = v;
+        focus = ci ?? today;
+        update(true);
+      }
+    }
+
+    function pick(d: number, v: View) {
+      active = v;
       if (ci !== null && co === null && d > ci) {
         if (allFree(ci, d)) [co, note] = [d, ""];
         else [ci, co, note] = [isBooked(d) ? null : d, null, NOTE];
       } else if (!isBooked(d)) [ci, co, note] = [d, null, ""];
       focus = d;
       update(true);
+      // Dates complete in the card: close the calendar and hand focus to the button.
+      if (pop && v === views[views.length - 1] && views.length > 1 && co !== null) {
+        setPop(false);
+        $<HTMLElement>("aside [data-avail-book]")?.focus();
+      }
     }
 
-    grid.addEventListener("click", (e) => {
-      const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-d]");
-      if (b && !b.hasAttribute("aria-disabled")) pick(Number(b.dataset.d));
-    });
-    grid.addEventListener("keydown", (e) => {
-      const step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key];
-      if (!step) return;
-      e.preventDefault();
-      focus = Math.min(Math.max(focus + step, today), through - 1);
-      const fm = monthOf(focus);
-      if (fm < mi) mi = fm;
-      else if (fm >= mi + show()) mi = Math.max(0, fm - show() + 1);
-      update(true);
-    });
-    const go = (delta: number) => {
-      mi = Math.min(Math.max(mi + delta, 0), Math.max(0, months.length - show()));
-      const [y, m] = months[mi];
-      focus = Math.max(today, Date.UTC(y, m, 1) / DAY);
-      update();
-      $("[data-avail-live]")!.textContent = months
-        .slice(mi, mi + show())
-        .map(([y, m]) => `${MONTH[m]} ${y}`)
-        .join(" and ");
-    };
-    prev.addEventListener("click", () => go(-1));
-    next.addEventListener("click", () => go(1));
+    for (const v of views) {
+      v.grid.addEventListener("click", (e) => {
+        const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-d]");
+        if (b && !b.hasAttribute("aria-disabled")) pick(Number(b.dataset.d), v);
+      });
+      v.grid.addEventListener("keydown", (e) => {
+        const step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key];
+        if (!step) return;
+        e.preventDefault();
+        active = v;
+        focus = Math.min(Math.max(focus + step, today), through - 1);
+        const fm = monthOf(focus);
+        if (fm < v.mi) v.mi = fm;
+        else if (fm >= v.mi + v.count()) v.mi = Math.max(0, fm - v.count() + 1);
+        update(true);
+      });
+      const go = (delta: number) => {
+        v.mi = Math.min(Math.max(v.mi + delta, 0), Math.max(0, months.length - v.count()));
+        const [y, m] = months[v.mi];
+        focus = Math.max(today, Date.UTC(y, m, 1) / DAY);
+        active = v;
+        update();
+        $("[data-avail-live]")!.textContent = months
+          .slice(v.mi, v.mi + v.count())
+          .map(([y, m]) => `${MONTH[m]} ${y}`)
+          .join(" and ");
+      };
+      v.prev.addEventListener("click", () => go(-1));
+      v.next.addEventListener("click", () => go(1));
+    }
     for (const c of $$("[data-avail-clear]"))
       c.addEventListener("click", () => {
         [ci, co, note] = [null, null, ""];
         update();
       });
+    popToggle?.addEventListener("click", () => setPop(!!pop?.hidden));
+    pop?.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        setPop(false);
+        popToggle?.focus();
+      }
+    });
     wide.addEventListener("change", () => update());
 
     const mins = Math.max(0, Math.round((Date.now() - Date.parse(data.updated)) / 6e4));
@@ -430,16 +481,14 @@ const chevron = (d: string) =>
     update();
     sec.hidden = false;
     $("[data-avail-dates]")!.hidden = false;
-
-    const bar = $("[data-avail-bar]")!;
-    new IntersectionObserver((entries, obs) => {
-      if (!entries.some((en) => en.isIntersecting)) return;
-      bar.hidden = false;
-      document.body.classList.add("avail-bar-on");
-      obs.disconnect();
-    }).observe(sec);
   }
 
+  // The phone booking bar is useful even when the calendar can't load.
+  const bar = document.querySelector<HTMLElement>("[data-avail-bar]");
+  if (bar) {
+    bar.hidden = false;
+    document.body.classList.add("avail-bar-on");
+  }
   const sec = document.querySelector<HTMLElement>("[data-avail]");
   if (sec) void init(sec);
 </script>
