@@ -6,6 +6,14 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Changed
 
+- **Design system, batch 4 of 5: stay pages (design audit items 14, 15, 16).**
+  - **Dates in the booking card (14).** The Check-in / Check-out fields in Book direct now open the live availability calendar inside the card (one month, with month arrows) instead of jumping down the page. It shares its selection with the large calendar: pick dates in either, and the fields, the button ("Ask about 6–8 Nov on WhatsApp") and the pre-filled message update; the card calendar closes once both dates are picked. Esc closes it.
+  - **Phone booking bar (15).** Shown from the first screen on every stay page (it used to appear only after the calendar scrolled into view, and never if the calendar couldn't load). By default it shows the starting price and "Check availability"; once dates are picked it shows them. The cover photo carries a "1 / N · tap to view" counter on phones.
+  - **Photo viewer (16).** Tapping any photo (cover, the four thumbnails, "Show all photos", or the All photos grid) opens a full-screen viewer with the photo's caption, a counter, arrows, keyboard (← → Esc) and swipe. Without JavaScript the photos are plain links to the large image. In the All photos grid, a blurred preview shows while each photo loads (no more flat grey tiles). New component `src/components/PhotoViewer.astro`.
+  - Calendar "your stay" tint changed from the old coral pink to a terracotta tint (#F6E3DC).
+
+### Changed
+
 - **Design system, batch 3 of 5: homepage (design audit items 01, 02, 08, 12).**
   - **Hero (01).** The first screen now carries the promise over the existing Courtyard photo / desktop video: "Chandigarh", "A garden of your own." (the page's H1, with "Apricot Stays, boutique homes in New Chandigarh" for screen readers), "Four homes, each with a private garden. Never shared.", a "Check dates on WhatsApp" button and "4.99 host rating · Superhost" (no review count in the hero, CK 22 Oct). A dark gradient keeps the text readable. (pa11y can't compute contrast over a photo + gradient and reports errors there, while axe 4.14 in Chromium marks it "needs review"; the hero copy is hidden from pa11y on `/` via `hideElements: [data-hero-copy]`, the rest of the homepage is still checked. Measured by hand: white on the scrim is about 6:1 or better over the lightest part of the photo.) The promise band below is retitled "Your garden, home by home."
   - **Navigation (02).** Logo on the left (STAYS still centred under Apricot), links "Homes · Ways to stay · Our story" in the middle, "Check dates" on the right; the current page is underlined in terracotta. "Home" and "Amenities" left the header (logo = home; amenities stay on the homepage and in the footer). Experiences and the Garden Shop stay footer-only during their soft launch.
