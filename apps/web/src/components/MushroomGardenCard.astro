@@ -1,7 +1,7 @@
 ---
 /**
- * "Coming soon" teaser for The Mushroom Garden, shown as the last card in
- * Our Collection. Deliberately NOT part of `properties` in @apricot/schema:
+ * "Coming soon" teaser for The Mushroom Garden: a slim band under Our Collection
+ * (design audit item 11: secondary weight for a home that is not bookable yet). Deliberately NOT part of `properties` in @apricot/schema:
  * it is not bookable, so it must stay out of schema.org, the sitemap,
  * llms.txt, "Also on Airbnb" and the booking pre-fills.
  *
@@ -16,80 +16,58 @@ const firstLook = contact.whatsappLink(
 );
 ---
 
-<article aria-labelledby="mushroom-garden-title" class="reveal md:col-span-2">
-  <div class="relative aspect-[4/3] overflow-hidden border border-dashed border-[#c9b79a] bg-[#f3ede2] md:aspect-[8/3]">
-    <div class="absolute inset-0 grid grid-cols-1 items-center gap-6 px-6 pt-14 pb-10 md:grid-cols-2 md:px-14 md:pt-14 md:pb-11">
-      <div class="flex h-full min-h-0 items-center justify-center">
-        <svg
-          viewBox="0 0 260 300"
-          fill="none"
-          class="block h-full w-auto max-w-full"
-          role="img"
-          aria-label="Early line sketch of the garden plan: a mushroom-shaped garden, the cap a shared garden and the stem a trail of cottages"
-        >
-          <path
-            d="M20 140 C20 62 72 20 130 20 C188 20 240 62 240 140 Z"
-            stroke="#6b5a45"
-            stroke-width="1.6"
-          ></path>
-          <path
-            d="M98 140 V270 C98 278 104 284 112 284 H148 C156 284 162 278 162 270 V140"
-            stroke="#6b5a45"
-            stroke-width="1.6"
-          ></path>
-          <path
-            d="M42 128 C44 76 86 42 130 42 C174 42 216 76 218 128"
-            stroke="#6b5a45"
-            stroke-width="1"
-            stroke-dasharray="2 7"
-            stroke-linecap="round"
-          ></path>
-          <path
-            d="M130 150 C112 172 148 192 130 212 C112 232 148 252 130 272"
-            stroke="#6b5a45"
-            stroke-width="1"
-            stroke-dasharray="2 7"
-            stroke-linecap="round"
-          ></path>
-          <rect x="106" y="176" width="14" height="10" stroke="#6b5a45" stroke-width="1"></rect>
-          <rect x="140" y="214" width="14" height="10" stroke="#6b5a45" stroke-width="1"></rect>
-          <rect x="106" y="246" width="14" height="10" stroke="#6b5a45" stroke-width="1"></rect>
-          <circle cx="130" cy="96" r="18" stroke="#6b5a45" stroke-width="1"></circle>
-        </svg>
-      </div>
-      <div class="hidden max-w-sm md:block">
-        <p class="font-serif text-3xl leading-tight font-normal text-stone-900">
-          A whole garden, made to stay in.
-        </p>
-        <p class="mt-3 font-sans text-[15px] leading-relaxed text-stone-600">
-          A garden heart to gather in. A winding path to cottages, each in its own garden.
-        </p>
-      </div>
-    </div>
-    <span class="absolute top-4 left-4 bg-[#1f2e24] px-3 py-1.5 font-sans text-[11px] tracking-[0.18em] text-[#f6f1e7] uppercase">
-      Coming 2027
-    </span>
-    <span class="absolute bottom-3.5 left-4 font-serif text-[13px] text-[#6b5a45] italic">
-      Early sketch
-    </span>
-  </div>
-  <div class="mt-5">
-    <h3
-      id="mushroom-garden-title"
-      class="mb-1 font-sans text-base font-normal tracking-[0.08em] text-stone-800 uppercase"
-    >
-      The Mushroom Garden
-    </h3>
-    <p class="font-sans text-xs font-light tracking-[0.2em] text-stone-500 uppercase">
-      Chandigarh · In the making
+<article
+  aria-labelledby="mushroom-garden-title"
+  class="reveal mt-12 flex flex-col gap-4 border border-dashed border-[#c9b79a] bg-[#f3ede2] px-5 py-5 sm:flex-row sm:items-center sm:gap-6 sm:px-6"
+>
+  <svg
+    viewBox="0 0 260 300"
+    fill="none"
+    class="block h-16 w-auto shrink-0"
+    role="img"
+    aria-label="Early line sketch of the garden plan: a mushroom-shaped garden, the cap a shared garden and the stem a trail of cottages"
+  >
+    <path
+      d="M20 140 C20 62 72 20 130 20 C188 20 240 62 240 140 Z"
+      stroke="#6b5a45"
+      stroke-width="1.6"
+    ></path>
+    <path
+      d="M98 140 V270 C98 278 104 284 112 284 H148 C156 284 162 278 162 270 V140"
+      stroke="#6b5a45"
+      stroke-width="1.6"
+    ></path>
+    <path
+      d="M42 128 C44 76 86 42 130 42 C174 42 216 76 218 128"
+      stroke="#6b5a45"
+      stroke-width="1"
+      stroke-dasharray="2 7"
+      stroke-linecap="round"
+    ></path>
+    <path
+      d="M130 150 C112 172 148 192 130 212 C112 232 148 252 130 272"
+      stroke="#6b5a45"
+      stroke-width="1"
+      stroke-dasharray="2 7"
+      stroke-linecap="round"
+    ></path>
+    <rect x="106" y="176" width="14" height="10" stroke="#6b5a45" stroke-width="1"></rect>
+    <rect x="140" y="214" width="14" height="10" stroke="#6b5a45" stroke-width="1"></rect>
+    <rect x="106" y="246" width="14" height="10" stroke="#6b5a45" stroke-width="1"></rect>
+    <circle cx="130" cy="96" r="18" stroke="#6b5a45" stroke-width="1"></circle>
+  </svg>
+  <div class="min-w-0 flex-1">
+    <p class="mb-1 font-sans text-[11px] tracking-[0.18em] text-[#5c4b38] uppercase">
+      Coming 2027 · Chandigarh · In the making
     </p>
-    <a
-      href={firstLook}
-      target="_blank"
-      rel="noopener"
-      class="mt-1 inline-flex min-h-11 items-center font-sans text-sm text-stone-800 underline underline-offset-[5px] hover:text-stone-950"
-    >
-      Join the first-look list
-    </a>
+    <h3 id="mushroom-garden-title" class="font-serif text-xl leading-snug text-stone-900">
+      The Mushroom Garden: a whole garden, made to stay in.
+    </h3>
+    <p class="mt-1 text-sm text-stone-600">
+      A garden heart to gather in. A winding path to cottages, each in its own garden.
+    </p>
   </div>
+  <a href={firstLook} target="_blank" rel="noopener" class="btn-link shrink-0">
+    Join the first-look list
+  </a>
 </article>
