@@ -16,5 +16,10 @@ export default defineConfig({
       { protocol: "https", hostname: "www.notion.so" },
     ],
   },
-  vite: { plugins: [tailwindcss()] },
+  vite: {
+    plugins: [tailwindcss()],
+    // Never inline scripts or assets into the HTML: the CSP (public/_headers) has no
+    // 'unsafe-inline' for scripts, so an inlined <script> would silently not run.
+    build: { assetsInlineLimit: 0 },
+  },
 });
