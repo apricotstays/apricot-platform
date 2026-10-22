@@ -13,6 +13,7 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
   - **Airbnb exits (13).** Homepage "Also on Airbnb" strip removed. On stay pages "View on Airbnb" is a text line under the booking button ("Prefer Airbnb? See this home on Airbnb").
   - **Five Rivers captions (17).** On phones, room name and bed share one line and the palette sits underneath (was a three-column row that wrapped every word).
   - **Golden hour (20).** The Book direct card shows tonight's sunset time for New Chandigarh, calculated in the browser (NOAA equations, IST), with "Best watched from your own garden." Hidden if the script can't run.
+  - **Build fix.** `vite.build.assetsInlineLimit: 0` so small page scripts are emitted as files, not inlined: the site CSP blocks inline scripts, which hid the sunset line on the first preview.
 
 ### Changed
 
