@@ -229,12 +229,12 @@ const jsonLd = {
                       fallbackFormat="jpg"
                       class="aspect-video w-full bg-stone-100 object-cover"
                     />
-                    <figcaption class="mt-3 flex items-baseline gap-3">
+                    <figcaption class="mt-3 grid grid-cols-[1fr_auto] items-baseline gap-x-3 gap-y-1 sm:flex">
                       <span class="font-serif text-lg text-stone-800">{r.name}</span>
-                      <span class="text-xs tracking-[0.15em] text-stone-500 uppercase">
+                      <span class="col-span-2 row-start-2 text-xs tracking-[0.15em] text-stone-500 uppercase">
                         {r.palette}
                       </span>
-                      <span class="text-sm text-stone-700">{r.bed}</span>
+                      <span class="text-right text-sm text-stone-700">{r.bed}</span>
                     </figcaption>
                   </figure>
                 ))}
@@ -380,8 +380,27 @@ const jsonLd = {
               <strong class="font-semibold">{promise.name.toLowerCase()}</strong>:{" "}
               {p.garden.toLowerCase()}, never shared.
             </p>
-            <p class="mb-6 text-sm text-stone-600">
+            <p class="mb-4 text-sm text-stone-600">
               Message us with your dates — we'll confirm availability and the exact price.
+            </p>
+            <!-- Golden hour (design audit item 20): today's sunset for New Chandigarh, computed in
+                 the browser; hidden until the script fills it in. -->
+            <p
+              class="mb-6 flex items-center gap-3 rounded bg-[#fbefe2] px-3 py-2.5 text-sm text-stone-800"
+              data-sunset
+              hidden
+            >
+              <svg width="26" height="26" viewBox="0 0 30 30" aria-hidden="true">
+                <path d="M3 21h24" stroke="#b5452f" stroke-width="1.6"></path>
+                <path d="M8 21a7 7 0 0 1 14 0" fill="#f2b880"></path>
+                <g stroke="#c99a5b" stroke-width="1.4" stroke-linecap="round">
+                  <path d="M15 8v3M6.5 12l2 2M23.5 12l-2 2"></path>
+                </g>
+              </svg>
+              <span>
+                <strong class="font-semibold" data-sunset-time></strong>
+                <span class="block text-stone-600">Best watched from your own garden.</span>
+              </span>
             </p>
             <!-- Dates line: shown only when this home's availability calendar has loaded. -->
             <a
@@ -440,14 +459,17 @@ const jsonLd = {
               <span class="text-sm leading-snug text-stone-800" data-avail-msg-text></span>
             </div>
             {p.airbnbUrl && (
-              <a
-                href={p.airbnbUrl}
-                target="_blank"
-                rel="noopener"
-                class="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded border border-stone-300 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50"
-              >
-                View on Airbnb <Icon name="external" size={14} />
-              </a>
+              <p class="mt-3 text-center text-sm text-stone-600">
+                Prefer Airbnb?{" "}
+                <a
+                  href={p.airbnbUrl}
+                  target="_blank"
+                  rel="noopener"
+                  class="inline-flex items-center gap-1 text-stone-800 underline underline-offset-4 hover:text-apricot"
+                >
+                  See this home on Airbnb <Icon name="external" size={13} />
+                </a>
+              </p>
             )}
             <p class="mt-4 text-center text-xs text-stone-500">
               WhatsApp {contact.whatsappDisplay}
@@ -464,3 +486,48 @@ const jsonLd = {
 
   <Footer />
 </Base>
+
+<script>
+  // Sunset for DLF Hyde Park, New Chandigarh (30.84 N, 76.72 E), NOAA solar equations.
+  // Shown in IST whatever the visitor's own time zone is.
+  const box = document.querySelector<HTMLElement>("[data-sunset]");
+  const out = document.querySelector<HTMLElement>("[data-sunset-time]");
+  if (box && out) {
+    const lat = 30.8406;
+    const lng = 76.7249;
+    const now = new Date(Date.now() + 330 * 60000); // IST calendar date
+    const y = now.getUTCFullYear();
+    const day = Math.floor(
+      (Date.UTC(y, now.getUTCMonth(), now.getUTCDate()) - Date.UTC(y, 0, 0)) / 864e5,
+    );
+    const g = ((2 * Math.PI) / 365) * (day - 1 + (18 - 12) / 24);
+    const eqt =
+      229.18 *
+      (0.000075 +
+        0.001868 * Math.cos(g) -
+        0.032077 * Math.sin(g) -
+        0.014615 * Math.cos(2 * g) -
+        0.040849 * Math.sin(2 * g));
+    const decl =
+      0.006918 -
+      0.399912 * Math.cos(g) +
+      0.070257 * Math.sin(g) -
+      0.006758 * Math.cos(2 * g) +
+      0.000907 * Math.sin(2 * g) -
+      0.002697 * Math.cos(3 * g) +
+      0.00148 * Math.sin(3 * g);
+    const rad = Math.PI / 180;
+    const ha =
+      Math.acos(
+        Math.cos(90.833 * rad) / (Math.cos(lat * rad) * Math.cos(decl)) -
+          Math.tan(lat * rad) * Math.tan(decl),
+      ) / rad;
+    const ist = Math.round(720 - 4 * (lng - ha) - eqt + 330); // minutes after midnight IST
+    if (Number.isFinite(ist)) {
+      const h = Math.floor(ist / 60) % 24;
+      const m = ist % 60;
+      out.textContent = `Sunset tonight at ${h > 12 ? h - 12 : h}:${String(m).padStart(2, "0")} PM`;
+      box.hidden = false;
+    }
+  }
+</script>
