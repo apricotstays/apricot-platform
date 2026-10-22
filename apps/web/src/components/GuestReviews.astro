@@ -20,7 +20,7 @@ const cols = data.reviews.length >= 3 ? "md:grid-cols-3" : "md:grid-cols-2";
 
 {data.reviews.length > 0 && (
   <section id="reviews" aria-labelledby="reviews-h">
-    <h2 id="reviews-h" class="mb-2 text-xl font-semibold text-stone-800">
+    <h2 id="reviews-h" class="t-h2 mb-2">
       {data.isNew ? "New to the collection" : "What guests say"}
     </h2>
     {data.isNew ? (

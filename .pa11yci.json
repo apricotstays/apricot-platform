@@ -3,14 +3,16 @@
     "standard": "WCAG2AA",
     "runners": ["axe"],
     "timeout": 30000,
-    "ignore": ["color-contrast"],
     "chromeLaunchConfig": {
       "args": ["--no-sandbox"]
     }
   },
   "urls": [
     "http://127.0.0.1:4321/",
-    "http://127.0.0.1:4321/our-story",
+    {
+      "url": "http://127.0.0.1:4321/our-story",
+      "ignore": ["color-contrast"]
+    },
     "http://127.0.0.1:4321/stays/garden-cottage",
     "http://127.0.0.1:4321/stays/garden-courtyard",
     "http://127.0.0.1:4321/stays/garden-chateau",
@@ -20,10 +22,22 @@
     "http://127.0.0.1:4321/ways-to-stay/hospital-visits",
     "http://127.0.0.1:4321/ways-to-stay/garden-for-two",
     "http://127.0.0.1:4321/menu",
-    "http://127.0.0.1:4321/shop",
-    "http://127.0.0.1:4321/shop/birds-of-the-garden",
-    "http://127.0.0.1:4321/shop/birds-of-the-garden/indian-grey-hornbill",
-    "http://127.0.0.1:4321/shop/words-of-the-garden/the-gate",
+    {
+      "url": "http://127.0.0.1:4321/shop",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://127.0.0.1:4321/shop/birds-of-the-garden",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://127.0.0.1:4321/shop/birds-of-the-garden/indian-grey-hornbill",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://127.0.0.1:4321/shop/words-of-the-garden/the-gate",
+      "ignore": ["color-contrast"]
+    },
     "http://127.0.0.1:4321/experiences",
     "http://127.0.0.1:4321/experiences/car-wash",
     "http://127.0.0.1:4321/experiences/naar-kasauli",

@@ -26,8 +26,7 @@ const facts = [
   l.duration && { icon: "clock", label: l.duration },
 ].filter(Boolean) as { icon: "car" | "home" | "clock"; label: string }[];
 
-const btnDark =
-  "inline-flex h-12 w-full items-center justify-center gap-2 bg-stone-800 px-6 text-sm font-medium text-white transition-colors hover:bg-stone-900 focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-2 focus-visible:outline-none";
+const btnDark = "btn-primary btn-block min-h-12";
 const h2 = "mb-5 font-serif text-2xl font-normal text-stone-900";
 ---
 
@@ -48,7 +47,7 @@ const h2 = "mb-5 font-serif text-2xl font-normal text-stone-900";
         <span aria-current="page">{l.title}</span>
       </nav>
       {l.status === "Draft" && (
-        <p class="mb-6 rounded-lg bg-stone-900 px-4 py-3 text-sm text-white">
+        <p class="mb-6 rounded bg-stone-900 px-4 py-3 text-sm text-white">
           Draft — shown on preview links only. Set Status to Live in Notion to publish.
           {l.placeholders.length > 0 && <> Still to fill: {l.placeholders.join(", ")}.</>}
         </p>
@@ -62,7 +61,7 @@ const h2 = "mb-5 font-serif text-2xl font-normal text-stone-900";
 
       <div
         class:list={[
-          "mb-12 grid gap-2 overflow-hidden rounded-2xl",
+          "mb-12 grid gap-2 overflow-hidden rounded",
           extraPhotos.length > 0 && "md:grid-cols-2",
         ]}
       >
@@ -143,7 +142,7 @@ const h2 = "mb-5 font-serif text-2xl font-normal text-stone-900";
               </h2>
               <ul class="space-y-3">
                 {l.options.map((o) => (
-                  <li class="flex flex-col gap-3 rounded-xl border border-stone-200 p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <li class="flex flex-col gap-3 rounded border border-stone-200 p-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p class="font-medium text-stone-900">{o.name}</p>
                       <p class="text-sm text-stone-600">
@@ -232,7 +231,7 @@ const h2 = "mb-5 font-serif text-2xl font-normal text-stone-900";
         </div>
 
         <aside aria-label="Request" class="lg:sticky lg:top-6 lg:self-start">
-          <div class="rounded-2xl border border-stone-200 p-6 shadow-[0_6px_20px_rgba(0,0,0,0.08)]">
+          <div class="rounded border border-stone-200 p-6 shadow-[0_6px_20px_rgba(0,0,0,0.08)]">
             <p class="font-serif text-2xl text-stone-900">{priceLine(l)}</p>
             {l.priceNote && <p class="mt-1 text-sm text-stone-500">{l.priceNote}</p>}
             <a href={request} target="_blank" rel="noopener" class:list={[btnDark, "mt-5"]}>
@@ -251,12 +250,7 @@ const h2 = "mb-5 font-serif text-2xl font-normal text-stone-900";
   <!-- Phones: the request button stays in reach. -->
   <div class="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-stone-200 bg-white px-4 py-3 lg:hidden">
     <p class="text-sm font-medium text-stone-900">{priceLine(l)}</p>
-    <a
-      href={request}
-      target="_blank"
-      rel="noopener"
-      class="inline-flex h-11 items-center gap-2 bg-stone-800 px-4 text-sm font-medium text-white"
-    >
+    <a href={request} target="_blank" rel="noopener" class="btn-primary px-4">
       <Icon name="whatsapp" size={16} />
       Request
     </a>

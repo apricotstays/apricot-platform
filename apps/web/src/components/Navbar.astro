@@ -1,5 +1,6 @@
 ---
 import { contact } from "@apricot/brand";
+import Icon from "./Icon.astro";
 
 interface Props {
   /** Pin to the top while scrolling (homepage). */
@@ -60,9 +61,12 @@ const link =
           href={bookHref}
           target="_blank"
           rel="noopener"
-          class="inline-flex items-center justify-center border border-stone-800 px-5 py-2 text-sm font-medium text-stone-800 transition-all duration-300 hover:bg-stone-800 hover:text-white focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-2 focus-visible:outline-none"
+          class="btn-primary px-5"
+          aria-label="Check dates on WhatsApp"
+          title="Opens WhatsApp with a message ready to send"
         >
-          BOOK
+          <Icon name="whatsapp" size={16} />
+          Check dates
         </a>
       </div>
     </div>
@@ -121,9 +125,10 @@ const link =
         href={bookHref}
         target="_blank"
         rel="noopener"
-        class="border border-stone-800 px-3 py-1.5 text-xs font-medium text-stone-800 transition-colors hover:bg-stone-800 hover:text-white"
+        class="btn-primary h-11 w-11 px-0"
+        aria-label="Check dates on WhatsApp"
       >
-        BOOK
+        <Icon name="whatsapp" size={20} />
       </a>
     </div>
   </div>

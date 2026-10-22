@@ -85,7 +85,7 @@ const jsonLd = {
       <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {w.features.map((f) => (
           <li class="border border-stone-200 p-5">
-            <h3 class="mb-1.5 font-semibold text-stone-800">{f.title}</h3>
+            <h3 class="t-h3 mb-1.5">{f.title}</h3>
             <p class="text-[15px] leading-relaxed text-stone-600">{f.text}</p>
           </li>
         ))}
@@ -127,12 +127,7 @@ const jsonLd = {
 
       <div class="mt-14 flex flex-col gap-5 bg-linen p-7 sm:flex-row sm:items-center sm:justify-between">
         <p class="text-stone-700">{w.ctaLine}</p>
-        <a
-          href={wa}
-          target="_blank"
-          rel="noopener"
-          class="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-apricot px-6 text-sm font-medium text-white transition-colors hover:bg-apricot/90"
-        >
+        <a href={wa} target="_blank" rel="noopener" class="btn-primary min-h-12 shrink-0">
           <Icon name="whatsapp" size={18} />
           Message us on WhatsApp
         </a>

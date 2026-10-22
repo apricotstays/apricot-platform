@@ -122,7 +122,9 @@ const jsonLd = {
         <span aria-current="page">{p.name}</span>
       </nav>
       <p class="mb-2 text-sm tracking-wider text-stone-500 uppercase">{p.locality}</p>
-      <h1 class="font-serif text-3xl font-bold text-stone-800 md:text-4xl">{p.name}</h1>
+      <h1 class="font-serif text-4xl leading-tight font-normal text-stone-900 md:text-5xl">
+        {p.name}
+      </h1>
       <a
         href="/#promise"
         class="mt-4 inline-flex items-center gap-2 border border-stone-300 px-4 py-2.5 text-sm text-stone-800 hover:bg-stone-50"
@@ -171,7 +173,7 @@ const jsonLd = {
                 {i === thumbs.length - 1 && gallery.length > 5 && (
                   <a
                     href="#photos"
-                    class="absolute right-4 bottom-4 bg-white px-4 py-2 text-sm font-medium text-stone-800 shadow-md hover:shadow-lg"
+                    class="absolute right-4 bottom-4 inline-flex min-h-11 items-center rounded bg-white px-4 text-sm font-medium text-stone-800 shadow-md hover:shadow-lg"
                   >
                     Show all photos
                   </a>
@@ -200,7 +202,7 @@ const jsonLd = {
                 </li>
               ))}
             </ul>
-            <h2 id="about-h" class="mt-6 mb-4 text-xl font-semibold text-stone-800">
+            <h2 id="about-h" class="t-h2 mt-6 mb-4">
               About this stay
             </h2>
             <p class="leading-relaxed text-stone-600">{p.description}</p>
@@ -208,7 +210,7 @@ const jsonLd = {
 
           {namedRooms.length > 0 && (
             <section id="rooms" aria-labelledby="rooms-h">
-              <h2 id="rooms-h" class="mb-2 text-xl font-semibold text-stone-800">
+              <h2 id="rooms-h" class="t-h2 mb-2">
                 The Five Rivers
               </h2>
               <p class="mb-8 leading-relaxed text-stone-600">
@@ -242,7 +244,7 @@ const jsonLd = {
 
           {namedRooms.length === 0 && (
             <section id="sleep" aria-labelledby="sleep-h">
-              <h2 id="sleep-h" class="mb-6 text-xl font-semibold text-stone-800">
+              <h2 id="sleep-h" class="t-h2 mb-6">
                 Where you'll sleep
               </h2>
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -258,7 +260,7 @@ const jsonLd = {
           {homeReviews && <GuestReviews data={homeReviews} airbnbUrl={p.airbnbUrl} />}
 
           <section id="amenities" aria-labelledby="amenities-h">
-            <h2 id="amenities-h" class="mb-6 text-xl font-semibold text-stone-800">
+            <h2 id="amenities-h" class="t-h2 mb-6">
               Amenities
             </h2>
             <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -271,7 +273,7 @@ const jsonLd = {
             </ul>
             {everyAmenity.length > p.amenities.length && (
               <details class="group mt-6">
-                <summary class="inline-flex min-h-11 cursor-pointer list-none items-center border border-stone-800 px-5 text-sm font-medium text-stone-800 hover:bg-stone-50 [&::-webkit-details-marker]:hidden">
+                <summary class="btn-secondary cursor-pointer list-none px-5 [&::-webkit-details-marker]:hidden">
                   <span class="group-open:hidden">Show all {everyAmenity.length} amenities</span>
                   <span class="hidden group-open:inline">Show fewer</span>
                 </summary>
@@ -296,7 +298,7 @@ const jsonLd = {
           <AvailabilityCalendar slug={p.slug} name={p.name} priceLine={fromLine(p)} />
 
           <section id="things-to-know" aria-labelledby="know-h">
-            <h2 id="know-h" class="mb-2 text-xl font-semibold text-stone-800">
+            <h2 id="know-h" class="t-h2 mb-2">
               Things to know
             </h2>
             <p class="mb-6 text-stone-600">
@@ -309,7 +311,7 @@ const jsonLd = {
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
               {knowCards.map((c) => (
                 <div class="border border-stone-200 p-5">
-                  <h3 class="mb-3 flex items-center gap-2 font-semibold text-stone-800">
+                  <h3 class="t-h3 mb-3 flex items-center gap-2">
                     <Icon name={c.icon} size={18} />
                     {c.title}
                   </h3>
@@ -324,7 +326,7 @@ const jsonLd = {
           </section>
 
           <section id="location" aria-labelledby="location-h">
-            <h2 id="location-h" class="mb-6 text-xl font-semibold text-stone-800">
+            <h2 id="location-h" class="t-h2 mb-6">
               Location
             </h2>
             <div class="flex flex-col gap-4 bg-stone-50 p-6 sm:flex-row sm:items-center sm:justify-between">
@@ -348,7 +350,7 @@ const jsonLd = {
 
           {gallery.length > 5 && (
             <section id="photos" aria-labelledby="photos-h" class="scroll-mt-8">
-              <h2 id="photos-h" class="mb-6 text-xl font-semibold text-stone-800">
+              <h2 id="photos-h" class="t-h2 mb-6">
                 All photos
               </h2>
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -425,7 +427,7 @@ const jsonLd = {
               href={book}
               target="_blank"
               rel="noopener"
-              class="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-apricot px-3 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-apricot/90"
+              class="btn-primary btn-block min-h-12 px-3 py-2"
               data-avail-book
             >
               <Icon name="whatsapp" size={18} />
@@ -442,7 +444,7 @@ const jsonLd = {
                 href={p.airbnbUrl}
                 target="_blank"
                 rel="noopener"
-                class="mt-3 flex h-12 w-full items-center justify-center gap-2 border border-stone-300 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50"
+                class="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded border border-stone-300 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50"
               >
                 View on Airbnb <Icon name="external" size={14} />
               </a>
