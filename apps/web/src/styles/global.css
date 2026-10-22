@@ -51,3 +51,50 @@
     transform: none;
   }
 }
+
+/*
+ * Design system (design audit, Oct 2026).
+ * Buttons: three tiers, one radius (4px), sentence case, 44px minimum height.
+ *   .btn-primary   one per screen; anything that starts a booking or an order
+ *   .btn-secondary moves you through the site
+ *   .btn-link      inside copy and for low-stakes asks
+ * Modifiers: .btn-lg, .btn-block, .btn-forest (Our Story and Shop pages).
+ * Type: .t-display (page title), .t-h2 (section), .t-h3 (card / sub-section).
+ */
+@layer components {
+  .btn-primary,
+  .btn-secondary {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded px-6 text-center text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-2 focus-visible:outline-none;
+  }
+  .btn-primary {
+    @apply bg-apricot text-white hover:bg-apricot-dark;
+  }
+  .btn-secondary {
+    @apply border border-stone-800 bg-transparent text-stone-800 hover:bg-stone-800 hover:text-white;
+  }
+  .btn-forest {
+    @apply bg-forest text-[#fbf7f0] hover:bg-forest-dark focus-visible:ring-forest;
+  }
+  .btn-secondary.btn-forest {
+    @apply border-forest bg-transparent text-forest hover:bg-forest hover:text-[#fbf7f0];
+  }
+  .btn-lg {
+    @apply min-h-13 px-8 text-base;
+  }
+  .btn-block {
+    @apply w-full;
+  }
+  .btn-link {
+    @apply inline-flex min-h-11 items-center gap-1.5 text-[15px] font-medium text-stone-800 underline decoration-1 underline-offset-[6px] transition-colors hover:text-apricot focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-2 focus-visible:outline-none;
+  }
+
+  .t-display {
+    @apply font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl;
+  }
+  .t-h2 {
+    @apply font-serif text-2xl leading-snug font-normal text-stone-900 sm:text-[28px];
+  }
+  .t-h3 {
+    @apply font-serif text-lg leading-snug font-medium text-stone-900;
+  }
+}
