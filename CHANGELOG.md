@@ -6,6 +6,16 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Changed
 
+- **Design system, batch 2 of 5: quick wins (design audit items 09, 10, 11, 13, 17, 20).**
+  - **Prices (09).** Each Our Collection card says "· weekday rate" next to its price, and the rates note now sits directly under the grid instead of below the Mushroom Garden teaser.
+  - **Ways to stay photos (10).** The three cards show the stay, not the building again: Courtyard table for two, Château dining table for ten, Garden Care living room.
+  - **Mushroom Garden (11).** The two-column dashed tile is now a slim band under Our Collection (sketch, "Coming 2027", one line, first-look link).
+  - **Airbnb exits (13).** Homepage "Also on Airbnb" strip removed. On stay pages "View on Airbnb" is a text line under the booking button ("Prefer Airbnb? See this home on Airbnb").
+  - **Five Rivers captions (17).** On phones, room name and bed share one line and the palette sits underneath (was a three-column row that wrapped every word).
+  - **Golden hour (20).** The Book direct card shows tonight's sunset time for New Chandigarh, calculated in the browser (NOAA equations, IST), with "Best watched from your own garden." Hidden if the script can't run.
+
+### Changed
+
 - **Design system, batch 1 of 5: colour, buttons, type (design audit, 22 Oct 2026).** Audit: https://claude.ai/artifact/W7hYSi6i36cPmFd987Xmj2 (items 03, 05, 06, 07).
   - **Colour.** The accent is now "Courtyard" terracotta `#B5452F` (white text 5.44:1, passes WCAG AA), replacing the Replit/Airbnb coral `#FF5A5F` (3.05:1). Hover `#9A3A26`. The teal `#00A699` is gone; `sage` now maps to Garden green `#2F4A3A` (new `forest` token). Token names kept, so existing classes follow. The axe colour-contrast check is back on for 14 of 19 audited pages; Our Story and the Shop keep it off for now (pa11y reports contrast errors there that axe 4.14 in Chromium doesn't reproduce; they were already present on main).
   - **Buttons.** One system in `global.css`: `.btn-primary` (one per screen, starts a booking or order), `.btn-secondary`, `.btn-link`; modifiers `.btn-lg`, `.btn-block`, `.btn-forest` (Our Story and Shop keep green). 4px corners, sentence case, 44px minimum height. Applied to the header, homepage (membership / local tips links, final CTA, no more glow), stay pages, availability bar, policies, ways to stay, experiences, Our Story, Shop and 404. Cards and panels on Experiences and the Shop use 4px corners instead of 12–16px.
