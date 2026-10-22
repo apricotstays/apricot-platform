@@ -1,5 +1,5 @@
 ---
-/* "Order on WhatsApp" pill. `size="lg"` is the full-width button on product pages. */
+/* "Order on WhatsApp" button (design-system .btn-primary, forest variant). `size="lg"` is the full-width button on product pages. */
 interface Props {
   href: string;
   label?: string;
@@ -8,9 +8,7 @@ interface Props {
 }
 const { href, label = "Order on WhatsApp", ariaLabel, size = "sm" } = Astro.props;
 const cls =
-  size === "lg"
-    ? "flex min-h-13 w-full items-center justify-center gap-2.5 rounded-full bg-[#2f4a3a] px-6 text-base font-semibold text-white transition-colors hover:bg-[#223729] focus-visible:ring-2 focus-visible:ring-[#2f4a3a] focus-visible:ring-offset-2 focus-visible:outline-none"
-    : "inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#2f4a3a] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#223729] focus-visible:ring-2 focus-visible:ring-[#2f4a3a] focus-visible:ring-offset-2 focus-visible:outline-none";
+  size === "lg" ? "btn-primary btn-forest btn-lg btn-block gap-2.5" : "btn-primary btn-forest px-4";
 const icon = size === "lg" ? 18 : 15;
 ---
 
