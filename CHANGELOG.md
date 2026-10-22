@@ -6,6 +6,13 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Changed
 
+- **Design system, batch 5 of 5: other pages (design audit items 04, 18, 19).**
+  - **Phone menu (04).** The menu is now a full-height sheet: the four homes as photo tiles, "Ways to stay" and "Our story" as large serif links, and a "Check dates on WhatsApp" button with the number and email at the bottom. Still a native `<details>` (works without JavaScript); the page behind it no longer scrolls while it is open.
+  - **Policies (18).** A sticky "On this page" list in the empty right column on wide screens (At a glance → FAQ) that highlights the section in view, plus "Ask on WhatsApp". FAQ rows lose the browser's default ▶ triangle: full-width rows with a + that turns into × when open.
+  - **Experiences (19).** While no section has three or more listings, the page shows one row (four columns on desktop) with each card labelled by its section ("At your door", "Day trips") and the "Something else in mind?" ask as the last tile; filter tabs show counts ("All 3 · Experiences 1 · Services 2"). With three or more in any section it goes back to one row per section.
+
+### Changed
+
 - **Design system, batch 4 of 5: stay pages (design audit items 14, 15, 16).**
   - **Dates in the booking card (14).** The Check-in / Check-out fields in Book direct now open the live availability calendar inside the card (one month, with month arrows) instead of jumping down the page. It shares its selection with the large calendar: pick dates in either, and the fields, the button ("Ask about 6–8 Nov on WhatsApp") and the pre-filled message update; the card calendar closes once both dates are picked. Esc closes it.
   - **Phone booking bar (15).** Shown from the first screen on every stay page (it used to appear only after the calendar scrolled into view, and never if the calendar couldn't load). By default it shows the starting price and "Check availability"; once dates are picked it shows them. The cover photo carries a "1 / N · tap to view" counter on phones.

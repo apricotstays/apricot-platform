@@ -22,11 +22,27 @@ const kinds = new Set(listings.map((l) => l.kind));
 const showTabs = kinds.size > 1;
 const askHref = contact.whatsappLink("Hi Apricot Stays, I'm looking for something during my stay:");
 const btnDark = "btn-primary min-h-12";
+const count = (kind?: string) => listings.filter((l) => !kind || l.kind === kind).length;
 const tabs = [
-  { key: "all", label: "All" },
-  { key: "experiences", label: "Experiences" },
-  { key: "services", label: "Services" },
+  { key: "all", label: "All", n: count() },
+  { key: "experiences", label: "Experiences", n: count("Experience") },
+  { key: "services", label: "Services", n: count("Service") },
 ];
+// While the catalogue is small (no section with 3+ listings), show one row with the section as a
+// label on each card, and the "something else" ask as the last tile (design audit item 19).
+// Group by section again once any section reaches three.
+const compact = groups.length > 0 && groups.every((g) => g.listings.length < 3);
+const rows = compact
+  ? [
+      {
+        title: "",
+        listings: groups.flatMap((g) => g.listings.map((l) => ({ ...l, label: g.title }))),
+      },
+    ]
+  : groups.map((g) => ({
+      title: g.title,
+      listings: g.listings.map((l) => ({ ...l, label: l.kind as string })),
+    }));
 ---
 
 <Base
@@ -58,6 +74,7 @@ const tabs = [
               class="es-tab flex h-11 items-center rounded px-5 text-sm font-medium text-stone-600 hover:text-stone-900 focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               {t.label}
+              <span class="ml-1.5 tabular-nums">{t.n}</span>
             </a>
           ))}
         </nav>
@@ -70,18 +87,29 @@ const tabs = [
           New experiences are on their way. Tell us what you're looking for and we'll arrange it.
         </p>
       )}
-      {groups.map((g) => (
-        <section aria-labelledby={`sec-${slugify(g.title)}`} class="es-section">
-          <h2
-            id={`sec-${slugify(g.title)}`}
-            class="font-serif text-2xl font-normal text-stone-900 sm:text-3xl"
-          >
-            {g.title}
-          </h2>
-          {SECTION_SUBTITLES[g.title] && (
+      {rows.map((g) => (
+        <section
+          aria-labelledby={g.title ? `sec-${slugify(g.title)}` : undefined}
+          aria-label={g.title ? undefined : "All experiences and services"}
+          class="es-section"
+        >
+          {g.title && (
+            <h2
+              id={`sec-${slugify(g.title)}`}
+              class="font-serif text-2xl font-normal text-stone-900 sm:text-3xl"
+            >
+              {g.title}
+            </h2>
+          )}
+          {g.title && SECTION_SUBTITLES[g.title] && (
             <p class="mt-1 text-sm text-stone-500">{SECTION_SUBTITLES[g.title]}</p>
           )}
-          <ul class="mt-6 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          <ul
+            class:list={[
+              "grid gap-x-6 gap-y-10 sm:grid-cols-2",
+              compact ? "lg:grid-cols-4" : "mt-6 lg:grid-cols-3",
+            ]}
+          >
             {g.listings.map((l) => (
               <li data-kind={l.kind}>
                 <a href={`/experiences/${l.slug}`} class="group block">
@@ -89,7 +117,7 @@ const tabs = [
                     <ExperiencePhoto
                       listing={l}
                       widths={[400, 600, 800]}
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                       class="transition-transform duration-500 group-hover:scale-105"
                     />
                     {l.badge && (
@@ -104,30 +132,47 @@ const tabs = [
                     )}
                   </div>
                   <p class="mt-3 text-xs font-bold tracking-[0.12em] text-stone-500 uppercase">
-                    {l.kind}
+                    {l.label}
                   </p>
                   <h3 class="mt-1 font-medium text-stone-900 group-hover:underline">{l.title}</h3>
                   <p class="mt-1 text-sm text-stone-600">{priceLine(l)}</p>
                 </a>
               </li>
             ))}
+            {compact && (
+              <li class="es-ask flex flex-col justify-between gap-4 rounded bg-linen p-6">
+                <div>
+                  <h2 class="font-serif text-2xl leading-snug font-normal text-stone-900">
+                    Something else in mind?
+                  </h2>
+                  <p class="mt-2 text-stone-600">
+                    Tell us what you need. If we know someone good, we'll arrange it.
+                  </p>
+                </div>
+                <a href={askHref} target="_blank" rel="noopener" class="btn-secondary self-start">
+                  Ask on WhatsApp
+                </a>
+              </li>
+            )}
           </ul>
         </section>
       ))}
 
-      <div class="flex flex-col items-start justify-between gap-4 rounded bg-linen p-6 sm:flex-row sm:items-center sm:p-8">
-        <div>
-          <h2 class="font-serif text-2xl font-normal text-stone-900">
-            Looking for something else?
-          </h2>
-          <p class="mt-1 text-stone-600">
-            Tell us what you need. If we know someone good, we'll arrange it.
-          </p>
+      {!compact && (
+        <div class="flex flex-col items-start justify-between gap-4 rounded bg-linen p-6 sm:flex-row sm:items-center sm:p-8">
+          <div>
+            <h2 class="font-serif text-2xl font-normal text-stone-900">
+              Looking for something else?
+            </h2>
+            <p class="mt-1 text-stone-600">
+              Tell us what you need. If we know someone good, we'll arrange it.
+            </p>
+          </div>
+          <a href={askHref} target="_blank" rel="noopener" class={btnDark}>
+            Ask on WhatsApp
+          </a>
         </div>
-        <a href={askHref} target="_blank" rel="noopener" class={btnDark}>
-          Ask on WhatsApp
-        </a>
-      </div>
+      )}
     </div>
   </main>
 
