@@ -9,17 +9,18 @@ interface Props {
 const { sticky = true } = Astro.props;
 
 const bookHref = contact.whatsappLink("Hi Apricot Stays, I'd like to check availability.");
-const leftLinks = [
-  { name: "Home", href: "/" },
-  { name: "Our Story", href: "/our-story" },
-  { name: "Amenities", href: "/#amenities" },
+// Ordered by what a guest does first (design audit item 02). The logo is the Home link.
+// Experiences and the Garden Shop stay footer-only while they are in soft launch.
+const navLinks = [
+  { name: "Homes", href: "/#collection" },
+  { name: "Ways to stay", href: "/#ways-to-stay" },
+  { name: "Our story", href: "/our-story" },
 ];
-const rightLinks = [{ name: "Our Homes", href: "/#collection" }];
-const allLinks = [...leftLinks, ...rightLinks];
+const allLinks = navLinks;
 const here = Astro.url.pathname.replace(/\.html$/, "");
 const current = (href: string) => (href === here ? "page" : undefined);
 const link =
-  "rounded-sm text-sm font-medium text-stone-600 transition-colors hover:text-apricot focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-4";
+  "rounded-sm text-sm font-medium text-stone-600 decoration-apricot decoration-2 underline-offset-8 transition-colors hover:text-apricot focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-4 aria-[current=page]:text-stone-900 aria-[current=page]:underline";
 ---
 
 <nav
@@ -31,44 +32,35 @@ const link =
 >
   <div class="container mx-auto px-6">
     <!-- Desktop -->
-    <div class="hidden items-center md:grid md:grid-cols-3">
+    <div class="hidden items-center md:grid md:grid-cols-[1fr_auto_1fr]">
+      <a
+        href="/"
+        class="flex flex-col items-center justify-self-start rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-4"
+        aria-label="Apricot Stays home"
+      >
+        <span class="font-serif text-2xl leading-none font-bold text-stone-800">Apricot</span>
+        <span class="mt-1 font-sans text-[0.6rem] font-medium tracking-[0.3em] text-stone-500 uppercase">
+          Stays
+        </span>
+      </a>
       <div class="flex items-center gap-8">
-        {leftLinks.map((l) => (
+        {navLinks.map((l) => (
           <a href={l.href} class={link} aria-current={current(l.href)}>
             {l.name}
           </a>
         ))}
       </div>
-      <div class="flex justify-center">
-        <a
-          href="/"
-          class="group flex flex-col items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-4"
-          aria-label="Apricot Stays home"
-        >
-          <span class="font-serif text-2xl leading-none font-bold text-stone-800">Apricot</span>
-          <span class="mt-1 font-sans text-[0.6rem] font-medium tracking-[0.3em] text-stone-500 uppercase">
-            Stays
-          </span>
-        </a>
-      </div>
-      <div class="flex items-center justify-end gap-8">
-        {rightLinks.map((l) => (
-          <a href={l.href} class={link} aria-current={current(l.href)}>
-            {l.name}
-          </a>
-        ))}
-        <a
-          href={bookHref}
-          target="_blank"
-          rel="noopener"
-          class="btn-primary px-5"
-          aria-label="Check dates on WhatsApp"
-          title="Opens WhatsApp with a message ready to send"
-        >
-          <Icon name="whatsapp" size={16} />
-          Check dates
-        </a>
-      </div>
+      <a
+        href={bookHref}
+        target="_blank"
+        rel="noopener"
+        class="btn-primary justify-self-end px-5"
+        aria-label="Check dates on WhatsApp"
+        title="Opens WhatsApp with a message ready to send"
+      >
+        <Icon name="whatsapp" size={16} />
+        Check dates
+      </a>
     </div>
 
     <!-- Mobile (no JavaScript: native disclosure for the menu) -->
