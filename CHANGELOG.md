@@ -4,6 +4,14 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ## [Unreleased]
 
+### Changed
+
+- **Design system, batch 1 of 5: colour, buttons, type (design audit, 22 Oct 2026).** Audit: https://claude.ai/artifact/W7hYSi6i36cPmFd987Xmj2 (items 03, 05, 06, 07).
+  - **Colour.** The accent is now "Courtyard" terracotta `#B5452F` (white text 5.44:1, passes WCAG AA), replacing the Replit/Airbnb coral `#FF5A5F` (3.05:1). Hover `#9A3A26`. The teal `#00A699` is gone; `sage` now maps to Garden green `#2F4A3A` (new `forest` token). Token names kept, so existing classes follow. The axe colour-contrast check is back on for 14 of 19 audited pages; Our Story and the Shop keep it off for now (pa11y reports contrast errors there that axe 4.14 in Chromium doesn't reproduce; they were already present on main).
+  - **Buttons.** One system in `global.css`: `.btn-primary` (one per screen, starts a booking or order), `.btn-secondary`, `.btn-link`; modifiers `.btn-lg`, `.btn-block`, `.btn-forest` (Our Story and Shop keep green). 4px corners, sentence case, 44px minimum height. Applied to the header, homepage (membership / local tips links, final CTA, no more glow), stay pages, availability bar, policies, ways to stay, experiences, Our Story, Shop and 404. Cards and panels on Experiences and the Shop use 4px corners instead of 12–16px.
+  - **Header button.** "BOOK" → "Check dates" with the WhatsApp glyph and an accessible label ("Check dates on WhatsApp"); filled terracotta. On phones it is a 44px WhatsApp icon button.
+  - **Type.** Stay-page title in regular Lora (was bold); stay-page section headings ("About this stay", "Where you'll sleep", reviews, amenities, availability, things to know, location, photos) and card headings move from DM Sans semibold to Lora via `.t-h2` / `.t-h3`.
+
 ### Added
 
 - **Our Story: "ripened early" + a guest line.** The name callout adds the meaning of the word: Latin _praecoquum_, "ripened early", the fruit that's ready before the others, so the promise is "the home is ready before you are". Under "How Shivani keeps every garden", a green card quotes a guest: "It feels like someone thought about you before you came." (Kshitij, Garden Courtyard, October 2026). Before/after mockup (option A) approved by CK, 22 Oct 2026.
