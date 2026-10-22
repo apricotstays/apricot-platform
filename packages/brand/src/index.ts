@@ -1,11 +1,14 @@
 /**
  * Apricot Stays brand tokens — single source of truth.
  * Keep in sync with theme.css (Tailwind @theme used by the website).
- * Palette ported from the Replit design (owner decision, 14 Oct 2026).
+ * Palette: Courtyard terracotta + Garden green (design audit, Oct 2026; replaced the Replit coral/teal).
  */
 export const colors = {
-  apricot: "#FF5A5F",
-  sage: "#00A699",
+  apricot: "#B5452F",
+  apricotDark: "#9A3A26",
+  forest: "#2F4A3A",
+  forestDark: "#223729",
+  sage: "#2F4A3A",
   porch: "#FFFFFF",
   stone: "#484848",
   pebble: "#F7F7F7",
