@@ -89,6 +89,13 @@ const jsonLd = {
     })),
   ],
 };
+// Ways to stay cards show the moment, not the building (design audit item 10):
+// the Collection grid above already uses each home's exterior.
+const wayPhotos: Record<string, (typeof photos)[keyof typeof photos]> = {
+  "garden-for-two": photos.courtyardDining,
+  "family-gatherings": photos.chateauDining,
+  "hospital-visits": photos.careLiving,
+};
 ---
 
 <Base
@@ -198,17 +205,20 @@ const jsonLd = {
                   <p class="font-sans text-xs font-light tracking-[0.2em] text-stone-500 uppercase">
                     {p.locality}
                   </p>
-                  <p class="mt-2 font-sans text-sm text-stone-700">{fromLine(p)}</p>
+                  <p class="mt-2 font-sans text-sm text-stone-700">
+                    {fromLine(p)}
+                    <span class="text-stone-500"> · weekday rate</span>
+                  </p>
                 </div>
               </a>
             );
           })}
-          <MushroomGardenCard />
         </div>
-        <p class="mt-10 text-center text-sm text-stone-500">
-          Starting weekday rates. We confirm the exact price for your dates on WhatsApp. Rates
-          checked {ratesChecked}.
+        <p class="mt-8 text-sm text-stone-500">
+          Prices are starting weekday rates, checked {ratesChecked}. We confirm the exact price for
+          your dates on WhatsApp.
         </p>
+        <MushroomGardenCard />
       </div>
     </section>
 
@@ -229,7 +239,7 @@ const jsonLd = {
         </div>
         <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
           {waysToStay.map((w) => {
-            const img = galleries[w.homes[0]][0];
+            const img = wayPhotos[w.slug] ?? galleries[w.homes[0]][0];
             const names = w.homes
               .map((slug) => properties.find((p) => p.slug === slug)!.name.replace(/^Apricot /, ""))
               .join(" · ");
@@ -426,30 +436,6 @@ const jsonLd = {
               <p class="leading-7 text-stone-600">{a.text}</p>
             </div>
           ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- Also on Airbnb -->
-    <section class="border-t border-stone-100 bg-white py-14">
-      <div class="mx-auto max-w-5xl px-6 text-center">
-        <p class="mb-6 font-sans text-[0.65rem] tracking-[0.2em] text-stone-500 uppercase">
-          Also on Airbnb
-        </p>
-        <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
-          {properties
-            .filter((p) => p.airbnbUrl)
-            .map((p) => (
-              <a
-                href={p.airbnbUrl}
-                target="_blank"
-                rel="noopener"
-                class="inline-flex items-center gap-2 font-sans text-sm text-stone-600 hover:text-stone-900"
-              >
-                {p.name}
-                <Icon name="external" size={14} />
-              </a>
-            ))}
         </div>
       </div>
     </section>
