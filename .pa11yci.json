@@ -8,7 +8,10 @@
     }
   },
   "urls": [
-    "http://127.0.0.1:4321/",
+    {
+      "url": "http://127.0.0.1:4321/",
+      "hideElements": "[data-hero-copy]"
+    },
     {
       "url": "http://127.0.0.1:4321/our-story",
       "ignore": ["color-contrast"]

@@ -6,6 +6,14 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Changed
 
+- **Design system, batch 3 of 5: homepage (design audit items 01, 02, 08, 12).**
+  - **Hero (01).** The first screen now carries the promise over the existing Courtyard photo / desktop video: "Chandigarh", "A garden of your own." (the page's H1, with "Apricot Stays, boutique homes in New Chandigarh" for screen readers), "Four homes, each with a private garden. Never shared.", a "Check dates on WhatsApp" button and "4.99 host rating · Superhost" (no review count in the hero, CK 22 Oct). A dark gradient keeps the text readable. (pa11y can't compute contrast over a photo + gradient and reports errors there, while axe 4.14 in Chromium marks it "needs review"; the hero copy is hidden from pa11y on `/` via `hideElements: [data-hero-copy]`, the rest of the homepage is still checked. Measured by hand: white on the scrim is about 6:1 or better over the lightest part of the photo.) The promise band below is retitled "Your garden, home by home."
+  - **Navigation (02).** Logo on the left (STAYS still centred under Apricot), links "Homes · Ways to stay · Our story" in the middle, "Check dates" on the right; the current page is underlined in terracotta. "Home" and "Amenities" left the header (logo = home; amenities stay on the homepage and in the footer). Experiences and the Garden Shop stay footer-only during their soft launch.
+  - **Collection cards (08).** Name in Lora without the repeated "Apricot" (kept for screen readers), the home's Airbnb rating where it has one (Cottage 4.98, Courtyard 5.0; Château "New"), and "guests · bedrooms · garden" instead of the repeated location, which now appears once under the heading.
+  - **Amenities (12).** "Thoughtful Amenities" → "What every home has": six shadowed cards become a light three-column list with terracotta line icons and more specific lines (100 Mbps Wi-Fi at the Cottage; a private garden at every home).
+
+### Changed
+
 - **Design system, batch 2 of 5: quick wins (design audit items 09, 10, 11, 13, 17, 20).**
   - **Prices (09).** Each Our Collection card says "· weekday rate" next to its price, and the rates note now sits directly under the grid instead of below the Mushroom Garden teaser.
   - **Ways to stay photos (10).** The three cards show the stay, not the building again: Courtyard table for two, Château dining table for ten, Garden Care living room.
