@@ -9,9 +9,16 @@ import TrustLine from "../../components/TrustLine.astro";
 import AvailabilityCalendar from "../../components/AvailabilityCalendar.astro";
 import GuestReviews from "../../components/GuestReviews.astro";
 import PhotoViewer from "../../components/PhotoViewer.astro";
-import { fromLine, properties, ratesChecked, to24h, type Property } from "@apricot/schema";
-import { brand, contact, promise } from "@apricot/brand";
-import { galleries, rooms } from "../../data/media";
+import {
+  fromLine,
+  properties,
+  ratesChecked,
+  shortName,
+  to24h,
+  type Property,
+} from "@apricot/schema";
+import { brand, contact } from "@apricot/brand";
+import { galleries, photoTour, rooms } from "../../data/media";
 import { reviews } from "../../data/reviews";
 import { allAmenities, amenityGroups } from "../../data/amenities";
 import { parseBeds } from "../../data/agent";
@@ -44,6 +51,36 @@ const tiny = await Promise.all(
 );
 const openLabel = (i: number) => `Open photo ${i + 1} of ${gallery.length}: ${gallery[i].alt}`;
 const homeReviews = reviews[p.slug];
+// Same line-icon language as the homepage's "What every home has" (design review round 2, item 13).
+const amenityIcon = (a: string) => {
+  const t = a.toLowerCase();
+  const rules: [RegExp, Parameters<typeof Icon>[0]["name"]][] = [
+    [/wi-?fi/, "wifi"],
+    [/power/, "power"],
+    [/garden lighting/, "bulb"],
+    [/garden|lawn|courtyard/, "sprout"],
+    [/security|gated|estate/, "shield"],
+    [/clubhouse/, "building"],
+    [/kitchen/, "kitchen"],
+    [/washing/, "laundry"],
+    [/air con/, "snow"],
+    [/workspace/, "desk"],
+    [/pet/, "paw"],
+    [/check-in/, "key"],
+    [/parking/, "car"],
+    [/^tv$/, "tv"],
+    [/fire/, "flame"],
+    [/water/, "drop"],
+    [/step-free|ground floor/, "home"],
+  ];
+  return rules.find(([re]) => re.test(t))?.[1] ?? "check";
+};
+// Photo tour groups as gallery indexes (so the viewer opens at the right photo). Falls back to
+// one group when a home has no tour defined.
+const tour = (photoTour[p.slug] ?? [{ label: "All photos", photos: gallery }]).map((g) => ({
+  label: g.label,
+  idx: g.photos.map((ph) => gallery.indexOf(ph)).filter((i) => i >= 0),
+}));
 
 const book = contact.whatsappLink(
   `Hi Apricot Stays, I'd like to book ${p.name}.\n\nDates:\nGuests:`,
@@ -57,6 +94,8 @@ const directPerks = [
   "Late checkout until 2 PM when the home is free",
   "Talk to the hosts on WhatsApp, before and during your stay",
 ];
+// The three shown in the Book direct card; the full list is on /policies#direct-h.
+const cardPerks = [`${p.garden}, never shared`, directPerks[0], directPerks[2]];
 type KnowCard = { icon: "clock" | "home" | "shield"; title: string; lines: readonly string[] };
 const knowCards: KnowCard[] = [
   {
@@ -142,24 +181,33 @@ const jsonLd = {
     <div class="container mx-auto mb-6 px-6">
       <nav aria-label="Breadcrumb" class="mb-4 text-sm text-stone-500">
         <a href="/#collection" class="hover:text-stone-800">
-          Our Collection
+          Homes
         </a>
         <span aria-hidden="true"> / </span>
-        <span aria-current="page">{p.name}</span>
+        <span aria-current="page">{shortName(p.name)}</span>
       </nav>
-      <p class="mb-2 text-sm tracking-wider text-stone-500 uppercase">{p.locality}</p>
+      <!-- One name, one facts line (design review round 2, item 06). -->
       <h1 class="font-serif text-4xl leading-tight font-normal text-stone-900 md:text-5xl">
-        {p.name}
+        {shortName(p.name)}
       </h1>
-      <a
-        href="/#promise"
-        class="mt-4 inline-flex items-center gap-2 border border-stone-300 px-4 py-2.5 text-sm text-stone-800 hover:bg-stone-50"
-      >
-        <Icon name="sprout" size={18} />
-        <span>
-          <strong class="font-semibold">{promise.name}</strong> · {p.garden.toLowerCase()}
-        </span>
-      </a>
+      <p class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-stone-600">
+        {homeReviews?.listing?.rating ? (
+          <span class="inline-flex items-center gap-1.5">
+            <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" class="fill-gold">
+              <path d="M10 1.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.9z"></path>
+            </svg>
+            <span class="font-medium text-stone-800">{homeReviews.listing.rating}</span> ·{" "}
+            {homeReviews.listing.count} reviews
+          </span>
+        ) : homeReviews?.isNew ? (
+          <span class="font-medium text-stone-800">New to the collection</span>
+        ) : null}
+        <a href="/#collection" class="inline-flex items-center gap-1.5 hover:text-stone-900">
+          <Icon name="sprout" size={16} />
+          {p.garden}
+        </a>
+        <span>{p.locality}</span>
+      </p>
     </div>
 
     <!-- Gallery -->
@@ -311,8 +359,8 @@ const jsonLd = {
             </h2>
             <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {p.amenities.map((a) => (
-                <li class="flex items-center gap-3 text-stone-600">
-                  <span class="h-2 w-2 shrink-0 bg-gold" aria-hidden="true" />
+                <li class="flex items-center gap-3 text-stone-700">
+                  <Icon name={amenityIcon(a)} size={20} class="shrink-0 text-apricot" />
                   {a}
                 </li>
               ))}
@@ -394,34 +442,48 @@ const jsonLd = {
             </div>
           </section>
 
+          {/* Desktop only: on phones the photo viewer already shows every photo (round 2, item 02). */}
           {gallery.length > 5 && (
-            <section id="photos" aria-labelledby="photos-h" class="scroll-mt-8">
+            <section id="photos" aria-labelledby="photos-h" class="hidden scroll-mt-8 md:block">
               <h2 id="photos-h" class="t-h2 mb-6">
-                All photos
+                Photo tour
               </h2>
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {gallery.map((img, i) => (
-                  <a
-                    href={big[i].url}
-                    data-viewer-open={String(i)}
-                    class="relative block aspect-[4/3] overflow-hidden bg-stone-100 focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-2 focus-visible:outline-none"
-                    aria-label={openLabel(i)}
-                  >
-                    <span
-                      class="absolute inset-0 scale-110 bg-cover bg-center blur-xl"
-                      style={`background-image:url(${tiny[i]})`}
-                      aria-hidden="true"
-                    ></span>
-                    <Picture
-                      src={img.src}
-                      alt={img.alt}
-                      widths={[480, 800]}
-                      sizes="(min-width: 640px) 50vw, 100vw"
-                      formats={["avif", "webp"]}
-                      fallbackFormat="jpg"
-                      class="relative h-full w-full object-cover"
-                    />
-                  </a>
+              <!-- Grouped by space (design review round 2, item 12); each photo opens the viewer. -->
+              <div class="space-y-8">
+                {tour.map((g) => (
+                  <div>
+                    <div class="mb-3 flex items-baseline justify-between gap-4">
+                      <h3 class="font-semibold text-stone-800">{g.label}</h3>
+                      <span class="text-sm text-stone-500">
+                        {g.idx.length} photo{g.idx.length === 1 ? "" : "s"}
+                      </span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                      {g.idx.map((i) => (
+                        <a
+                          href={big[i].url}
+                          data-viewer-open={String(i)}
+                          class="relative block aspect-[4/3] overflow-hidden rounded bg-stone-100 focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-2 focus-visible:outline-none"
+                          aria-label={openLabel(i)}
+                        >
+                          <span
+                            class="absolute inset-0 scale-110 bg-cover bg-center blur-xl"
+                            style={`background-image:url(${tiny[i]})`}
+                            aria-hidden="true"
+                          ></span>
+                          <Picture
+                            src={gallery[i].src}
+                            alt={gallery[i].alt}
+                            widths={[300, 600]}
+                            sizes="(min-width: 1024px) 18vw, 33vw"
+                            formats={["avif", "webp"]}
+                            fallbackFormat="jpg"
+                            class="relative h-full w-full object-cover"
+                          />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
             </section>
@@ -429,37 +491,18 @@ const jsonLd = {
         </div>
 
         <!-- Booking card -->
-        <aside class="lg:sticky lg:top-8 lg:self-start" aria-label="Book this stay">
+        <!-- Phones: the card sits right under the photo (design review round 2, item 02). -->
+        <aside
+          class="order-first lg:sticky lg:top-8 lg:order-last lg:self-start"
+          aria-label="Book this stay"
+        >
           <div class="border border-stone-200 p-6 shadow-sm">
-            <p class="mb-1 font-serif text-2xl text-stone-800">Book direct</p>
-            <p class="mb-2 text-lg text-stone-800">{fromLine(p)}</p>
-            <p class="mb-3 text-sm text-stone-700">
-              Every stay comes with{" "}
-              <strong class="font-semibold">{promise.name.toLowerCase()}</strong>:{" "}
-              {p.garden.toLowerCase()}, never shared.
+            <!-- Order (design review round 2, item 01): price, dates and the button first, so the
+                 action fits in the first screen; reassurance and extras follow the button. -->
+            <p class="text-xs font-semibold tracking-[0.14em] text-stone-600 uppercase">
+              Book direct
             </p>
-            <p class="mb-4 text-sm text-stone-600">
-              Message us with your dates — we'll confirm availability and the exact price.
-            </p>
-            <!-- Golden hour (design audit item 20): today's sunset for New Chandigarh, computed in
-                 the browser; hidden until the script fills it in. -->
-            <p
-              class="mb-6 flex items-center gap-3 rounded bg-[#fbefe2] px-3 py-2.5 text-sm text-stone-800"
-              data-sunset
-              hidden
-            >
-              <svg width="26" height="26" viewBox="0 0 30 30" aria-hidden="true">
-                <path d="M3 21h24" stroke="#b5452f" stroke-width="1.6"></path>
-                <path d="M8 21a7 7 0 0 1 14 0" fill="#f2b880"></path>
-                <g stroke="#c99a5b" stroke-width="1.4" stroke-linecap="round">
-                  <path d="M15 8v3M6.5 12l2 2M23.5 12l-2 2"></path>
-                </g>
-              </svg>
-              <span>
-                <strong class="font-semibold" data-sunset-time></strong>
-                <span class="block text-stone-600">Best watched from your own garden.</span>
-              </span>
-            </p>
+            <p class="mt-1 mb-4 font-serif text-2xl text-stone-900">{fromLine(p)}</p>
             <!-- Dates line: shown only when this home's availability calendar has loaded. -->
             <button
               type="button"
@@ -539,23 +582,6 @@ const jsonLd = {
                 hidden
               ></p>
             </div>
-            <div class="mb-5 bg-linen p-4">
-              <p class="mb-2 text-sm font-semibold text-stone-800">Why book with us directly</p>
-              <ul class="space-y-1.5 text-sm leading-snug text-stone-700">
-                {directPerks.map((perk) => (
-                  <li class="flex gap-2">
-                    <Icon name="check" size={16} class="mt-0.5 shrink-0" />
-                    <span>{perk}</span>
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="/policies"
-                class="mt-2 inline-block text-xs font-medium text-stone-800 underline underline-offset-4"
-              >
-                How our policies work
-              </a>
-            </div>
             <a
               href={book}
               target="_blank"
@@ -572,6 +598,44 @@ const jsonLd = {
               </span>
               <span class="text-sm leading-snug text-stone-800" data-avail-msg-text></span>
             </div>
+            <p class="mt-2 text-center text-xs text-stone-600">
+              We confirm availability and the exact price on WhatsApp.
+            </p>
+            <div class="mt-5 border-t border-stone-100 pt-4">
+              <ul class="space-y-1.5 text-sm leading-snug text-stone-700">
+                {cardPerks.map((perk) => (
+                  <li class="flex gap-2">
+                    <Icon name="check" size={16} class="mt-0.5 shrink-0" />
+                    <span>{perk}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="/policies#direct-h"
+                class="mt-2 inline-block text-xs font-medium text-stone-800 underline underline-offset-4"
+              >
+                All reasons to book direct
+              </a>
+            </div>
+            <!-- Golden hour (design audit item 20): today's sunset for New Chandigarh, computed in
+                 the browser; hidden until the script fills it in. -->
+            <p
+              class="mt-4 flex items-center gap-3 rounded bg-[#fbefe2] px-3 py-2.5 text-sm text-stone-800"
+              data-sunset
+              hidden
+            >
+              <svg width="26" height="26" viewBox="0 0 30 30" aria-hidden="true">
+                <path d="M3 21h24" stroke="#b5452f" stroke-width="1.6"></path>
+                <path d="M8 21a7 7 0 0 1 14 0" fill="#f2b880"></path>
+                <g stroke="#c99a5b" stroke-width="1.4" stroke-linecap="round">
+                  <path d="M15 8v3M6.5 12l2 2M23.5 12l-2 2"></path>
+                </g>
+              </svg>
+              <span>
+                <strong class="font-semibold" data-sunset-time></strong>
+                <span class="block text-stone-600">Best watched from your own garden.</span>
+              </span>
+            </p>
             {p.airbnbUrl && (
               <p class="mt-3 text-center text-sm text-stone-600">
                 Prefer Airbnb?{" "}
@@ -586,12 +650,25 @@ const jsonLd = {
               </p>
             )}
             <p class="mt-4 text-center text-xs text-stone-500">
-              WhatsApp {contact.whatsappDisplay}
+              WhatsApp {contact.whatsappDisplay} · starting weekday rate, checked {ratesChecked}
             </p>
-            <p class="mt-1 text-center text-xs text-stone-500">
-              Starting weekday rate · checked {ratesChecked}
-            </p>
-            <TrustLine size="xs" class="mt-4 border-t border-stone-100 pt-4" />
+            {homeReviews?.listing?.rating ? (
+              <p class="mt-4 flex items-center justify-center gap-1.5 border-t border-stone-100 pt-4 text-xs text-stone-600">
+                <svg
+                  viewBox="0 0 20 20"
+                  width="14"
+                  height="14"
+                  aria-hidden="true"
+                  class="fill-gold"
+                >
+                  <path d="M10 1.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.9z"></path>
+                </svg>
+                <span class="font-medium text-stone-800">{homeReviews.listing.rating}</span>·{" "}
+                {homeReviews.listing.count} reviews of this home
+              </p>
+            ) : (
+              <TrustLine size="xs" class="mt-4 border-t border-stone-100 pt-4" />
+            )}
           </div>
         </aside>
       </div>

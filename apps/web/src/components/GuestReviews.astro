@@ -7,14 +7,18 @@
  */
 import TrustLine from "./TrustLine.astro";
 import Icon from "./Icon.astro";
-import { listingLine, type HomeReviews } from "../data/reviews";
+import { trust } from "@apricot/brand";
+import type { HomeReviews } from "../data/reviews";
 
 interface Props {
   data: HomeReviews;
   airbnbUrl?: string;
 }
 const { data, airbnbUrl } = Astro.props;
-const line = listingLine(data);
+// One score per context (design review round 2, item 05): the home's own Airbnb rating is the
+// headline; the host's totals across every Apricot listing get their own, labelled line.
+const l = data.listing;
+const hostLine = `Hosted by Shivani & Shiva${trust.superhost ? " · Superhost" : ""} · ${trust.reviews} reviews across all Apricot homes`;
 const cols = data.reviews.length >= 3 ? "md:grid-cols-3" : "md:grid-cols-2";
 ---
 
@@ -32,7 +36,18 @@ const cols = data.reviews.length >= 3 ? "md:grid-cols-3" : "md:grid-cols-2";
         <TrustLine align="left" class="mb-6" />
       </>
     ) : (
-      line && <p class="mb-6 text-sm text-stone-600">{line}</p>
+      l && (
+        <div class="mb-6">
+          <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            {l.rating && <span class="font-serif text-3xl text-stone-900">{l.rating}</span>}
+            <span class="text-sm text-stone-700">
+              {l.count} review{l.count === 1 ? "" : "s"} of this home
+              {l.guestFavourite ? " · Airbnb Guest Favourite" : !l.rating ? " on Airbnb" : ""}
+            </span>
+          </p>
+          <p class="mt-2 border-t border-stone-100 pt-2 text-sm text-stone-600">{hostLine}</p>
+        </div>
+      )
     )}
     <div class:list={["grid grid-cols-1 gap-4", cols]}>
       {data.reviews.map((r) => (

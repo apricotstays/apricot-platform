@@ -210,6 +210,17 @@ const chevron = (d: string) =>
   .avail-key[data-s="free"] {
     border: 1px solid #d9d2c8;
   }
+  [data-avail-bar] {
+    transition: transform 0.2s ease;
+  }
+  [data-avail-bar].avail-bar-away {
+    transform: translateY(110%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-avail-bar] {
+      transition: none;
+    }
+  }
   @media (max-width: 1023.98px) {
     body.avail-bar-on {
       padding-bottom: 8.5rem;
@@ -488,6 +499,14 @@ const chevron = (d: string) =>
   if (bar) {
     bar.hidden = false;
     document.body.classList.add("avail-bar-on");
+    // On phones the Book direct card now sits near the top (design review round 2, item 02):
+    // slide the bar away while the card's own button is on screen, so there is one button.
+    const cardBtn = document.querySelector("aside [data-avail-book]");
+    if (cardBtn && "IntersectionObserver" in window) {
+      new IntersectionObserver(([e]) =>
+        bar.classList.toggle("avail-bar-away", e.isIntersecting),
+      ).observe(cardBtn);
+    }
   }
   const sec = document.querySelector<HTMLElement>("[data-avail]");
   if (sec) void init(sec);

@@ -84,3 +84,16 @@ describe("garden promise (option A, CK 21 Oct 2026)", () => {
     for (const p of properties) expect(p.garden, p.slug).toMatch(/^Private /);
   });
 });
+
+describe("photo tour (design review round 2, item 12)", () => {
+  it("puts every gallery photo in exactly one group", async () => {
+    const { galleries, photoTour } = await import("../src/data/media");
+    for (const [slug, gallery] of Object.entries(galleries)) {
+      const tour = photoTour[slug];
+      expect(tour, slug).toBeDefined();
+      const all = tour.flatMap((g) => g.photos);
+      expect(all.length, slug).toBe(gallery.length);
+      for (const ph of gallery) expect(all.filter((x) => x === ph).length, slug).toBe(1);
+    }
+  });
+});

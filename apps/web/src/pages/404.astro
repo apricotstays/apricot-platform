@@ -1,22 +1,59 @@
 ---
+import { Picture } from "astro:assets";
 import Base from "../layouts/Base.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import Icon from "../components/Icon.astro";
+import { contact } from "@apricot/brand";
+import { properties, shortName } from "@apricot/schema";
+import { galleries } from "../data/media";
+
+// A way back in, not a dead end (design review round 2, item 16): most broken links are old
+// links to a home, so show the four homes and a WhatsApp button.
+const wa = contact.whatsappLink("Hi Apricot Stays, I followed a link that didn't work.");
 ---
 
 <Base title="Page not found · Apricot Stays" description="This page doesn't exist." noindex>
   <Navbar sticky={false} />
-  <main id="main" class="grid min-h-[60vh] place-content-center px-6 py-24 text-center">
+  <main id="main" class="mx-auto max-w-5xl px-6 py-20 text-center">
     <div class="mx-auto mb-5 h-px w-10 bg-apricot" aria-hidden="true"></div>
     <h1 class="mb-4 font-serif text-4xl font-normal text-stone-900 sm:text-5xl">
       This page has moved out.
     </h1>
-    <p class="mx-auto mb-8 max-w-md text-lg text-stone-600">
-      It may have been an old link. Our homes are all on the home page.
+    <p class="mx-auto mb-10 max-w-md text-lg text-stone-600">
+      It may have been an old link. The gardens are all still here.
     </p>
-    <a href="/" class="btn-secondary mx-auto min-h-12">
-      Back to Apricot Stays
-    </a>
+    <ul class="grid grid-cols-2 gap-4 text-left md:grid-cols-4">
+      {properties.map((p) => (
+        <li>
+          <a href={`/stays/${p.slug}`} class="group block">
+            <span class="block aspect-square overflow-hidden rounded bg-stone-100">
+              <Picture
+                src={galleries[p.slug][0].src}
+                alt=""
+                widths={[300, 500]}
+                sizes="(min-width: 768px) 22vw, 45vw"
+                formats={["avif", "webp"]}
+                fallbackFormat="jpg"
+                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transform-none"
+              />
+            </span>
+            <span class="mt-2 block font-medium text-stone-800 group-hover:underline">
+              {shortName(p.name)}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-10 flex flex-wrap justify-center gap-3">
+      <a href={wa} target="_blank" rel="noopener" class="btn-primary min-h-12">
+        <Icon name="whatsapp" size={18} />
+        Ask us on WhatsApp
+      </a>
+      <a href="/" class="btn-secondary min-h-12">
+        Homepage
+      </a>
+    </div>
   </main>
   <Footer />
 </Base>

@@ -49,7 +49,33 @@ const toc = [
       </p>
 
       <h2 id="at-a-glance">At a glance</h2>
-      <div class="mt-4 overflow-x-auto border border-stone-200">
+      <!-- Phones: one card per home so every term is visible (design review round 2, item 04). -->
+      <div class="mt-4 flex flex-col gap-3 sm:hidden">
+        {properties.map((p) => (
+          <div class="border border-stone-200 px-4 py-3 text-sm">
+            <div class="flex items-baseline justify-between gap-3">
+              <a href={`/stays/${p.slug}`} class="font-semibold text-stone-800">
+                {shortName(p.name)}
+              </a>
+              <span class="text-stone-600">Up to {p.maxGuests} guests</span>
+            </div>
+            <dl class="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-stone-600">
+              <dt class="text-stone-500">In / out</dt>
+              <dd class="m-0">
+                {p.policy.checkIn} / {p.policy.checkOut}
+              </dd>
+              <dt class="text-stone-500">Free cancel</dt>
+              <dd class="m-0">{p.policy.freeCancellation}</dd>
+              <dt class="text-stone-500">Pets</dt>
+              <dd class="m-0">{p.policy.pets}</dd>
+            </dl>
+          </div>
+        ))}
+        <p class="m-0 text-sm text-stone-600">
+          <strong>Minimum stay, all homes:</strong> {properties[0].policy.minStay}.
+        </p>
+      </div>
+      <div class="mt-4 hidden overflow-x-auto border border-stone-200 sm:block">
         <table class="w-full min-w-[760px] text-left text-sm">
           <thead class="bg-stone-50 text-stone-800">
             <tr>

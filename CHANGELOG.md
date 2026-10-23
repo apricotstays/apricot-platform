@@ -4,6 +4,23 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ## [Unreleased]
 
+### Changed
+
+- **Design review round 2, batch 1 (items 01, 02, 04, 05, 06, 08, 09, 10, 11, 12, 13, 16, 17, 18, 19, 20; CK approved on the review).**
+  - **Booking card (01).** Price, dates and "Check availability" come first; the reassurance line sits under the button; three perks and "All reasons to book direct" follow; then sunset, Airbnb and the rating.
+  - **Phones (02).** The Book direct card sits right under the photo; the "All photos" list is hidden below tablet width (the viewer shows every photo); the bottom booking bar slides away while the card's own button is on screen.
+  - **Policies (04).** On phones "At a glance" is one card per home (in/out, free cancellation, pets) with the shared minimum-stay line under it; desktop keeps the table.
+  - **Ratings (05).** Reviews lead with the home's own score ("4.98 · 64 reviews of this home"), with a separate labelled host line (93 reviews across all homes); the booking card shows only the home's score. New homes keep the host line.
+  - **Names (06).** "Garden Cottage" etc. on stay-page titles, breadcrumb ("Homes / …"), footer, Ways to stay pages and Our Story tiles (`shortName` in `@apricot/schema`); full names stay in `<title>`, schema.org and WhatsApp messages. Eyebrow + badge merged into one facts line (rating, garden, place).
+  - **Homepage (08, 09, 10, 11).** Promise band removed (the hero says it; its sentence moved under "Our Collection"). Experiences block shows the first three real listings with a "See all" link. Garden Club and Our Story become one "More from Apricot" section (two tiles; a short list on phones). Ways to stay cards use the collection's borderless style and swipe on phones. Phone homepage roughly 10,400px → 7,500px.
+  - **Photo tour (12).** "All photos" grouped by space (`photoTour` in `data/media.ts`; test: every photo in exactly one group).
+  - **Amenities (13).** Line icons instead of square bullets (new icons in `Icon.astro`).
+  - **404 (16).** Shows the four homes plus WhatsApp and Homepage buttons.
+  - **Footer (17).** Brand + WhatsApp button, then Homes, Explore, Help; links shortest first in each group (CK).
+  - **Our Story (18).** Headline "A city of gardens, and not one you could stay in."
+  - **Experiences (19).** Badges hidden while every listing has the same one; cards show duration instead of "Price on WhatsApp".
+  - **Club menu (20).** Header action is "Call to order" (Navbar `action` prop); design-system buttons; bottom bar = one "Call to order" plus a WhatsApp text link.
+
 ### Added
 
 - **Agent-ready: read-only MCP server at `/mcp` (roadmap 4.7, first slice).** `POST https://apricotstays.in/mcp` speaks MCP Streamable HTTP (stateless, plain JSON; revisions 2025-03-26, 2025-06-18, 2025-11-25), with no sign-in: it serves only what the site shows. Four read-only tools: `list_homes` (optionally by guests), `check_availability` (dates, guests, home; from the same Airbnb calendar code and 1-hour cache as `/api/availability`, with clashing nights, the weekend minimum-stay note and when the calendar was read), `get_policies`, `get_booking_link` (a `wa.me` link in the page calendar's wording plus the guest count). Dates are checked (YYYY-MM-DD, not past, ≤ 60 nights, within 12 months); bad input is a tool error, never a 500. GET/DELETE → 405, batches rejected. One log line per tool call (tool, home, dates, guests; no personal data). `/mcp` reads `/stays.json` through the ASSETS binding; `wrangler.jsonc` lists `/mcp` in `run_worker_first`. No new dependencies, secrets or Cloudflare resources.

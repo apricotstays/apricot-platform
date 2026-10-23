@@ -64,6 +64,9 @@ export const policiesUpdated = "October 2026";
 /** CK, 20 Oct 2026: 2 nights when the stay includes a Friday or Saturday night, at every home. */
 const WEEKEND_MIN_STAY = "2 nights at weekends";
 /** The full rule, shown on stay pages and /policies. */
+/** The name guests see on the site ("Garden Cottage"); the full name stays in titles and schema.org. */
+export const shortName = (name: string) => name.replace(/^Apricot /, "");
+
 export const minStayRule =
   "2 nights if your stay includes a Friday or Saturday night; 1 night otherwise. Within 3 days of arrival, 1 night is fine.";
 
