@@ -17,6 +17,9 @@ import { groupBySection, priceLine, SECTION_SUBTITLES, slugify } from "../../exp
  * Row order follows the Section options in Notion (loadExperiences → sectionOrder).
  */
 const { listings, sectionOrder } = await loadExperiences();
+// A badge only means something when it is the exception (design review round 2, item 19):
+// hide them while every listing carries the same one.
+const showBadges = new Set(listings.map((l) => l.badge || "")).size > 1;
 const groups = groupBySection(listings, sectionOrder);
 const kinds = new Set(listings.map((l) => l.kind));
 const showTabs = kinds.size > 1;
@@ -120,7 +123,7 @@ const rows = compact
                       sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                       class="transition-transform duration-500 group-hover:scale-105"
                     />
-                    {l.badge && (
+                    {l.badge && showBadges && (
                       <span class="absolute top-3 left-3 rounded bg-white px-3 py-1 text-xs font-bold text-stone-900">
                         {l.badge}
                       </span>
@@ -135,7 +138,7 @@ const rows = compact
                     {l.label}
                   </p>
                   <h3 class="mt-1 font-medium text-stone-900 group-hover:underline">{l.title}</h3>
-                  <p class="mt-1 text-sm text-stone-600">{priceLine(l)}</p>
+                  <p class="mt-1 text-sm text-stone-600">{l.duration || priceLine(l)}</p>
                 </a>
               </li>
             ))}
