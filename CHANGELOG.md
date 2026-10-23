@@ -4,6 +4,19 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ## [Unreleased]
 
+### Added
+
+- **Agent-ready, Phase 0 (roadmap 4.0).** apricotstays.in now describes itself to AI agents as data, built from the same files as the pages. Nothing visible on the site changes.
+  - **`/stays.json`**: all four homes with facts, beds, garden, grouped amenities, 1200 px photo URLs with captions, the Château's named rooms, starting rate (labelled as a weekday starting rate, exact total confirmed on WhatsApp), stay policy, Airbnb rating and review quotes as text (null where Airbnb shows none; quotes borrowed from another home say "stayed at"), links (page, Airbnb, pre-filled WhatsApp, availability). Plus the promise, contact, shared policies and FAQ, ways to stay, a `generated` time and pointers to `/api/availability` and `/mcp`.
+  - **`/llms-full.txt`**: the long form of `llms.txt`, with a "For agents" section documenting `/stays.json`, `/api/availability` and `/mcp`. `llms.txt` gains a "For AI agents" list pointing to the three.
+  - **Richer JSON-LD on stay pages**: `image` (the gallery, 1200 px) and `containsPlace` → `Accommodation` with `occupancy`, `numberOfBedrooms`, `numberOfBathroomsTotal` and `bed`. Still `LodgingBusiness`; ratings stay text-only (no `aggregateRating`, CK 23 Oct 2026).
+  - `Access-Control-Allow-Origin: *` on `/stays.json` and `/llms-full.txt` (`public/_headers`) so browser-based agents can read them.
+  - CI: a `wrangler deploy --dry-run` step bundles the Worker on every PR.
+
+### Changed
+
+- `/policies`: the payment lines, house rules and FAQ moved from the page into `src/data/policies.ts` (shared with the agent files). The page text is unchanged.
+
 ### Changed
 
 - **Design system, batch 5 of 5: other pages (design audit items 04, 18, 19).**

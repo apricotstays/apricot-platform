@@ -14,6 +14,8 @@ import { brand, contact, promise } from "@apricot/brand";
 import { galleries, rooms } from "../../data/media";
 import { reviews } from "../../data/reviews";
 import { allAmenities, amenityGroups } from "../../data/amenities";
+import { parseBeds } from "../../data/agent";
+import { galleryUrls } from "../../lib/agent-media";
 
 export const getStaticPaths = (() =>
   properties.map((p) => ({
@@ -87,6 +89,8 @@ facts.splice(p.bedrooms ? 2 : 1, 0, { icon: "bed", label: p.beds });
 const groups = amenityGroups[p.slug] ?? [];
 const everyAmenity = allAmenities(p.slug);
 
+const bed = parseBeds(p.beds);
+const agentPhotos = await galleryUrls(getImage, p.slug);
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LodgingBusiness",
@@ -113,6 +117,15 @@ const jsonLd = {
     addressCountry: contact.address.country,
   },
   geo: { "@type": "GeoCoordinates", ...contact.address.geo },
+  image: agentPhotos.map((ph) => ph.url),
+  containsPlace: {
+    "@type": "Accommodation",
+    name: p.name,
+    occupancy: { "@type": "QuantitativeValue", maxValue: p.maxGuests, unitCode: "C62" },
+    ...(p.bedrooms ? { numberOfBedrooms: p.bedrooms } : {}),
+    ...(p.bathrooms ? { numberOfBathroomsTotal: p.bathrooms } : {}),
+    bed: { "@type": "BedDetails", typeOfBed: bed.type, numberOfBeds: bed.count },
+  },
   ...(p.airbnbUrl ? { sameAs: [p.airbnbUrl] } : {}),
 };
 ---
