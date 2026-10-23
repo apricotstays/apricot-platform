@@ -44,6 +44,12 @@ jobs:
           SHOW_DRAFTS: "1"
         run: npm run build
 
+      - name: Worker bundle (dry run)
+        # Bundles src/worker.ts the way Cloudflare will, so a bad import in src/api/ (images,
+        # astro:*) fails the PR instead of the deploy after merge. No account or token needed.
+        working-directory: apps/web
+        run: npx wrangler deploy --dry-run --outdir "$RUNNER_TEMP/worker-bundle"
+
       - name: Broken links (internal)
         run: npm run links
 

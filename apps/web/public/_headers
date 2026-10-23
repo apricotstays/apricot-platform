@@ -12,3 +12,10 @@
 
 /og.jpg
   Cache-Control: public, max-age=86400
+
+# Agent-ready files: readable by browser-based agents on other sites (CK, 23 Oct 2026).
+/stays.json
+  Access-Control-Allow-Origin: *
+
+/llms-full.txt
+  Access-Control-Allow-Origin: *

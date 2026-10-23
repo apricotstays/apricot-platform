@@ -35,6 +35,12 @@ ${ways}
 - WhatsApp: ${contact.whatsappDisplay} — https://wa.me/919740544873
 - Share dates, number of guests and preferred home.
 
+## For AI agents
+
+- [Full guide](${brand.url}/llms-full.txt): every home in full — facts, amenities, rooms, policies, reviews, FAQ
+- [Homes as JSON](${brand.url}/stays.json): all four homes as structured data, with photo URLs, starting rates and links
+- [MCP server](${brand.url}/mcp): read-only, no sign-in; list homes, check availability for dates and guests, get a WhatsApp booking link
+
 ## Pages
 
 - [Home](${brand.url}/): overview and contact
