@@ -2,12 +2,12 @@
 
 Monorepo for **Apricot Stays** — boutique homes across the Chandigarh Tricity.
 
-| Path              | What it is                                              | Status   |
-| ----------------- | ------------------------------------------------------- | -------- |
-| `apps/web`        | apricotstays.in (Astro, static) + `/api/availability`   | Live     |
-| `apps/api`        | Availability, enquiries, agent API (Cloudflare Workers) | Reserved |
-| `packages/brand`  | Colours, fonts (Tailwind `@theme`), contact details     | Active   |
-| `packages/schema` | Homes and their facts (availability later, from STAIZ)  | Active   |
+| Path              | What it is                                                     | Status   |
+| ----------------- | -------------------------------------------------------------- | -------- |
+| `apps/web`        | apricotstays.in (Astro, static) + `/api/availability` + `/mcp` | Live     |
+| `apps/api`        | Availability, enquiries, agent API (Cloudflare Workers)        | Reserved |
+| `packages/brand`  | Colours, fonts (Tailwind `@theme`), contact details            | Active   |
+| `packages/schema` | Homes and their facts (availability later, from STAIZ)         | Active   |
 
 Booking and availability logic belongs in **STAIZ**; this site reads from it rather than re-implementing it.
 
@@ -47,19 +47,20 @@ Nobody pushes straight to `main`.
 
 Built from the same data as the pages at every deploy, so the site and agents never disagree:
 
-| URL                 | What it is                                                                                   |
-| ------------------- | -------------------------------------------------------------------------------------------- |
-| `/llms.txt`         | Short summary for LLMs ([llmstxt.org](https://llmstxt.org))                                  |
-| `/llms-full.txt`    | Every home in full: facts, amenities, rooms, policies, reviews, FAQ, and the agent endpoints |
-| `/stays.json`       | Every home as JSON, with 1200 px photo URLs, starting rates, policies and links              |
-| `/api/availability` | `?home=<slug>` → booked dates from the home's Airbnb calendar                                |
-| Stay pages' JSON-LD | schema.org `LodgingBusiness` with gallery `image` and an `Accommodation` (occupancy, beds)   |
+| URL                 | What it is                                                                                                                                                         |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/llms.txt`         | Short summary for LLMs ([llmstxt.org](https://llmstxt.org))                                                                                                        |
+| `/llms-full.txt`    | Every home in full: facts, amenities, rooms, policies, reviews, FAQ, and the agent endpoints                                                                       |
+| `/stays.json`       | Every home as JSON, with 1200 px photo URLs, starting rates, policies and links                                                                                    |
+| `/api/availability` | `?home=<slug>` → booked dates from the home's Airbnb calendar                                                                                                      |
+| Stay pages' JSON-LD | schema.org `LodgingBusiness` with gallery `image` and an `Accommodation` (occupancy, beds)                                                                         |
+| `/mcp`              | Read-only MCP server (POST, Streamable HTTP, JSON, no sign-in): `list_homes`, `check_availability`, `get_policies`, `get_booking_link` (`apps/web/src/api/mcp.ts`) |
 
 Builders: `apps/web/src/data/agent.ts` (pure, tested in `test/agent.test.ts`); photo URLs are resolved at build time in `src/lib/agent-media.ts`. To check a build changed nothing else: `node apps/web/scripts/build-diff.mjs <old-dist> apps/web/dist`. To check every photo URL in `/stays.json`: `node apps/web/scripts/check-photos.mjs <site-or-preview-url>`.
 
 ## Hosting
 
-Cloudflare (free plan): DNS, Workers static assets (`apps/web/wrangler.jsonc`, preview per PR), Web Analytics. Only `/api/*` runs Worker code (`apps/web/src/worker.ts`); its secrets (`ICAL_<SLUG>`, one Airbnb calendar link per home) live in the Cloudflare dashboard, never in the repo. No payment method is attached to any account; services that require one are out of scope. See `docs/` for the runbook.
+Cloudflare (free plan): DNS, Workers static assets (`apps/web/wrangler.jsonc`, preview per PR), Web Analytics. Only `/api/*` and `/mcp` run Worker code (`apps/web/src/worker.ts`); its secrets (`ICAL_<SLUG>`, one Airbnb calendar link per home) live in the Cloudflare dashboard, never in the repo. No payment method is attached to any account; services that require one are out of scope. See `docs/` for the runbook.
 
 ## Licence
 
