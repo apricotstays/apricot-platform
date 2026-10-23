@@ -8,8 +8,13 @@ import Icon from "./Icon.astro";
 interface Props {
   /** Pin to the top while scrolling (homepage). */
   sticky?: boolean;
+  /**
+   * Replace the header's "Check dates" button with the page's own main action (e.g. "Call to
+   * order" on /menu, for guests already staying; design review round 2, item 20).
+   */
+  action?: { href: string; label: string; icon: "phone" | "whatsapp"; external?: boolean };
 }
-const { sticky = true } = Astro.props;
+const { sticky = true, action } = Astro.props;
 
 const bookHref = contact.whatsappLink("Hi Apricot Stays, I'd like to check availability.");
 // Ordered by what a guest does first (design audit item 02). The logo is the Home link.
@@ -53,17 +58,29 @@ const link =
           </a>
         ))}
       </div>
-      <a
-        href={bookHref}
-        target="_blank"
-        rel="noopener"
-        class="btn-primary justify-self-end px-5"
-        aria-label="Check dates on WhatsApp"
-        title="Opens WhatsApp with a message ready to send"
-      >
-        <Icon name="whatsapp" size={16} />
-        Check dates
-      </a>
+      {action ? (
+        <a
+          href={action.href}
+          target={action.external ? "_blank" : undefined}
+          rel={action.external ? "noopener" : undefined}
+          class="btn-primary justify-self-end px-5"
+        >
+          <Icon name={action.icon} size={16} />
+          {action.label}
+        </a>
+      ) : (
+        <a
+          href={bookHref}
+          target="_blank"
+          rel="noopener"
+          class="btn-primary justify-self-end px-5"
+          aria-label="Check dates on WhatsApp"
+          title="Opens WhatsApp with a message ready to send"
+        >
+          <Icon name="whatsapp" size={16} />
+          Check dates
+        </a>
+      )}
     </div>
 
     <!-- Mobile (no JavaScript: native disclosure for the menu) -->
@@ -165,15 +182,27 @@ const link =
           Stays
         </span>
       </a>
-      <a
-        href={bookHref}
-        target="_blank"
-        rel="noopener"
-        class="btn-primary h-11 w-11 px-0"
-        aria-label="Check dates on WhatsApp"
-      >
-        <Icon name="whatsapp" size={20} />
-      </a>
+      {action ? (
+        <a
+          href={action.href}
+          target={action.external ? "_blank" : undefined}
+          rel={action.external ? "noopener" : undefined}
+          class="btn-primary h-11 w-11 px-0"
+          aria-label={action.label}
+        >
+          <Icon name={action.icon} size={20} />
+        </a>
+      ) : (
+        <a
+          href={bookHref}
+          target="_blank"
+          rel="noopener"
+          class="btn-primary h-11 w-11 px-0"
+          aria-label="Check dates on WhatsApp"
+        >
+          <Icon name="whatsapp" size={20} />
+        </a>
+      )}
     </div>
   </div>
 </nav>

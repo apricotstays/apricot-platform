@@ -1,111 +1,89 @@
 ---
 import { contact } from "@apricot/brand";
 import StaizMark from "./StaizMark.astro";
-import { properties } from "@apricot/schema";
+import Icon from "./Icon.astro";
+import { properties, shortName } from "@apricot/schema";
 import { loadExperiences } from "../experiences/load";
 
 const year = new Date().getFullYear();
 // The link appears only once at least one listing has a page (Live, or Draft on previews).
 const { listings: experiences } = await loadExperiences();
 const wa = contact.whatsappLink("Hi Apricot Stays, I'd like to know about availability.");
-const heading = "mb-6 font-sans text-sm font-light tracking-[0.15em] text-stone-800 uppercase";
-const item = "text-stone-500 transition-colors hover:text-stone-900";
+const heading = "mb-4 text-xs font-semibold tracking-[0.15em] text-stone-500 uppercase";
+const item = "text-sm text-stone-700 transition-colors hover:text-stone-900";
+type Link = { label: string; href: string };
+const byLength = (links: Link[]) => [...links].sort((x, y) => x.label.length - y.label.length);
+const groups = [
+  {
+    title: "Homes",
+    links: byLength(
+      properties.map((p) => ({ label: shortName(p.name), href: `/stays/${p.slug}` })),
+    ),
+  },
+  {
+    title: "Explore",
+    links: byLength([
+      { label: "Our story", href: "/our-story" },
+      { label: "Ways to stay", href: "/#ways-to-stay" },
+      ...(experiences.length > 0 ? [{ label: "Experiences", href: "/experiences" }] : []),
+      { label: "The Garden Shop", href: "/shop" },
+    ]),
+  },
+  {
+    title: "Help",
+    links: byLength([
+      { label: "Privacy", href: "/privacy" },
+      { label: "Policies & FAQ", href: "/policies" },
+      { label: contact.whatsappDisplay, href: wa },
+      { label: contact.email, href: `mailto:${contact.email}` },
+    ]),
+  },
+];
 ---
 
-<footer class="bg-stone-50 pt-20 pb-10">
+<footer class="bg-stone-50 pt-16 pb-10">
   <div class="container mx-auto px-6">
-    <div class="mb-16 grid grid-cols-1 gap-12 md:grid-cols-4">
-      <div class="md:col-span-2">
-        <p class="mb-6 font-sans text-lg font-light tracking-[0.15em] text-stone-800 uppercase">
-          Apricot Stays
+    <!-- Grouped by intent, shortest link first in each group (design review round 2, item 17). -->
+    <div class="mb-14 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div class="col-span-2 md:col-span-1">
+        <a href="/" class="inline-block text-center" aria-label="Apricot Stays, home">
+          <span class="block font-serif text-2xl leading-none text-stone-900">Apricot</span>
+          <span class="mt-1 block text-[10px] tracking-[0.35em] text-stone-500">STAYS</span>
+        </a>
+        <p class="mt-4 max-w-xs text-sm leading-relaxed text-stone-600">
+          Four homes with private gardens at {contact.address.locality}.
         </p>
-        <p class="mb-8 max-w-md font-sans text-sm leading-relaxed font-light text-stone-600">
-          A small collection of boutique homes at DLF Hyde Park, New Chandigarh, each one kept the
-          way we'd keep our own.
-        </p>
+        <a href={wa} target="_blank" rel="noopener" class="btn-primary mt-5">
+          <Icon name="whatsapp" size={16} />
+          WhatsApp us
+        </a>
       </div>
-
-      <div>
-        <p class={heading}>Explore</p>
-        <ul class="space-y-4">
-          <li>
-            <a href="/" class={item}>
-              Home
-            </a>
-          </li>
-          <li>
-            <a href="/our-story" class={item}>
-              Our Story
-            </a>
-          </li>
-          <li>
-            <a href="/#amenities" class={item}>
-              Amenities
-            </a>
-          </li>
-          {experiences.length > 0 && (
-            <li>
-              <a href="/experiences" class={item}>
-                Experiences &amp; services
-              </a>
-            </li>
-          )}
-          <li>
-            <a href="/shop" class={item}>
-              The Garden Shop
-            </a>
-          </li>
-          {properties.map((p) => (
-            <li>
-              <a href={`/stays/${p.slug}`} class={item}>
-                {p.name}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <p class={heading}>Contact</p>
-        <div class="space-y-3 font-sans text-sm font-light text-stone-600">
-          <p>
-            WhatsApp:{" "}
-            <a
-              href={wa}
-              target="_blank"
-              rel="noopener"
-              class="font-normal text-stone-800 hover:underline"
-            >
-              {contact.whatsappDisplay}
-            </a>
-          </p>
-          <p>
-            Email:{" "}
-            <a href={`mailto:${contact.email}`} class="font-normal text-stone-800 hover:underline">
-              {contact.email}
-            </a>
-          </p>
-          <div class="pt-3 leading-relaxed">
-            <p>{contact.address.locality},</p>
-            <p>{contact.address.region}, India</p>
-          </div>
+      {groups.map((g) => (
+        <div>
+          <p class={heading}>{g.title}</p>
+          <ul class="space-y-3">
+            {g.links.map((l) => (
+              <li>
+                <a
+                  href={l.href}
+                  class={item}
+                  target={l.href.startsWith("http") ? "_blank" : undefined}
+                  rel={l.href.startsWith("http") ? "noopener" : undefined}
+                >
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+      ))}
     </div>
 
     <div class="flex flex-col items-center justify-between gap-4 border-t border-stone-200 pt-8 text-sm text-stone-500 md:flex-row">
-      <p>&copy; {year} Apricot Stays. All rights reserved.</p>
+      <p>&copy; {year} Apricot Stays</p>
       <p class="text-xs tracking-[0.15em] uppercase">
         Powered by <StaizMark />
       </p>
-      <div class="flex gap-6">
-        <a href="/policies" class="hover:text-stone-800">
-          Stay policies &amp; FAQ
-        </a>
-        <a href="/privacy" class="hover:text-stone-800">
-          Privacy
-        </a>
-      </div>
     </div>
   </div>
 </footer>
