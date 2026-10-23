@@ -5,7 +5,7 @@ import Base from "../../layouts/Base.astro";
 import Navbar from "../../components/Navbar.astro";
 import Footer from "../../components/Footer.astro";
 import Icon from "../../components/Icon.astro";
-import { fromLine, properties } from "@apricot/schema";
+import { fromLine, properties, shortName } from "@apricot/schema";
 import { brand, contact } from "@apricot/brand";
 import { galleries } from "../../data/media";
 import { waysToStay, type WayToStay } from "../../data/ways-to-stay";
@@ -112,7 +112,7 @@ const jsonLd = {
                 />
               </div>
               <p class="mt-4 font-serif text-xl text-stone-900 group-hover:text-apricot">
-                {p.name}
+                {shortName(p.name)}
               </p>
               <p class="mt-1 text-sm text-stone-600">
                 Up to {p.maxGuests} guests · {p.beds} · {fromLine(p)}
