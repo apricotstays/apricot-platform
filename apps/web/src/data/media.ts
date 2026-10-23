@@ -222,6 +222,62 @@ export const galleries: Record<string, Photo[]> = {
   ],
 };
 
+/**
+ * "Photo tour" on a stay page (design review round 2, item 12): the gallery grouped by space.
+ * Every photo in a home's gallery should appear in exactly one group (tested).
+ */
+export const photoTour: Record<string, { label: string; photos: Photo[] }[]> = {
+  "garden-cottage": [
+    {
+      label: "Garden & outside",
+      photos: [
+        photos.cottageSunset,
+        photos.cottageGardenDusk,
+        photos.cottageGardenPath,
+        photos.cottagePorch,
+        photos.cottageNight,
+      ],
+    },
+    { label: "Bedroom", photos: [photos.cottageBedroom, photos.cottageBedroomDoors] },
+    { label: "Kitchen", photos: [photos.cottageKitchen, photos.cottageKitchenSink] },
+  ],
+  "garden-courtyard": [
+    {
+      label: "Courtyard & outside",
+      photos: [
+        photos.courtyardEvening,
+        photos.courtyardPatio,
+        photos.courtyardNight,
+        photos.courtyardDay,
+      ],
+    },
+    {
+      label: "Living & dining",
+      photos: [photos.courtyardLiving, photos.courtyardDining, photos.courtyardGames],
+    },
+    { label: "Bedroom", photos: [photos.courtyardBedroom, photos.courtyardBedroomDetail] },
+  ],
+  "garden-chateau": [
+    {
+      label: "Outside",
+      photos: [photos.chateauFront, photos.chateauExterior, photos.chateauStreet],
+    },
+    {
+      label: "Living spaces",
+      photos: [photos.chateauLiving, photos.chateauLounge, photos.chateauHall, photos.chateauFoyer],
+    },
+    { label: "Dining & kitchen", photos: [photos.chateauDining, photos.chateauDiningKitchen] },
+  ],
+  "garden-care": [
+    { label: "Garden & outside", photos: [photos.careExterior] },
+    {
+      label: "Living & dining",
+      photos: [photos.careLiving, photos.careLivingWide, photos.careDining, photos.careKitchenette],
+    },
+    { label: "Bedroom & bath", photos: [photos.careBedroom, photos.careBathroom] },
+  ],
+};
+
 export interface Room {
   name: string;
   palette: string;
