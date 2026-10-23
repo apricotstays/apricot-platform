@@ -16,7 +16,9 @@ const urls = stays.homes.flatMap((h) => [
 const rebase = (u) => u.replace(/^https:\/\/apricotstays\.in/, base);
 const results = await Promise.all(
   urls.map(async (u) => {
-    const r = await fetch(rebase(u), { method: "GET" });
+    let r = await fetch(rebase(u), { method: "GET" });
+    // One retry: a burst of first-time image requests can draw a transient 503 on a preview.
+    if (r.status !== 200) r = await fetch(rebase(u), { method: "GET" });
     return { u, status: r.status, type: r.headers.get("content-type") };
   }),
 );

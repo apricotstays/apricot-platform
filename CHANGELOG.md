@@ -6,6 +6,10 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Added
 
+- **Agent-ready: read-only MCP server at `/mcp` (roadmap 4.7, first slice).** `POST https://apricotstays.in/mcp` speaks MCP Streamable HTTP (stateless, plain JSON; revisions 2025-03-26, 2025-06-18, 2025-11-25), with no sign-in: it serves only what the site shows. Four read-only tools: `list_homes` (optionally by guests), `check_availability` (dates, guests, home; from the same Airbnb calendar code and 1-hour cache as `/api/availability`, with clashing nights, the weekend minimum-stay note and when the calendar was read), `get_policies`, `get_booking_link` (a `wa.me` link in the page calendar's wording plus the guest count). Dates are checked (YYYY-MM-DD, not past, ≤ 60 nights, within 12 months); bad input is a tool error, never a 500. GET/DELETE → 405, batches rejected. One log line per tool call (tool, home, dates, guests; no personal data). `/mcp` reads `/stays.json` through the ASSETS binding; `wrangler.jsonc` lists `/mcp` in `run_worker_first`. No new dependencies, secrets or Cloudflare resources.
+
+### Added
+
 - **Agent-ready, Phase 0 (roadmap 4.0).** apricotstays.in now describes itself to AI agents as data, built from the same files as the pages. Nothing visible on the site changes.
   - **`/stays.json`**: all four homes with facts, beds, garden, grouped amenities, 1200 px photo URLs with captions, the Château's named rooms, starting rate (labelled as a weekday starting rate, exact total confirmed on WhatsApp), stay policy, Airbnb rating and review quotes as text (null where Airbnb shows none; quotes borrowed from another home say "stayed at"), links (page, Airbnb, pre-filled WhatsApp, availability). Plus the promise, contact, shared policies and FAQ, ways to stay, a `generated` time and pointers to `/api/availability` and `/mcp`.
   - **`/llms-full.txt`**: the long form of `llms.txt`, with a "For agents" section documenting `/stays.json`, `/api/availability` and `/mcp`. `llms.txt` gains a "For AI agents" list pointing to the three.
