@@ -1,5 +1,5 @@
 ---
-import { contact } from "@apricot/brand";
+import { contact, poweredBy } from "@apricot/brand";
 import StaizMark from "./StaizMark.astro";
 import Icon from "./Icon.astro";
 import { properties, shortName } from "@apricot/schema";
@@ -81,9 +81,33 @@ const groups = [
 
     <div class="flex flex-col items-center justify-between gap-4 border-t border-stone-200 pt-8 text-sm text-stone-500 md:flex-row">
       <p>&copy; {year} Apricot Stays</p>
-      <p class="text-xs tracking-[0.15em] uppercase">
-        Powered by <StaizMark />
-      </p>
+      {poweredBy.url ? (
+        <p class="group relative text-xs tracking-[0.15em] uppercase">
+          <a
+            href={`${poweredBy.url}?${poweredBy.utm}`}
+            target="_blank"
+            rel="noopener"
+            aria-describedby="staiz-hint"
+            class="inline-block py-3 decoration-stone-400 underline-offset-4 hover:text-stone-700 hover:underline"
+          >
+            Powered by <StaizMark />
+            <span aria-hidden="true" class="ml-0.5 text-[0.7rem] opacity-60">
+              ↗
+            </span>
+          </a>
+          <span
+            id="staiz-hint"
+            role="tooltip"
+            class="pointer-events-none absolute bottom-full left-1/2 z-10 w-max max-w-[15rem] -translate-x-1/2 md:right-0 md:left-auto md:translate-x-0 rounded bg-stone-800 px-3 py-1.5 text-center text-xs tracking-normal text-white normal-case opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100"
+          >
+            {poweredBy.hint}
+          </span>
+        </p>
+      ) : (
+        <p class="text-xs tracking-[0.15em] uppercase">
+          Powered by <StaizMark />
+        </p>
+      )}
     </div>
   </div>
 </footer>

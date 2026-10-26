@@ -6,6 +6,10 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ### Changed
 
+- **"Powered by STAIZ" footer credit links to the STAIZ site (CK chose option C, 26 Oct).** Opens https://staiz.apricotstays.in/ in a new tab with `utm_source=apricotstays&utm_medium=footer`, a small ↗, and a hover/focus hint: "The software we built to run our homes — for hosts and operators" (linked via `aria-describedby`; right-aligned on desktop so it isn't clipped). The credit under the availability calendar stays plain text so guests aren't sent away at the booking moment. `StaizMark` is now text-only; settings in `poweredBy` (`url`, `utm`, `hint`) in `@apricot/brand`; pinned by `test/powered-by.test.ts`.
+
+### Changed
+
 - **Design review round 2, batch 1 (items 01, 02, 04, 05, 06, 08, 09, 10, 11, 12, 13, 16, 17, 18, 19, 20; CK approved on the review).**
   - **Booking card (01).** Price, dates and "Check availability" come first; the reassurance line sits under the button; three perks and "All reasons to book direct" follow; then sunset, Airbnb and the rating.
   - **Phones (02).** The Book direct card sits right under the photo; the "All photos" list is hidden below tablet width (the viewer shows every photo); the bottom booking bar slides away while the card's own button is on screen.
