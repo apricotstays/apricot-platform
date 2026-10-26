@@ -67,11 +67,15 @@ export const trust = {
 } as const;
 
 /**
- * "Powered by STAIZ" credit in the site footer — STAIZ is the operating system
- * Apricot Stays runs on (our B2B product). Set `url` once the STAIZ site is live
- * and the credit becomes a link; while it's null it renders as plain text.
+ * "Powered by STAIZ" credit — STAIZ is the operating system Apricot Stays runs
+ * on (our B2B product, site for operators). Only the footer credit links out
+ * (`url` + `utm`, new tab, with the `hint` tooltip); the credit under the
+ * availability calendar stays plain text so guests aren't sent away at the
+ * booking moment (CK, 26 Oct 2026). Set `url` to null to unlink the footer.
  */
 export const poweredBy = {
   name: "STAIZ",
-  url: null as string | null,
+  url: "https://staiz.apricotstays.in/" as string | null,
+  utm: "utm_source=apricotstays&utm_medium=footer",
+  hint: "The software we built to run our homes — for hosts and operators",
 } as const;
