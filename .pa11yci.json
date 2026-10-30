@@ -22,6 +22,7 @@
     "http://127.0.0.1:4321/stays/garden-care",
     "http://127.0.0.1:4321/privacy",
     "http://127.0.0.1:4321/policies",
+    "http://127.0.0.1:4321/shoots",
     "http://127.0.0.1:4321/ways-to-stay/hospital-visits",
     "http://127.0.0.1:4321/ways-to-stay/garden-for-two",
     "http://127.0.0.1:4321/menu",

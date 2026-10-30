@@ -4,6 +4,10 @@ All notable changes to apricotstays.in. Format: [Keep a Changelog](https://keepa
 
 ## [Unreleased]
 
+### Added
+
+- **Shoots V1: `/shoots` "Shoot at Apricot" (CK, 30 Oct; Film & Shoot Locations Playbook).** One page for film/OTT, ads, music videos, pre-wedding and creator shoots: Château as the set, the other three homes as green room and crew stay ("shoot and stay"), six Château spaces, a spec card per home (facts already on the site; power, sizes and unit parking shared at the recce), how it works (enquire → recce → quote → agreement & deposit → shoot & wrap), house rules for shoots, one WhatsApp "shoot enquiry" CTA, no prices. Soft launch: `noindex`, not in the sitemap or llms.txt (`SOFT_LAUNCH` in the page); linked from the footer (Explore → Shoots) and a line under House rules on `/policies`. Data in `src/data/shoots.ts`; pinned by `test/shoots.test.ts`.
+
 ### Changed
 
 - **"Powered by STAIZ" footer credit links to the STAIZ site (CK chose option C, 26 Oct).** Opens https://staiz.apricotstays.in/ in a new tab with `utm_source=apricotstays&utm_medium=footer`, a small ↗, and a hover/focus hint: "The software we built to run our homes — for hosts and operators" (linked via `aria-describedby`; right-aligned on desktop so it isn't clipped). The credit under the availability calendar stays plain text so guests aren't sent away at the booking moment. `StaizMark` is now text-only; settings in `poweredBy` (`url`, `utm`, `hint`) in `@apricot/brand`; pinned by `test/powered-by.test.ts`.
