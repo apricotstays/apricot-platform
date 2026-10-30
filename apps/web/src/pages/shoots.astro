@@ -1,0 +1,221 @@
+---
+/**
+ * Shoot at Apricot — film, ad, music-video and pre-wedding shoots (playbook V1, CK 30 Oct 2026).
+ * Soft launch: noindex, not in the sitemap or llms.txt; linked from the footer and /policies.
+ * To go public: remove `noindex`, add "/shoots" to sitemap.xml.ts and llms.txt.ts.
+ */
+import { Picture } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import Icon from "../components/Icon.astro";
+import { properties, shortName } from "@apricot/schema";
+import { brand, contact } from "@apricot/brand";
+import {
+  chateauSpaces,
+  shootHomes,
+  shootRules,
+  shootSteps,
+  shootTypes,
+  shootWhatsapp,
+} from "../data/shoots";
+import { photos } from "../data/media";
+
+const SOFT_LAUNCH = true;
+
+const wa = contact.whatsappLink(shootWhatsapp);
+const homes = shootHomes.map((h) => ({ ...h, p: properties.find((p) => p.slug === h.slug)! }));
+const hero = photos.chateauExterior;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: `Shoot at Apricot · ${brand.name}`,
+  url: `${brand.url}/shoots`,
+  description:
+    "Film, ad, music video and pre-wedding shoot locations at DLF Hyde Park, New Chandigarh: a French-manor villa as the set, with three more homes for cast and crew.",
+  about: homes.map((h) => ({ "@id": `${brand.url}/stays/${h.slug}#lodging`, name: h.p.name })),
+};
+---
+
+<Base
+  title="Shoot locations in New Chandigarh · Apricot Stays"
+  description="Film, ad, music video and pre-wedding shoots at DLF Hyde Park, New Chandigarh: a French-manor villa as your set, with three more homes in the same estate for cast and crew."
+  og={{ image: hero.src, imageAlt: hero.alt }}
+  jsonLd={jsonLd}
+  noindex={SOFT_LAUNCH}
+>
+  <Navbar sticky={false} />
+
+  <main id="main" class="bg-white">
+    <div class="mx-auto max-w-5xl px-6 pt-12 pb-20">
+      <p class="mb-3 text-xs font-semibold tracking-[0.2em] text-stone-500 uppercase">
+        Shoots &amp; productions
+      </p>
+      <h1 class="font-serif text-4xl leading-tight font-normal text-stone-900 sm:text-5xl">
+        A French-manor set, with crew beds next door
+      </h1>
+      <p class="mt-5 max-w-3xl text-lg leading-8 text-stone-600">
+        Four homes inside one gated estate at DLF Hyde Park, New Chandigarh. Shoot at the Garden
+        Château, and keep your cast and crew in the homes around it: set, green room and beds in one
+        place, behind one gate.
+      </p>
+      <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <a href={wa} target="_blank" rel="noopener" class="btn-primary btn-lg min-h-12">
+          <Icon name="whatsapp" size={18} />
+          Send a shoot enquiry
+        </a>
+        <a href="#how-it-works" class="btn-link">
+          How it works
+        </a>
+      </div>
+
+      <div class="mt-10 aspect-[16/9] overflow-hidden bg-stone-100">
+        <Picture
+          src={hero.src}
+          alt={hero.alt}
+          widths={[480, 800, 1200, 1600]}
+          sizes="(min-width: 1024px) 976px, 100vw"
+          formats={["avif", "webp"]}
+          fallbackFormat="jpg"
+          loading="eager"
+          fetchpriority="high"
+          class="h-full w-full object-cover"
+        />
+      </div>
+
+      <h2 class="mt-16 mb-6 font-serif text-3xl font-normal text-stone-900">What we host</h2>
+      <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {shootTypes.map((t) => (
+          <li class="border border-stone-200 p-5">
+            <h3 class="t-h3 mb-1.5">{t.title}</h3>
+            <p class="text-[15px] leading-relaxed text-stone-600">{t.text}</p>
+          </li>
+        ))}
+        <li class="flex flex-col justify-center bg-linen p-5">
+          <h3 class="t-h3 mb-1.5">Shoot and stay</h3>
+          <p class="text-[15px] leading-relaxed text-stone-600">
+            Up to 16 people sleep across the four homes, all inside the same estate.
+          </p>
+        </li>
+      </ul>
+
+      <h2 class="mt-16 mb-2 font-serif text-3xl font-normal text-stone-900">
+        Spaces at the Château
+      </h2>
+      <p class="mb-6 text-stone-600">
+        A quick look before your recce.{" "}
+        <a
+          href="/stays/garden-chateau"
+          class="font-medium text-stone-800 underline underline-offset-4"
+        >
+          See every photo
+        </a>
+      </p>
+      <ul class="grid grid-cols-2 gap-3 md:grid-cols-3">
+        {chateauSpaces.map((s) => (
+          <li>
+            <div class="aspect-[4/3] overflow-hidden bg-stone-100">
+              <Picture
+                src={s.photo.src}
+                alt={s.photo.alt}
+                widths={[320, 640]}
+                sizes="(min-width: 768px) 320px, 50vw"
+                formats={["avif", "webp"]}
+                fallbackFormat="jpg"
+                class="h-full w-full object-cover"
+              />
+            </div>
+            <p class="mt-2 text-sm text-stone-600">{s.label}</p>
+          </li>
+        ))}
+      </ul>
+
+      <h2 class="mt-16 mb-6 font-serif text-3xl font-normal text-stone-900">The four homes</h2>
+      <div class="grid gap-6 sm:grid-cols-2">
+        {homes.map((h) => (
+          <article class="border border-stone-200">
+            <div class="aspect-[16/10] overflow-hidden bg-stone-100">
+              <Picture
+                src={h.photo.src}
+                alt={h.photo.alt}
+                widths={[400, 800]}
+                sizes="(min-width: 640px) 480px, 100vw"
+                formats={["avif", "webp"]}
+                fallbackFormat="jpg"
+                class="h-full w-full object-cover"
+              />
+            </div>
+            <div class="p-5">
+              <p class="text-xs font-semibold tracking-[0.15em] text-apricot uppercase">{h.role}</p>
+              <h3 class="mt-1 font-serif text-2xl text-stone-900">{shortName(h.p.name)}</h3>
+              <dl class="mt-4 grid grid-cols-[7rem_1fr] gap-x-3 gap-y-2 text-sm">
+                <dt class="text-stone-500">Rooms</dt>
+                <dd class="text-stone-800">
+                  {h.p.bedrooms} bedroom{h.p.bedrooms === 1 ? "" : "s"} · {h.p.bathrooms} bath ·{" "}
+                  {h.p.beds}
+                </dd>
+                <dt class="text-stone-500">Outside</dt>
+                <dd class="text-stone-800">{h.p.garden}</dd>
+                <dt class="text-stone-500">Spaces</dt>
+                <dd class="text-stone-800">{h.spaces}</dd>
+                <dt class="text-stone-500">Good for</dt>
+                <dd class="text-stone-800">{h.uses}</dd>
+              </dl>
+              <a
+                href={`/stays/${h.slug}`}
+                class="mt-4 inline-block text-sm font-medium text-stone-800 underline underline-offset-4"
+              >
+                Photos of the {shortName(h.p.name)}
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="mt-5 text-sm text-stone-600">
+        Every home has free parking, Wi-Fi and 24/7 power backup, inside an estate with security at
+        the gate. Power load, room sizes and parking for unit vehicles are shared at the recce.
+      </p>
+
+      <h2 id="how-it-works" class="mt-16 mb-6 font-serif text-3xl font-normal text-stone-900">
+        How it works
+      </h2>
+      <ol class="grid gap-4 sm:grid-cols-5">
+        {shootSteps.map((s, i) => (
+          <li class="border-t-2 border-apricot pt-4">
+            <p class="font-serif text-2xl text-apricot">{i + 1}</p>
+            <h3 class="t-h3 mt-1 mb-1.5">{s.title}</h3>
+            <p class="text-[15px] leading-relaxed text-stone-600">{s.text}</p>
+          </li>
+        ))}
+      </ol>
+
+      <h2 class="mt-16 mb-4 font-serif text-3xl font-normal text-stone-900">
+        House rules for shoots
+      </h2>
+      <p class="mb-4 text-stone-600">
+        Our homes sit in a residential estate, among neighbours and gardens.
+      </p>
+      <ul class="list-disc space-y-2 pl-5 text-stone-700 marker:text-stone-400">
+        {shootRules.map((r) => (
+          <li>{r}</li>
+        ))}
+      </ul>
+
+      <div class="mt-14 flex flex-col gap-5 bg-linen p-7 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="font-serif text-xl text-stone-900">Scouting for a project?</p>
+          <p class="mt-1 text-stone-700">
+            Send the project, dates and crew size. We'll reply with availability and set up a recce.
+          </p>
+        </div>
+        <a href={wa} target="_blank" rel="noopener" class="btn-primary min-h-12 shrink-0">
+          <Icon name="whatsapp" size={18} />
+          Send a shoot enquiry
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Base>
