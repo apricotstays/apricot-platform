@@ -58,7 +58,11 @@ const ogImageUrl = new URL(ogImg.src, Astro.site);
       <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
     ))}
     {preloadImage && <link rel="preload" href={preloadImage} as="image" fetchpriority="high" />}
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Apricot" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap.xml" />
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
