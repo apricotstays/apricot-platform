@@ -1,0 +1,349 @@
+---
+/**
+ * The General's Garden — an Army-heritage stay at Lt Gen Bhavnish Kumar's home, managed by
+ * Apricot Stays (CK, Nov 2026).
+ * UNLISTED: shared only by direct link. noindex; NOT in the nav, footer, sitemap, llms.txt,
+ * llms-full.txt, /stays.json or /mcp, and linked from no other page (pinned by
+ * test/generals-garden.test.ts). Images are AI-generated stand-ins, labelled "Representative
+ * image", until the house is photographed; the portrait and quote are the General's, used with
+ * his approval.
+ */
+import { Picture } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import Icon from "../components/Icon.astro";
+import { contact } from "@apricot/brand";
+
+import hero from "../assets/generals-garden/hero-garden.jpg";
+import siachen from "../assets/generals-garden/siachen.jpg";
+import dras from "../assets/generals-garden/dras.jpg";
+import northeast from "../assets/generals-garden/northeast.jpg";
+import western from "../assets/generals-garden/western.jpg";
+import parade from "../assets/generals-garden/parade.jpg";
+import sapling from "../assets/generals-garden/sapling.jpg";
+import breakfast from "../assets/generals-garden/breakfast.jpg";
+import dinner from "../assets/generals-garden/dinner.jpg";
+import tea from "../assets/generals-garden/tea.jpg";
+import offsite from "../assets/generals-garden/offsite.jpg";
+import portrait from "../assets/generals-garden/portrait.jpg";
+
+const waMessage =
+  "Hi Apricot Stays, I'd like to be a founding guest at The General's Garden (GG-founding).\nDates:\nNights:\nGuests:\nOccasion (family / reunion / offsite / other):";
+const wa = contact.whatsappLink(waMessage);
+
+const chapters = [
+  {
+    n: "1",
+    title: "The frontiers",
+    text: "Dras, the Siachen Glacier, the Northeast and the Western borders.",
+  },
+  {
+    n: "2",
+    title: "Command",
+    text: "Leading 5 KUMAON, a Mountain Brigade and a strike infantry division.",
+  },
+  {
+    n: "3",
+    title: "Kartavya Path",
+    text: "Commanding the Republic Day parade in 2024, 2025 and 2026.",
+  },
+  {
+    n: "4",
+    title: "Two generations",
+    text: "A second-generation officer, carrying his father's service forward.",
+  },
+  {
+    n: "5",
+    title: "The garden",
+    text: "Home after 37 years, and the peace that service protects.",
+  },
+];
+
+const rooms = [
+  {
+    title: "Siachen",
+    text: "Glacier whites, mountaineering kit, photos from the ice",
+    img: siachen,
+    alt: "A white and grey bedroom with an ice axe, coiled rope and black-and-white mountain photographs",
+  },
+  {
+    title: "Dras",
+    text: "High-altitude palette, sector maps, battalion-era photos",
+    img: dras,
+    alt: "A stone-toned bedroom with a framed Himalayan map, a brass compass and binoculars on a desk",
+  },
+  {
+    title: "The Northeast",
+    text: "Jungle greens, regional textiles, stories from the posting",
+    img: northeast,
+    alt: "A deep green bedroom with a cane bed, woven Northeast textiles and misty forest photographs",
+  },
+  {
+    title: "The Western front",
+    text: "Desert tones and the command years · master bedroom",
+    img: western,
+    alt: "An ochre bedroom with a campaign desk, leather trunk, red dhurrie and desert photographs",
+  },
+];
+
+const experiences = [
+  {
+    label: "Limited dates",
+    title: "An Evening with the General",
+    text: "A hosted dinner, a few times a year.",
+    img: dinner,
+    alt: "A candlelit dining table with silver, brass candlesticks and flowers",
+  },
+  {
+    label: "Every morning",
+    title: "Mess-style breakfast",
+    text: "Served the officers' mess way, with Kumaoni dishes.",
+    img: breakfast,
+    alt: "A formal breakfast table with a silver teapot, parathas, eggs and fruit",
+  },
+  {
+    label: "Every evening",
+    title: "Garden at sunset",
+    text: "Tea, the day's story card and a short ritual.",
+    img: tea,
+    alt: "A brass tea set, lantern and story card on a cane table in a garden at dusk",
+  },
+  {
+    label: "For teams",
+    title: "Lessons from a General",
+    text: "Leadership offsites with the whole house.",
+    img: offsite,
+    alt: "A circle of cane chairs with notebooks and a flip chart under a shade tree",
+  },
+];
+
+const tag =
+  "pointer-events-none absolute top-2.5 right-2.5 rounded bg-linen px-2 py-1 text-xs text-forest";
+---
+
+<Base
+  title="The General's Garden · Apricot Stays"
+  description="From Siachen to Kartavya Path: a four-bedroom home with a garden in DLF Hyde Park, built around one General's 37 years of service. Opening Republic Day 2027."
+  og={{
+    title: "The General's Garden · From Siachen to Kartavya Path",
+    description:
+      "A four-bedroom home with a garden, built around 37 years of service. Opening Republic Day 2027. Request founding dates.",
+    image: hero,
+    imageAlt: "A villa garden at golden hour with two cane chairs and a brass tea set",
+  }}
+  noindex
+>
+  <Navbar
+    action={{ href: wa, label: "Request founding dates", icon: "whatsapp", external: true }}
+  />
+
+  <main id="main">
+    <section class="relative flex min-h-[560px] items-end bg-sand">
+      <Picture
+        src={hero}
+        alt="A villa garden at golden hour with two cane chairs and a brass tea set under a flowering tree"
+        widths={[800, 1280, 1672]}
+        sizes="100vw"
+        formats={["avif", "webp"]}
+        class="absolute inset-0 h-full w-full object-cover"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <span class={tag}>Representative image</span>
+      <div class="relative w-full bg-gradient-to-t from-[rgba(20,30,24,0.82)] via-[rgba(20,30,24,0.35)] to-transparent">
+        <div
+          class="mx-auto flex max-w-6xl flex-col gap-4 px-6 pt-32 pb-14 text-white"
+          data-hero-copy
+        >
+          <p class="text-sm font-medium tracking-wide">Opening Republic Day 2027 · DLF Hyde Park</p>
+          <h1 class="t-display max-w-3xl text-white">From Siachen to Kartavya Path.</h1>
+          <p class="max-w-xl text-lg leading-relaxed text-linen">
+            The General's Garden: a four-bedroom home built around 37 years of service, ending where
+            every journey should, in a garden.
+          </p>
+          <div>
+            <a href={wa} target="_blank" rel="noopener" class="btn-primary btn-lg">
+              <Icon name="whatsapp" size={18} />
+              Request founding dates
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-forest px-6 py-20 text-linen">
+      <div class="mx-auto flex max-w-6xl flex-col gap-10">
+        <div class="max-w-2xl">
+          <p class="mb-2 text-sm font-medium">The story</p>
+          <h2 class="t-h2 text-white">Thirty-seven years, five chapters</h2>
+        </div>
+        <ol class="grid gap-7 sm:grid-cols-2 lg:grid-cols-5">
+          {chapters.map((c) => (
+            <li class="flex flex-col gap-2 border-t border-[#6b8274] pt-5">
+              <span class="font-serif text-3xl" aria-hidden="true">
+                {c.n}
+              </span>
+              <h3 class="font-serif text-xl text-white">{c.title}</h3>
+              <p class="text-[15px] leading-relaxed text-[#dce3dd]">{c.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="mx-auto flex max-w-6xl flex-col gap-9 px-6 py-20">
+      <div class="max-w-2xl">
+        <p class="mb-2 text-sm font-medium text-forest">The house</p>
+        <h2 class="t-h2 text-forest">Four bedrooms, four frontiers</h2>
+        <p class="mt-3 text-lg leading-relaxed text-stone-600">
+          Each room tells one chapter, with a short story card written with the General.
+        </p>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {rooms.map((r) => (
+          <figure class="flex flex-col gap-2.5">
+            <div class="relative">
+              <Picture
+                src={r.img}
+                alt={r.alt}
+                widths={[400, 800]}
+                sizes="(min-width: 1024px) 280px, (min-width: 640px) 50vw, 100vw"
+                formats={["avif", "webp"]}
+                class="aspect-[4/3] w-full rounded object-cover"
+              />
+              <span class={tag}>Representative image</span>
+            </div>
+            <figcaption>
+              <h3 class="font-serif text-xl text-stone-900">{r.title}</h3>
+              <p class="text-[15px] text-stone-600">{r.text}</p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="flex flex-col gap-2 rounded border border-sand p-7">
+          <div class="relative mb-2">
+            <Picture
+              src={parade}
+              alt="A heritage living room with ceremonial swords, medals and parade photographs in lit display cabinets"
+              widths={[600, 1000]}
+              sizes="(min-width: 768px) 520px, 100vw"
+              formats={["avif", "webp"]}
+              class="aspect-[3/2] w-full rounded object-cover"
+            />
+            <span class={tag}>Representative image</span>
+          </div>
+          <h3 class="font-serif text-2xl text-forest">The Parade Room</h3>
+          <p class="text-[15px] leading-relaxed text-stone-600">
+            The living room as the centrepiece: photos and memorabilia from three Republic Day
+            parades.
+          </p>
+        </div>
+        <div class="flex flex-col gap-2 rounded border border-sand p-7">
+          <div class="relative mb-2">
+            <Picture
+              src={sapling}
+              alt="A freshly planted sapling with a brass plaque and a spade on a lawn at sunset"
+              widths={[600, 1000]}
+              sizes="(min-width: 768px) 520px, 100vw"
+              formats={["avif", "webp"]}
+              class="aspect-[3/2] w-full rounded object-cover"
+            />
+            <span class={tag}>Representative image</span>
+          </div>
+          <h3 class="font-serif text-2xl text-forest">The garden</h3>
+          <p class="text-[15px] leading-relaxed text-stone-600">
+            Where the story ends: tea at sunset, a short evening ritual, and a tree each family
+            helps plant.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-linen px-6 py-20">
+      <div class="mx-auto flex max-w-6xl flex-col gap-9">
+        <div>
+          <p class="mb-2 text-sm font-medium text-forest">Experiences</p>
+          <h2 class="t-h2 text-forest">More than a place to stay</h2>
+        </div>
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {experiences.map((e) => (
+            <article class="flex flex-col overflow-hidden rounded bg-white">
+              <div class="relative">
+                <Picture
+                  src={e.img}
+                  alt={e.alt}
+                  widths={[400, 800]}
+                  sizes="(min-width: 1024px) 280px, (min-width: 640px) 50vw, 100vw"
+                  formats={["avif", "webp"]}
+                  class="aspect-[4/3] w-full object-cover"
+                />
+                <span class={tag}>Representative image</span>
+              </div>
+              <div class="flex flex-col gap-2 p-6">
+                <p class="text-[13px] font-medium text-apricot-dark">{e.label}</p>
+                <h3 class="font-serif text-xl text-stone-900">{e.title}</h3>
+                <p class="text-[15px] text-stone-600">{e.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 md:grid-cols-2">
+      <Picture
+        src={portrait}
+        alt="Portrait of Lt Gen Bhavnish Kumar in ceremonial uniform in a garden"
+        widths={[500, 900]}
+        sizes="(min-width: 768px) 540px, 100vw"
+        formats={["avif", "webp"]}
+        class="aspect-[4/5] w-full rounded object-cover object-top"
+      />
+      <figure class="flex flex-col gap-4 rounded bg-forest p-9 text-linen">
+        <blockquote class="font-serif text-2xl leading-snug">
+          “It’s a great responsibility &amp; a huge honour to lead the parade on Kartavya Path.”
+        </blockquote>
+        <figcaption class="text-sm">
+          Lt Gen Bhavnish Kumar, AVSM, VSM (Retd) · Republic Day 2025
+        </figcaption>
+      </figure>
+    </section>
+
+    <section id="founding" class="bg-linen px-6 py-20">
+      <div class="mx-auto grid max-w-6xl items-start gap-10 md:grid-cols-2">
+        <div class="flex flex-col gap-3">
+          <p class="text-sm font-medium text-forest">Founding guests</p>
+          <h2 class="t-h2 text-forest">Request your dates</h2>
+          <p class="text-lg leading-relaxed text-stone-600">
+            We open on Republic Day 2027. Founding guests get first pick of dates. This is a
+            request, not a booking: no payment now.
+          </p>
+        </div>
+        <div class="flex flex-col gap-4 rounded border border-sand bg-white p-7">
+          <h3 class="font-serif text-2xl text-forest">Message us on WhatsApp</h3>
+          <p class="text-[15px] leading-relaxed text-stone-600">
+            Tap below and the message opens ready to fill in. Just tell us:
+          </p>
+          <ul class="list-disc pl-5 text-[15px] leading-loose">
+            <li>Your preferred dates and nights</li>
+            <li>How many guests</li>
+            <li>The occasion: family break, reunion or offsite</li>
+          </ul>
+          <a href={wa} target="_blank" rel="noopener" class="btn-primary btn-lg btn-block">
+            <Icon name="whatsapp" size={18} />
+            Request founding dates on WhatsApp
+          </a>
+          <p class="text-center text-sm text-stone-600">{contact.whatsappDisplay}</p>
+        </div>
+      </div>
+    </section>
+
+    <p class="mx-auto max-w-6xl px-6 pt-8 pb-2 text-sm text-stone-600">
+      The General's Garden · DLF Hyde Park, New Chandigarh · Managed by Apricot Stays
+    </p>
+  </main>
+
+  <Footer />
+</Base>
