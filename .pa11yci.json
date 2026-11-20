@@ -23,6 +23,7 @@
     "http://127.0.0.1:4321/privacy",
     "http://127.0.0.1:4321/policies",
     "http://127.0.0.1:4321/shoots",
+    "http://127.0.0.1:4321/list-your-home",
     {
       "url": "http://127.0.0.1:4321/generals-garden",
       "hideElements": "[data-hero-copy]"
