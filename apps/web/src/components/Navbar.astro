@@ -1,215 +1,145 @@
 ---
-import { Picture } from "astro:assets";
 import { contact } from "@apricot/brand";
-import { properties } from "@apricot/schema";
-import { galleries } from "../data/media";
 import Icon from "./Icon.astro";
 
 interface Props {
   /** Pin to the top while scrolling (homepage). */
   sticky?: boolean;
-  /**
-   * Replace the header's "Check dates" button with the page's own main action (e.g. "Call to
-   * order" on /menu, for guests already staying; design review round 2, item 20).
-   */
-  action?: { href: string; label: string; icon: "phone" | "whatsapp"; external?: boolean };
 }
-const { sticky = true, action } = Astro.props;
+const { sticky = true } = Astro.props;
 
-const bookHref = contact.whatsappLink("Hi Apricot Stays, I'd like to check availability.");
-// Ordered by what a guest does first (design audit item 02). The logo is the Home link.
-// Experiences and the Garden Shop stay footer-only while they are in soft launch.
-const navLinks = [
-  { name: "Homes", href: "/#collection" },
-  { name: "Ways to stay", href: "/#ways-to-stay" },
-  { name: "Our story", href: "/our-story" },
+/*
+ * Header v2 (CK, 19 Nov 2026; modelled on fairly.com): logo left, the two sides of Apricot in
+ * the middle, an account menu on the right. Guests come first today; to put owners first later,
+ * swap the order of `sides`. Homes, Ways to stay and Our story are reached from the homepage
+ * and the footer. Booking starts from each page's own button ("Check dates on WhatsApp").
+ */
+const appUrl = "https://app.apricotstays.in/";
+const manageBooking = contact.whatsappLink(
+  "Hi Apricot Stays, I'd like to check or change my booking.\nName: \nDates: ",
+);
+
+// build.format "file": "/index.html" → "/", "/list-your-home.html" → "/list-your-home".
+const here = Astro.url.pathname.replace(/\.html$/, "").replace(/(^|\/)index$/, "$1") || "/";
+const ownerSide = here.startsWith("/list-your-home");
+const guestSide = !ownerSide && (here === "/" || /^\/(stays|ways-to-stay)\//.test(here));
+const sides = [
+  { name: "Book a stay", href: "/", active: guestSide },
+  { name: "List your home", href: "/list-your-home", active: ownerSide },
 ];
-const allLinks = navLinks;
-const here = Astro.url.pathname.replace(/\.html$/, "");
-const current = (href: string) => (href === here ? "page" : undefined);
-const link =
-  "rounded-sm text-sm font-medium text-stone-600 decoration-apricot decoration-2 underline-offset-8 transition-colors hover:text-apricot focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-4 aria-[current=page]:text-stone-900 aria-[current=page]:underline";
+const tab =
+  "inline-flex min-h-11 items-center border-b-2 pt-0.5 text-[15px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-4 rounded-sm";
+const tabOn = "border-apricot font-semibold text-stone-900";
+const tabOff = "border-transparent font-medium text-stone-600 hover:text-stone-900";
 ---
 
 <nav
   class:list={[
-    "left-0 right-0 z-50 border-b border-stone-100 bg-white py-4",
+    "left-0 right-0 z-50 border-b border-stone-200 bg-white pt-3",
     sticky ? "sticky top-0" : "relative",
   ]}
   aria-label="Main"
 >
   <div class="container mx-auto px-6">
-    <!-- Desktop -->
-    <div class="hidden items-center md:grid md:grid-cols-[1fr_auto_1fr]">
+    <div class="flex items-center justify-between pb-3 md:grid md:grid-cols-[1fr_auto_1fr]">
       <a
         href="/"
         class="flex flex-col items-center justify-self-start rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-4"
         aria-label="Apricot Stays home"
       >
-        <span class="font-serif text-2xl leading-none font-bold text-stone-800">Apricot</span>
-        <span class="mt-1 font-sans text-[0.6rem] font-medium tracking-[0.3em] text-stone-500 uppercase">
+        <span class="font-serif text-xl leading-none font-bold text-stone-800 md:text-2xl">
+          Apricot
+        </span>
+        <span class="mt-1 font-sans text-[0.55rem] font-medium tracking-[0.3em] text-stone-500 uppercase md:text-[0.6rem]">
           Stays
         </span>
       </a>
-      <div class="flex items-center gap-8">
-        {navLinks.map((l) => (
-          <a href={l.href} class={link} aria-current={current(l.href)}>
-            {l.name}
+
+      <div class="hidden items-center gap-9 md:flex">
+        {sides.map((s) => (
+          <a
+            href={s.href}
+            class:list={[tab, s.active ? tabOn : tabOff]}
+            aria-current={s.href === here ? "page" : undefined}
+          >
+            {s.name}
           </a>
         ))}
       </div>
-      {action ? (
-        <a
-          href={action.href}
-          target={action.external ? "_blank" : undefined}
-          rel={action.external ? "noopener" : undefined}
-          class="btn-primary justify-self-end px-5"
-        >
-          <Icon name={action.icon} size={16} />
-          {action.label}
-        </a>
-      ) : (
-        <a
-          href={bookHref}
-          target="_blank"
-          rel="noopener"
-          class="btn-primary justify-self-end px-5"
-          aria-label="Check dates on WhatsApp"
-          title="Opens WhatsApp with a message ready to send"
-        >
-          <Icon name="whatsapp" size={16} />
-          Check dates
-        </a>
-      )}
-    </div>
 
-    <!-- Mobile (no JavaScript: native disclosure for the menu) -->
-    <div class="flex items-center justify-between md:hidden">
-      <details class="group">
+      <!-- Account menu (native disclosure; the script below only closes it on Escape or an outside click). -->
+      <details class="account-menu relative justify-self-end" data-account-menu>
         <summary
-          class="cursor-pointer list-none rounded-sm p-2 text-stone-800 [&::-webkit-details-marker]:hidden"
-          aria-label="Menu"
+          class="inline-flex min-h-11 cursor-pointer list-none items-center gap-2.5 rounded-full border border-stone-200 bg-white pr-3 pl-3.5 text-stone-800 transition-colors hover:border-stone-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-apricot focus-visible:ring-offset-2 [&::-webkit-details-marker]:hidden"
+          aria-label="Account menu"
         >
-          <svg
-            class="group-open:hidden"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            aria-hidden="true"
-          >
-            <path d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-          <svg
-            class="hidden group-open:block"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            aria-hidden="true"
-          >
-            <path d="M6 6l12 12M18 6L6 18"></path>
-          </svg>
+          <Icon name="menu" size={18} />
+          <Icon name="user" size={22} />
         </summary>
-        <!-- Full-height sheet (design audit item 04): the homes as pictures, the other pages as
-             large links, and the booking button within thumb reach. No JavaScript needed. -->
-        <div class="nav-sheet absolute top-full right-0 left-0 flex h-[calc(100svh-100%)] flex-col gap-6 overflow-y-auto border-t border-stone-100 bg-cream px-6 pt-6 pb-8">
-          <div>
-            <p class="mb-3 text-xs font-semibold tracking-[0.2em] text-stone-500 uppercase">
-              Our homes
-            </p>
-            <ul class="grid grid-cols-2 gap-3">
-              {properties.map((p) => (
-                <li>
-                  <a href={`/stays/${p.slug}`} class="block rounded-sm">
-                    <span class="block aspect-[4/3] overflow-hidden rounded bg-stone-100">
-                      <Picture
-                        src={galleries[p.slug][0].src}
-                        alt=""
-                        widths={[240, 400]}
-                        sizes="45vw"
-                        formats={["avif", "webp"]}
-                        fallbackFormat="jpg"
-                        class="h-full w-full object-cover"
-                      />
-                    </span>
-                    <span class="mt-1.5 block text-sm font-medium text-stone-800">
-                      {p.name.replace(/^Apricot /, "")}
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <ul class="flex flex-col gap-1 border-t border-stone-300/60 pt-4">
-            {allLinks
-              .filter((l) => l.name !== "Homes")
-              .map((l) => (
-                <li>
-                  <a
-                    href={l.href}
-                    aria-current={current(l.href)}
-                    class="block py-1.5 font-serif text-2xl text-stone-900 hover:text-apricot"
-                  >
-                    {l.name}
-                  </a>
-                </li>
-              ))}
-          </ul>
-          <div class="mt-auto flex flex-col gap-3">
-            <a
-              href={bookHref}
-              target="_blank"
-              rel="noopener"
-              class="btn-primary btn-block min-h-12"
-            >
-              <Icon name="whatsapp" size={18} />
-              Check dates on WhatsApp
-            </a>
-            <p class="text-center text-xs text-stone-600">
-              WhatsApp {contact.whatsappDisplay} · {contact.email}
-            </p>
-          </div>
+        <div class="absolute top-full right-0 z-50 mt-2 flex w-72 flex-col gap-2.5 rounded border border-stone-200 bg-white p-4 shadow-lg">
+          <p class="text-center text-[11px] font-semibold tracking-[0.2em] text-stone-500 uppercase">
+            Homeowners &amp; caretakers
+          </p>
+          <a href={appUrl} class="btn-secondary w-full">
+            <Icon name="login" size={16} />
+            Log in
+          </a>
+          <a href={appUrl} class="btn-primary btn-forest w-full">
+            Sign up
+          </a>
+          <div class="-mx-4 mt-1.5 border-t border-stone-200"></div>
+          <p class="mt-1 text-center text-[11px] font-semibold tracking-[0.2em] text-stone-500 uppercase">
+            Staying with us?
+          </p>
+          <a
+            href={manageBooking}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded bg-linen px-6 text-sm font-medium text-forest transition-colors hover:bg-sand focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:outline-none"
+          >
+            <Icon name="whatsapp" size={15} />
+            Manage your booking
+          </a>
+          <p class="text-center text-xs text-stone-500">
+            On WhatsApp. Booked on Airbnb? Manage it there.
+          </p>
         </div>
       </details>
-      <a href="/" class="flex flex-col items-center rounded-sm" aria-label="Apricot Stays home">
-        <span class="font-serif text-xl leading-none font-bold text-stone-800">Apricot</span>
-        <span class="mt-0.5 font-sans text-[0.5rem] font-medium tracking-[0.25em] text-stone-500 uppercase">
-          Stays
-        </span>
-      </a>
-      {action ? (
+    </div>
+
+    <!-- Phone: the two sides as a row under the logo (no menu sheet needed). -->
+    <div class="grid grid-cols-2 md:hidden">
+      {sides.map((s) => (
         <a
-          href={action.href}
-          target={action.external ? "_blank" : undefined}
-          rel={action.external ? "noopener" : undefined}
-          class="btn-primary h-11 w-11 px-0"
-          aria-label={action.label}
+          href={s.href}
+          class:list={[tab, "justify-center", s.active ? tabOn : tabOff]}
+          aria-current={s.href === here ? "page" : undefined}
         >
-          <Icon name={action.icon} size={20} />
+          {s.name}
         </a>
-      ) : (
-        <a
-          href={bookHref}
-          target="_blank"
-          rel="noopener"
-          class="btn-primary h-11 w-11 px-0"
-          aria-label="Check dates on WhatsApp"
-        >
-          <Icon name="whatsapp" size={20} />
-        </a>
-      )}
+      ))}
     </div>
   </div>
 </nav>
 
-<style is:global>
-  /* Lock the page behind the open phone menu. */
-  html:has(nav details[open] .nav-sheet) {
-    overflow: hidden;
-  }
-</style>
+<script>
+  // Header account menu: close the <details> on Escape or a click outside it.
+  // The menu opens and closes without this script (native disclosure); this only tidies it.
+  const menus = document.querySelectorAll<HTMLDetailsElement>("[data-account-menu]");
+
+  document.addEventListener("click", (e) => {
+    menus.forEach((m) => {
+      if (m.open && !m.contains(e.target as Node)) m.open = false;
+    });
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    menus.forEach((m) => {
+      if (m.open) {
+        m.open = false;
+        m.querySelector("summary")?.focus();
+      }
+    });
+  });
+</script>

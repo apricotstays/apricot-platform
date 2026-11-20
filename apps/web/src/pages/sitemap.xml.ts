@@ -6,6 +6,7 @@ import { waysToStay } from "../data/ways-to-stay";
 const paths = [
   "/",
   "/our-story",
+  "/list-your-home",
   ...properties.map((p) => `/stays/${p.slug}`),
   ...waysToStay.map((w) => `/ways-to-stay/${w.slug}`),
   "/policies",
