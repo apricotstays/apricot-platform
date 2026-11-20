@@ -45,6 +45,7 @@ ${ways}
 
 - [Home](${brand.url}/): overview and contact
 - [Our Story](${brand.url}/our-story): why Apricot exists — Chandigarh's gardens, and Shivani, who keeps every home; the name comes from her grandmother's garden in Ludhiana, where roses and apricots grew
+- [List your home](${brand.url}/list-your-home): Managed by Apricot, for homeowners in New Chandigarh and the Tricity — one named caretaker per home, one flat 20% fee, no lock-in; enquiries on WhatsApp
 - [Stay policies & FAQ](${brand.url}/policies): cancellation, payment, check-in times, house rules, why book direct
 - [Privacy](${brand.url}/privacy): what data we handle (DPDP Act, 2023)
 `;

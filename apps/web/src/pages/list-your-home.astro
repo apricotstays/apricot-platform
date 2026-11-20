@@ -1,0 +1,589 @@
+---
+/**
+ * List your home — "Managed by Apricot", the owner page (CK, 19 Nov 2026).
+ * Section order follows fairly.com/vacation-rental-management; content in data/list-your-home.ts.
+ * Public: linked from the header on every page, in the sitemap and llms.txt.
+ */
+import { Picture } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import Icon from "../components/Icon.astro";
+import { brand, contact, trust } from "@apricot/brand";
+import { properties, shortName } from "@apricot/schema";
+import { photos } from "../data/media";
+import { reviews } from "../data/reviews";
+import {
+  DRAFT_MARKERS,
+  careReviews,
+  comparison,
+  earnMore,
+  faq,
+  fee,
+  inTheLoop,
+  ownerWhatsapp,
+  steps,
+  visibility,
+} from "../data/list-your-home";
+
+const wa = contact.whatsappLink(ownerWhatsapp);
+const hero = photos.cottageGardenPath;
+const quotes = careReviews.map((c) => {
+  const r = reviews[c.home].reviews.find((x) => x.name === c.name)!;
+  return { ...r, home: shortName(properties.find((p) => p.slug === c.home)!.name) };
+});
+const courtyardRating = reviews["garden-courtyard"].listing?.rating;
+
+const eyebrow = "mb-2.5 text-xs font-semibold tracking-[0.2em] text-stone-500 uppercase";
+const h2 = "font-serif text-3xl leading-snug font-normal text-stone-900";
+const h3 = "font-serif text-lg leading-snug font-medium text-stone-900";
+const body = "text-[15px] leading-relaxed text-stone-600";
+const img = "block h-full w-full object-cover";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Managed by Apricot",
+  serviceType: "Vacation home management",
+  url: `${brand.url}/list-your-home`,
+  provider: { "@type": "Organization", name: brand.name, url: brand.url },
+  areaServed: "New Chandigarh and the Chandigarh Tricity, India",
+  description:
+    "A dedicated caretaker for your home, our team behind them, and one flat fee. Listing, pricing, guests, turnovers and upkeep, for homes in New Chandigarh and the Tricity.",
+};
+---
+
+<Base
+  title="List your home · Managed by Apricot · Apricot Stays"
+  description="A dedicated caretaker for your home in New Chandigarh or the Tricity, our team behind them, and one flat 20% fee. Keep your own staff, your calendar and the final say."
+  og={{ image: hero.src, imageAlt: hero.alt }}
+  jsonLd={jsonLd}
+>
+  <Navbar />
+
+  <main id="main" class="bg-white">
+    <div class="mx-auto max-w-5xl px-6 pt-12 pb-20">
+      <!-- 1. Hero -->
+      <section aria-labelledby="hero-h" class="grid items-center gap-10 md:grid-cols-[1.1fr_1fr]">
+        <div>
+          <p class={eyebrow}>For homeowners</p>
+          <h1 id="hero-h" class="t-display">
+            A dedicated caretaker for your home
+          </h1>
+          <p class="mt-5 text-lg leading-8 text-stone-600">
+            One named person who knows your home, our team behind them, and one clear fee. For homes
+            in New Chandigarh and the Tricity. You keep the keys, the calendar and the final say.
+          </p>
+          <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+            <a href={wa} target="_blank" rel="noopener" class="btn-primary btn-lg min-h-12">
+              <Icon name="whatsapp" size={18} />
+              WhatsApp us about your home
+            </a>
+            <a href="#how-it-works" class="btn-link">
+              How it works
+            </a>
+          </div>
+          <p class="mt-5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-stone-600">
+            <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" class="fill-gold">
+              <path d="M10 1.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.9z"></path>
+            </svg>
+            <span>
+              <span class="font-medium text-stone-800">{trust.rating}</span> host rating
+            </span>
+            <span aria-hidden="true">·</span>
+            <span>{trust.reviews} Airbnb reviews</span>
+            {trust.superhost && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>Superhost</span>
+              </>
+            )}
+          </p>
+        </div>
+        <div class="aspect-[4/5] overflow-hidden bg-stone-100">
+          <Picture
+            src={hero.src}
+            alt={hero.alt}
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 768px) 45vw, 100vw"
+            formats={["avif", "webp"]}
+            fallbackFormat="jpg"
+            loading="eager"
+            fetchpriority="high"
+            class={img}
+          />
+        </div>
+      </section>
+
+      <!-- 2. One team, full visibility -->
+      <section aria-labelledby="s2" class="mt-20">
+        <p class={eyebrow}>One team, full visibility</p>
+        <h2 id="s2" class:list={[h2, "mb-6 max-w-3xl"]}>
+          Everything your home needs to get found, earn well and stay protected
+        </h2>
+        <div class="aspect-[16/7] overflow-hidden bg-stone-100">
+          <Picture
+            src={photos.chateauFront.src}
+            alt={photos.chateauFront.alt}
+            widths={[640, 1024, 1600]}
+            sizes="(min-width: 1024px) 976px, 100vw"
+            formats={["avif", "webp"]}
+            fallbackFormat="jpg"
+            class={img}
+          />
+        </div>
+        <ul class="mt-6 grid gap-4 md:grid-cols-3">
+          {visibility.map((v) => (
+            <li class="border border-stone-200 p-5">
+              <h3 class:list={[h3, "mb-1.5"]}>{v.title}</h3>
+              <p class={body}>
+                {v.text}
+                {DRAFT_MARKERS && "confirm" in v && (
+                  <span class="text-[13px] text-apricot-dark"> [confirm]</span>
+                )}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-5 font-serif text-xl text-stone-900">
+          Better care. Better reviews. Better bookings.
+        </p>
+      </section>
+
+      <!-- 3. See it all in one place -->
+      <section aria-labelledby="s3" class="mt-20 grid items-center gap-10 md:grid-cols-2">
+        <div>
+          <p class={eyebrow}>See it all in one place</p>
+          <h2 id="s3" class:list={[h2, "mb-5"]}>
+            Nothing happens in your home that you don't know about
+          </h2>
+          <ul class="list-disc space-y-2.5 pl-5 text-stone-700 marker:text-stone-400">
+            {inTheLoop.map((i) => (
+              <li>
+                <span class="font-medium text-stone-800">{i.lead}</span> {i.text}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <figure class="bg-linen p-6">
+          <figcaption class="mb-2.5 text-xs font-semibold tracking-[0.2em] text-stone-600 uppercase">
+            Your home's WhatsApp group
+          </figcaption>
+          <div class="flex flex-col gap-2.5 text-sm leading-normal">
+            <p class="max-w-[85%] self-start rounded border border-stone-200 bg-white px-3 py-2.5">
+              <span class="block font-semibold text-forest">Caretaker</span>
+              Turnover done. Fresh linen in, garden watered. Guests arrive at 2.
+            </p>
+            <p class="max-w-[85%] self-start rounded border border-stone-200 bg-white px-3 py-2.5">
+              <span class="block font-semibold text-forest">Apricot team</span>
+              New 5-star review on Airbnb. Sharing below.
+            </p>
+            <p class="max-w-[85%] self-end rounded bg-sand px-3 py-2.5">
+              <span class="block font-semibold text-stone-800">You</span>
+              Please block 28 Oct to 3 Nov. Family's home for Diwali.
+            </p>
+          </div>
+          <p class="mt-3 text-xs text-stone-600">Illustration only.</p>
+        </figure>
+      </section>
+
+      <!-- 4. Earn more -->
+      <section aria-labelledby="s4" class="mt-20 grid items-center gap-10 md:grid-cols-2">
+        <div class="aspect-[4/3] overflow-hidden bg-stone-100 md:order-1">
+          <Picture
+            src={photos.chateauLiving.src}
+            alt={photos.chateauLiving.alt}
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 768px) 45vw, 100vw"
+            formats={["avif", "webp"]}
+            fallbackFormat="jpg"
+            class={img}
+          />
+        </div>
+        <div class="md:order-2">
+          <p class={eyebrow}>Earn more</p>
+          <h2 id="s4" class:list={[h2, "mb-5"]}>
+            More stays, better rates, more of it kept
+          </h2>
+          <div class="flex flex-col gap-4">
+            {earnMore.map((e) => (
+              <div>
+                <h3 class:list={[h3, "mb-1"]}>{e.title}</h3>
+                <p class={body}>
+                  {e.text}
+                  {DRAFT_MARKERS && "confirm" in e && (
+                    <span class="text-[13px] text-apricot-dark"> [confirm]</span>
+                  )}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Get started for free -->
+      <section id="how-it-works" aria-labelledby="s5" class="mt-20 scroll-mt-24">
+        <div class="grid items-center gap-10 md:grid-cols-2">
+          <div>
+            <p class={eyebrow}>Get started for free</p>
+            <h2 id="s5" class:list={[h2, "mb-3"]}>
+              Getting your home ready costs you nothing
+            </h2>
+            <p class="text-stone-600">
+              No setup fee and no listing fee. We do the work, and if you ever leave, the photos are
+              yours to keep.
+            </p>
+          </div>
+          <div class="aspect-[4/3] overflow-hidden bg-stone-100">
+            <Picture
+              src={photos.cottagePorch.src}
+              alt={photos.cottagePorch.alt}
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 768px) 45vw, 100vw"
+              formats={["avif", "webp"]}
+              fallbackFormat="jpg"
+              class={img}
+            />
+          </div>
+        </div>
+        <ol class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {steps.map((s, i) => (
+            <li class="border-t-2 border-apricot pt-4">
+              <p class="font-serif text-2xl text-apricot">{i + 1}</p>
+              <h3 class:list={[h3, "mt-1 mb-1.5"]}>{s.title}</h3>
+              <p class={body}>{s.text}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <!-- 6. Proof: our own homes -->
+      <section aria-labelledby="s6" class="mt-20 grid bg-forest text-[#fbf7f0] md:grid-cols-2">
+        <div class="aspect-[4/3] overflow-hidden bg-forest-dark md:aspect-auto">
+          <Picture
+            src={photos.courtyardEvening.src}
+            alt={photos.courtyardEvening.alt}
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 768px) 45vw, 100vw"
+            formats={["avif", "webp"]}
+            fallbackFormat="jpg"
+            class={img}
+          />
+        </div>
+        <div class="p-8">
+          <p class="mb-2.5 text-xs font-semibold tracking-[0.2em] text-[#dce4dd] uppercase">
+            Proof
+          </p>
+          <h2 id="s6" class="font-serif text-[28px] leading-snug font-normal">
+            We started with our own homes
+          </h2>
+          <p class="mt-2.5 text-[15px] leading-relaxed text-[#dce4dd]">
+            Four garden homes in DLF Hyde Park, New Chandigarh, hosted the way we'll host yours.
+          </p>
+          <dl class="mt-5 grid grid-cols-2 gap-x-6 gap-y-4">
+            <div>
+              <dt class="text-sm text-[#dce4dd]">Host rating</dt>
+              <dd class="mt-0.5 font-serif text-[34px] leading-tight">{trust.rating}</dd>
+            </div>
+            <div>
+              <dt class="text-sm text-[#dce4dd]">Airbnb reviews</dt>
+              <dd class="mt-0.5 font-serif text-[34px] leading-tight">{trust.reviews}</dd>
+            </div>
+            {courtyardRating && (
+              <div>
+                <dt class="text-sm text-[#dce4dd]">Garden Courtyard</dt>
+                <dd class="mt-0.5 font-serif text-[34px] leading-tight">{courtyardRating}</dd>
+              </div>
+            )}
+            {trust.superhost && (
+              <div>
+                <dt class="text-sm text-[#dce4dd]">On Airbnb</dt>
+                <dd class="mt-0.5 font-serif text-[26px] leading-snug">Superhost</dd>
+              </div>
+            )}
+          </dl>
+          <a
+            href="/#collection"
+            class="mt-5 inline-flex min-h-11 items-center text-[15px] font-medium text-[#fbf7f0] underline underline-offset-[6px] focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
+          >
+            See the homes
+          </a>
+        </div>
+      </section>
+
+      <!-- 7. The 90-day promise -->
+      <section
+        aria-labelledby="s7"
+        class="mt-8 flex flex-col gap-4 bg-linen p-7 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div>
+          <h2 id="s7" class="font-serif text-2xl leading-snug font-normal text-stone-900">
+            Try us for 90 days. Leave if it's not right.
+          </h2>
+          <p class="mt-1.5 text-stone-700">
+            No exit fee in the first 90 days, the photos stay yours, and bookings already made are
+            honoured.
+          </p>
+        </div>
+        <a href="#contact" class="btn-link shrink-0">
+          Start the conversation
+        </a>
+      </section>
+
+      <!-- 8. The caretaker model -->
+      <section
+        id="caretaker"
+        aria-labelledby="s8"
+        class="mt-20 grid items-start gap-10 md:grid-cols-2"
+      >
+        <div>
+          <p class={eyebrow}>The caretaker model</p>
+          <h2 id="s8" class:list={[h2, "mb-3"]}>
+            Keep your didi. Keep your mali. We'll make it worth their while.
+          </h2>
+          <p class="mb-5 text-stone-600">
+            Not a rotating crew. Most homes already have someone who looks after them. We train them
+            in hosting, back them with our team and pay them a share of every stay, so they're
+            invested in your home doing well.
+          </p>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="border border-stone-200 p-4">
+              <p class="font-serif text-[28px] text-stone-900">{fee.caretaker}%</p>
+              <p class="mt-0.5 text-sm leading-normal text-stone-600">
+                of every booking to your caretaker, out of our fee
+              </p>
+            </div>
+            <div class="border border-stone-200 p-4">
+              <p class="font-serif text-[28px] text-stone-900">100%</p>
+              <p class="mt-0.5 text-sm leading-normal text-stone-600">
+                of the turnover fee guests pay goes to them too
+              </p>
+            </div>
+          </div>
+          <p class:list={[body, "mt-4"]}>
+            <span class="font-medium text-stone-800">No caretaker?</span> We'll match you with
+            someone vetted, background-checked and trained by us. If it isn't working, we find
+            someone new.
+          </p>
+        </div>
+        <div class="aspect-[4/5] overflow-hidden bg-stone-100">
+          <Picture
+            src={photos.careExterior.src}
+            alt={photos.careExterior.alt}
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 768px) 45vw, 100vw"
+            formats={["avif", "webp"]}
+            fallbackFormat="jpg"
+            class={img}
+          />
+        </div>
+      </section>
+
+      <!-- 9. Guests notice the care (real, consented guest reviews until owners can be quoted) -->
+      <section aria-labelledby="s9" class="mt-20">
+        <p class={eyebrow}>What guests say</p>
+        <h2 id="s9" class:list={[h2, "mb-6"]}>
+          Guests notice the care
+        </h2>
+        <div class="grid gap-4 md:grid-cols-3">
+          {quotes.map((q) => (
+            <figure class="flex flex-col gap-3.5 border border-stone-200 p-5">
+              <blockquote class="font-serif text-[17px] leading-relaxed text-stone-800">
+                “{q.text}”
+              </blockquote>
+              <figcaption class="mt-auto text-sm text-stone-600">
+                {q.name} · {q.home} · {q.month}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <p class="mt-3 text-[13px] text-stone-500">
+          Guest reviews from Airbnb. Owner stories coming as homes join.
+        </p>
+      </section>
+
+      <!-- 10. Pricing -->
+      <section id="pricing" aria-labelledby="s10" class="mt-20">
+        <h2 id="s10" class:list={[h2, "mb-6"]}>
+          One fee, shared with the person who cares for your home
+        </h2>
+        <div class="grid items-start gap-8 md:grid-cols-[1fr_1.5fr]">
+          <div class="border border-stone-200 p-6">
+            <p class="font-serif text-[56px] leading-none text-stone-900">{fee.total}%</p>
+            <p class="mt-2 mb-5 text-[15px] text-stone-600">
+              of rent, from each stay
+              {DRAFT_MARKERS && <span class="text-[13px] text-apricot-dark"> [confirm]</span>}
+            </p>
+            <div
+              role="img"
+              aria-label={`Split of each booking: ${fee.owner}% to you, ${fee.apricot}% to Apricot, ${fee.caretaker}% to your caretaker`}
+              class="mb-3.5 flex h-2.5 overflow-hidden"
+            >
+              <div class="bg-forest" style={`flex: ${fee.owner}`}></div>
+              <div class="bg-apricot" style={`flex: ${fee.apricot}`}></div>
+              <div class="bg-gold" style={`flex: ${fee.caretaker}`}></div>
+            </div>
+            <dl class="grid grid-cols-[1fr_auto] gap-x-3 gap-y-1.5 text-[15px]">
+              <dt class="text-stone-600">To you</dt>
+              <dd class="font-medium text-stone-800">{fee.owner}%</dd>
+              <dt class="text-stone-600">To Apricot</dt>
+              <dd class="font-medium text-stone-800">{fee.apricot}%</dd>
+              <dt class="text-stone-600">To your caretaker</dt>
+              <dd class="font-medium text-stone-800">{fee.caretaker}%</dd>
+            </dl>
+            <p class="mt-4 text-sm text-stone-600">
+              Turnover fee: paid by guests, 100% to your caretaker.
+            </p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[400px] border-collapse text-[15px]">
+              <caption class="pb-2 text-left text-sm text-stone-500">How we compare</caption>
+              <thead>
+                <tr class="border-b border-stone-800">
+                  <th scope="col" class="py-2.5 pr-2 text-left font-medium">
+                    <span class="sr-only">Item</span>
+                  </th>
+                  <th scope="col" class="px-2 py-2.5 text-left font-semibold text-stone-800">
+                    Managed by Apricot
+                  </th>
+                  <th scope="col" class="py-2.5 pl-2 text-left font-medium text-stone-500">
+                    Typical managers
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="text-stone-700">
+                {comparison.map((c) => (
+                  <tr class="border-b border-stone-200">
+                    <th scope="row" class="py-3 pr-2 text-left font-medium text-stone-800">
+                      {c.row}
+                    </th>
+                    <td class="px-2 py-3">{c.us}</td>
+                    <td class="py-3 pl-2 text-stone-600">
+                      {c.them}
+                      {DRAFT_MARKERS && "confirm" in c && (
+                        <span class="text-[13px] text-apricot-dark"> [confirm]</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p class="mt-2.5 text-[13px] text-stone-500">
+              Typical ranges from published Indian manager rates, November 2026.
+            </p>
+          </div>
+        </div>
+        <div class="mt-8 flex flex-col gap-4 bg-linen p-7 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="font-serif text-xl text-stone-900">A garden home that's something special?</p>
+            <p class="mt-1 text-stone-700">
+              A few homes join the Garden Collection, fully styled, run and sold as Apricot Stays.
+            </p>
+          </div>
+          <a href="#contact" class="btn-link shrink-0">
+            Ask us about it
+          </a>
+        </div>
+      </section>
+
+      <!-- 11. FAQ -->
+      <section aria-labelledby="s11" class="mt-20 max-w-3xl">
+        <h2 id="s11" class:list={[h2, "mb-4"]}>
+          Questions owners ask
+        </h2>
+        {faq.map((f, i) => (
+          <details class="group border-t border-stone-200 last:border-b" open={i === 0}>
+            <summary class="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 font-serif text-lg font-medium text-stone-900 hover:text-apricot [&::-webkit-details-marker]:hidden">
+              {f.q}
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+                class="shrink-0 transition-transform group-open:rotate-180"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+            <p class:list={[body, "pb-4"]}>
+              {f.a}
+              {DRAFT_MARKERS && "confirm" in f && (
+                <span class="text-[13px] text-apricot-dark"> [CA to confirm]</span>
+              )}
+            </p>
+          </details>
+        ))}
+      </section>
+
+      <!-- 12. Contact: WhatsApp only -->
+      <section
+        id="contact"
+        aria-labelledby="contact-h"
+        class="mt-20 grid scroll-mt-24 bg-linen md:grid-cols-[1fr_1.2fr]"
+      >
+        <div class="aspect-[4/3] overflow-hidden bg-sand md:aspect-auto">
+          <Picture
+            src={photos.cottageGardenDusk.src}
+            alt={photos.cottageGardenDusk.alt}
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 768px) 45vw, 100vw"
+            formats={["avif", "webp"]}
+            fallbackFormat="jpg"
+            class={img}
+          />
+        </div>
+        <div class="flex flex-col gap-3.5 p-8">
+          <h2 id="contact-h" class="font-serif text-[28px] leading-snug font-normal text-stone-900">
+            Tell us about your home
+          </h2>
+          <p class="text-stone-700">
+            One message is all it takes. We reply on WhatsApp, usually the same day, and set up a
+            walk-through.
+          </p>
+          <div class="self-start rounded border border-stone-200 bg-white px-3.5 py-3 text-sm leading-relaxed text-stone-800">
+            <span class="mb-1 block text-xs font-semibold tracking-[0.2em] text-stone-500 uppercase">
+              What you'll send
+            </span>
+            Hi Apricot, I'd like you to look after my home.
+            <br />
+            Where: ___
+            <br />
+            Bedrooms: ___
+            <br />
+            Already listed? ___
+          </div>
+          <div class="flex flex-wrap items-center gap-x-5 gap-y-3">
+            <a href={wa} target="_blank" rel="noopener" class="btn-primary min-h-12">
+              <Icon name="whatsapp" size={16} />
+              WhatsApp us
+            </a>
+            <span class="text-sm text-stone-600">
+              or call{" "}
+              <a
+                href={`tel:${contact.whatsappDisplay.replace(/\s/g, "")}`}
+                class="underline underline-offset-4"
+              >
+                {contact.whatsappDisplay}
+              </a>
+            </span>
+          </div>
+          <p class="text-[13px] text-stone-600">
+            Brokers, agents and caretakers are welcome to write too.
+          </p>
+        </div>
+      </section>
+
+      <p class="mt-8 text-[15px] text-stone-600">
+        Looking for a place to stay?{" "}
+        <a href="/" class="font-medium text-stone-800 underline underline-offset-4">
+          See our homes
+        </a>
+      </p>
+    </div>
+  </main>
+
+  <Footer />
+</Base>
