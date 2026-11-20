@@ -3,18 +3,9 @@
  * Modelled on fairly.com/vacation-rental-management: same section order, Apricot's design and
  * photos, rewritten for Indian owners. Copy doc: project `claude/homeowners-page-copy-2026-11-19.md`.
  *
- * Items in `toConfirm` are shown on the page with a small "[confirm]" marker while
- * `DRAFT_MARKERS` is true. Confirm each one, then set it to false before going live.
+ * Draft markers: set `DRAFT_MARKERS` to true to show "[confirm]" next to items tagged `confirm`.
  */
-export const DRAFT_MARKERS = true;
-
-export const toConfirm = {
-  channels: "Booking channels Apricot will actually run",
-  fee: "20% flat fee (80 owner / 15 Apricot / 5 caretaker)",
-  pricingChat: "Monthly pricing chat with owners",
-  lockIn: '"Often 1–3 years" lock-in for typical managers',
-  tax: "NRI TDS and GST answers (CA to confirm)",
-} as const;
+export const DRAFT_MARKERS = false;
 
 export const ownerWhatsapp =
   "Hi Apricot, I'd like you to look after my home.\nWhere: \nBedrooms: \nAlready listed? ";
@@ -24,9 +15,8 @@ export const fee = { total: 20, owner: 80, apricot: 15, caretaker: 5 } as const;
 
 export const visibility = [
   {
-    title: "Found everywhere",
-    text: "Airbnb, Booking.com, MakeMyTrip, Agoda, Google and apricotstays.in.",
-    confirm: "channels",
+    title: "Found where guests book",
+    text: "Listed on Airbnb and on apricotstays.in, where returning guests book direct.",
   },
   {
     title: "Your rates, your limits",
@@ -39,17 +29,19 @@ export const visibility = [
 ] as const;
 
 export const inTheLoop = [
-  { lead: "One calendar.", text: "Every channel synced, so there are no double bookings." },
+  {
+    lead: "One calendar.",
+    text: "Airbnb and direct bookings synced, so there are no double bookings.",
+  },
   { lead: "One WhatsApp group.", text: "You, your caretaker and our team." },
-  { lead: "Every review, shared.", text: "From every channel, the good and the useful." },
+  { lead: "Every review, shared.", text: "The good ones and the useful ones." },
   { lead: "A monthly statement.", text: "Stays, earnings, costs and payout." },
 ] as const;
 
 export const earnMore = [
   {
     title: "Priced for Chandigarh",
-    text: "Rates move with Mullanpur stadium match days, wedding season, hospital visits near PGI and long weekends. A monthly pricing chat with us, if you want one.",
-    confirm: "pricingChat",
+    text: "Rates move with Mullanpur stadium match days, wedding season, hospital visits near PGI and long weekends.",
   },
   {
     title: "Direct bookings",
@@ -82,7 +74,6 @@ export const comparison = [
   { row: "Management fee", us: "20%, flat", them: "20–45%" },
   { row: "Cleaning / turnover", us: "100% to your caretaker", them: "Often marked up" },
   { row: "Extra charges", us: "None", them: "Added on top" },
-  { row: "Lock-in", us: "None", them: "Often 1–3 years", confirm: "lockIn" },
   { row: "Your own use", us: "Free, any time", them: "Often restricted" },
 ] as const;
 
@@ -102,13 +93,11 @@ export const faq = [
   { q: "Can my family still use it?", a: "Yes. Block any dates, any time, free." },
   {
     q: "I live abroad. How do payouts work?",
-    a: "Monthly, in rupees, to your Indian account. Payouts to NRI owners carry TDS, and we'll share the details.",
-    confirm: "tax",
+    a: "Monthly, in rupees, to your Indian account. Payouts to NRI owners carry TDS, and we'll walk you through TDS and GST before you sign.",
   },
   {
     q: "What about GST and taxes?",
-    a: "We handle the GST on stays we collect. Your income tax stays with you, and our monthly statements make it simple.",
-    confirm: "tax",
+    a: "We'll walk you through TDS and GST before you sign, and our monthly statements give you everything you need for your own taxes.",
   },
   {
     q: "What happens between stays?",
