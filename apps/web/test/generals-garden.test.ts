@@ -23,7 +23,9 @@ describe("/generals-garden (unlisted)", () => {
     expect(hits).toEqual([]);
   });
 
-  it("swaps the header button for the founding-dates request", () => {
-    expect(page).toContain('label: "Request founding dates"');
+  // Header v2 (19 Nov 2026) has no per-page button; the request stays on the page itself.
+  it("keeps the founding-dates request on the page, with the standard header", () => {
+    expect(page).toMatch(/founding dates/i);
+    expect(page).toContain("<Navbar />");
   });
 });
