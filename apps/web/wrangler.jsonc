@@ -1,8 +1,9 @@
 {
-  // Static site served by Cloudflare Workers. Static files are free and unmetered; only /api/*
-  // and /mcp run the Worker script (src/worker.ts). ("/mcp" has no static file, so it would reach
-  // the Worker anyway; it is listed for clarity.) Secrets (ICAL_<SLUG>, one per home) are set in the
-  // Cloudflare dashboard, never in this file.
+  // Static site served by Cloudflare Workers. Static files are free and unmetered; only /api/*,
+  // /mcp and /p/* (private pages) run the Worker script (src/worker.ts). ("/mcp" has no static
+  // file, so it would reach the Worker anyway; it is listed for clarity.) Secrets (ICAL_<SLUG>, one
+  // per home; PROPOSAL_TOKEN, PROPOSAL_CODE, PROPOSAL_KEY for /p/*) are set in the Cloudflare
+  // dashboard, never in this file.
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "apricotstays-web",
   "compatibility_date": "2026-10-01",
@@ -10,10 +11,14 @@
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*", "/mcp"],
+    "run_worker_first": ["/api/*", "/mcp", "/p/*"],
     "html_handling": "drop-trailing-slash",
     "not_found_handling": "404-page",
   },
+  // Caps code attempts on private /p/* pages: 5 per minute per IP (src/api/proposal.ts).
+  "ratelimits": [
+    { "name": "PROPOSAL_LIMITER", "namespace_id": "1001", "simple": { "limit": 5, "period": 60 } },
+  ],
   "observability": { "enabled": true },
   "preview_urls": true,
   "workers_dev": false,
