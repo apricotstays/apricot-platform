@@ -1,10 +1,12 @@
 /**
- * Worker entry for apricotstays-web. /api/* and /mcp run this script (wrangler.jsonc:
+ * Worker entry for apricotstays-web. /api/*, /mcp and /p/* run this script (wrangler.jsonc:
  * assets.run_worker_first); a request with no matching static file also reaches it and is handed
  * back to the static assets (the 404 page). Everything else is a static file, free and unmetered.
  */
 import { handleAvailability, json, type Deps, type Env } from "./api/availability";
 import { handleMcp } from "./api/mcp";
+import { handleProposal, type Payload, type ProposalEnv } from "./api/proposal";
+import proposalPayload from "./proposal/payload.enc.json";
 import type { Stays } from "./data/agent";
 
 interface Assets {
@@ -16,7 +18,11 @@ interface Ctx {
 }
 
 export default {
-  async fetch(request: Request, env: Env & { ASSETS: Assets }, ctx: Ctx): Promise<Response> {
+  async fetch(
+    request: Request,
+    env: Env & ProposalEnv & { ASSETS: Assets },
+    ctx: Ctx,
+  ): Promise<Response> {
     const url = new URL(request.url);
     // `caches.default` is Cloudflare-specific; absent in other runtimes.
     const cache = (globalThis.caches as unknown as { default?: Cache } | undefined)?.default;
@@ -38,6 +44,15 @@ export default {
           return (await res.json()) as Stays;
         },
         log: (line) => console.log(line),
+      });
+    }
+
+    // Private owner proposals: /p/<token> behind a code (src/api/proposal.ts).
+    if (url.pathname.startsWith("/p/")) {
+      return handleProposal(request, env, {
+        asset: (path) => env.ASSETS.fetch(new Request(new URL(path, request.url))),
+        payload: proposalPayload as Payload,
+        now: () => Date.now(),
       });
     }
 
