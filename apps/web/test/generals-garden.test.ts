@@ -18,7 +18,12 @@ describe("/generals-garden (unlisted)", () => {
 
   it("is not referenced by any other source file", () => {
     const hits = Object.entries(sources)
-      .filter(([path, text]) => path !== pagePath && text.includes("generals-garden"))
+      // Importing its photos (e.g. the private /p/ shell) is not a link to the page.
+      .filter(
+        ([path, text]) =>
+          path !== pagePath &&
+          text.replaceAll("assets/generals-garden/", "").includes("generals-garden"),
+      )
       .map(([path]) => path);
     expect(hits).toEqual([]);
   });

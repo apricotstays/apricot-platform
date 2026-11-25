@@ -1,0 +1,29 @@
+---
+/**
+ * Shell for private pages (CK, Nov 2026). Never served directly: /p/* runs the Worker first
+ * (wrangler.jsonc), which answers 404 for this path. src/api/proposal.ts fetches this page from the
+ * static assets, fills the slot with the code screen or the decrypted proposal, and swaps
+ * {{IMG_*}} placeholders for the image URLs below. Not in the sitemap, llms.txt or any nav.
+ */
+import { getImage } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import heroSrc from "../../assets/generals-garden/hero-garden.jpg";
+import paradeSrc from "../../assets/generals-garden/parade.jpg";
+
+const hero = await getImage({ src: heroSrc, width: 1672, format: "webp" });
+const parade = await getImage({ src: paradeSrc, width: 1000, format: "webp" });
+---
+
+<Base
+  title="A private page · Apricot Stays"
+  description="A private page from Apricot Stays."
+  noindex
+>
+  <Navbar />
+  <main id="main" data-img-hero={hero.src} data-img-parade={parade.src}>
+    <div data-private-slot></div>
+  </main>
+  <Footer />
+</Base>
