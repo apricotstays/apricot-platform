@@ -177,3 +177,122 @@
     @apply font-serif text-lg leading-snug font-medium text-stone-900;
   }
 }
+
+/*
+ * Postcards from the garden (homepage guest reviews, CK picked mockup E, 26 Nov 2026).
+ * Without JS (or before it runs) the cards are a plain swipe row. postcards.ts adds
+ * .is-curved and moves the cards along an arc with transforms only (compositor work).
+ */
+@layer components {
+  .pc-track {
+    display: flex;
+    gap: 16px;
+    margin: 0;
+    padding: 8px 24px 24px;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .pc-card {
+    flex: none;
+    width: min(340px, 80vw);
+    scroll-snap-align: center;
+  }
+  .pc-stage.is-curved .pc-track {
+    position: relative;
+    display: block;
+    height: var(--pc-h, 620px);
+    padding: 0;
+    overflow: visible;
+    touch-action: pan-y;
+    cursor: grab;
+    user-select: none;
+  }
+  .pc-stage.is-dragging .pc-track {
+    cursor: grabbing;
+  }
+  .pc-stage.is-curved .pc-card {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: calc(min(340px, 80vw) / -2);
+    transform-origin: 50% 120%;
+    will-change: transform, opacity;
+  }
+  .pc-postcard {
+    position: relative;
+    margin: 0;
+    padding: 12px;
+    background: var(--color-linen);
+    box-shadow: 0 24px 48px rgb(10 20 14 / 0.35);
+  }
+  /* Dims cards away from the centre; opacity-only so it stays on the compositor. */
+  .pc-postcard::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--color-forest-dark);
+    opacity: var(--pc-dim, 0);
+    pointer-events: none;
+  }
+  .pc-stamp {
+    position: relative;
+    width: 62px;
+    height: 84px;
+    padding: 4px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgb(43 42 38 / 0.2);
+    outline: 2px dashed #fff;
+    outline-offset: -1px;
+  }
+  .pc-postmark {
+    position: absolute;
+    top: 46px;
+    left: -20px;
+    width: 70px;
+    height: 70px;
+    background-size: contain;
+    transform: rotate(-14deg);
+    pointer-events: none;
+  }
+  .pc-dot {
+    display: flex;
+    width: 28px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+  .pc-dot::before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 2px;
+    background: rgb(247 243 237 / 0.4);
+    transition: width 0.4s;
+  }
+  .pc-dot[aria-current="true"]::before {
+    width: 24px;
+    background: var(--color-gold);
+  }
+  .pc-btn {
+    display: flex;
+    flex: none;
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(247 243 237 / 0.35);
+    border-radius: 9999px;
+    color: var(--color-linen);
+    transition: background-color 0.2s;
+  }
+  .pc-btn:hover {
+    background: rgb(247 243 237 / 0.1);
+  }
+  .pc-btn:focus-visible,
+  .pc-dot:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,206 @@
+---
+/**
+ * "What garden guests are saying": consented Airbnb reviews as garden postcards (photo of the
+ * home, quote, signature, a bird stamp from the Garden Shop prints and a postmark), moving on a
+ * slow arc. Homepage only (CK picked mockup E, 26 Nov 2026). Data: `src/data/postcards.ts`;
+ * styles: `.pc-*` in `styles/global.css`; motion: `src/scripts/postcards.ts`.
+ * Text only: no review/rating structured data (Google disallows marking up Airbnb reviews).
+ * Without JS the cards stay a swipeable row and the controls stay hidden.
+ */
+import { Picture } from "astro:assets";
+import TrustLine from "./TrustLine.astro";
+import { shortName, properties } from "@apricot/schema";
+import { buildPostcards } from "../data/postcards";
+
+const nameOf = (slug: string) => shortName(properties.find((p) => p.slug === slug)?.name ?? slug);
+const cards = buildPostcards(nameOf);
+// Postmark drawn as a background image: pure decoration, so it carries no text for assistive tech.
+const postmark = (month: string) =>
+  "data:image/svg+xml," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70"><g fill="none" stroke="#9a3a26"><circle cx="35" cy="35" r="33" stroke-opacity=".55" stroke-width="1.5"/><path d="M13 36h44" stroke-opacity=".5"/></g><g fill="#9a3a26" font-family="Helvetica,Arial,sans-serif" font-size="8" font-weight="700" letter-spacing="1" text-anchor="middle"><text x="35" y="31">APRICOT</text><text x="35" y="47">${month}</text></g></svg>`,
+  );
+const laurel =
+  "M19 39C8 32 4 20 7 2M7 9c-4-1-6-3-6-6 3 0 6 2 6 6zM6 17c-4 0-6-3-6-5 3-1 6 1 6 5zM8 25c-4 1-7-1-7-4 3-1 6 1 7 4zM12 32c-4 1-7-1-8-3 3-1 6-1 8 3zM8 10c3-2 6-1 6 1-2 2-5 2-6-1zM8 18c3-2 6-1 6 1-2 2-5 2-6-1zM10 26c3-1 6 0 6 2-2 2-5 1-6-2z";
+---
+
+<section
+  id="guests"
+  aria-labelledby="guests-h"
+  class="scroll-mt-20 overflow-hidden bg-forest-dark py-20 sm:py-24"
+  data-postcards
+>
+  <div class="mx-auto max-w-7xl px-6 text-center lg:px-12">
+    <div class="mx-auto mb-5 h-px w-10 bg-gold" aria-hidden="true"></div>
+    <h2 id="guests-h" class="font-serif text-4xl leading-tight font-normal text-linen sm:text-5xl">
+      What garden guests are saying
+    </h2>
+    <div class="mt-5 flex items-center justify-center gap-3">
+      <svg
+        width="22"
+        height="40"
+        viewBox="0 0 22 40"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.3"
+        stroke-linecap="round"
+        aria-hidden="true"
+        class="hidden shrink-0 text-gold sm:block"
+      >
+        <path d={laurel}></path>
+      </svg>
+      <TrustLine tone="dark" />
+      <svg
+        width="22"
+        height="40"
+        viewBox="0 0 22 40"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.3"
+        stroke-linecap="round"
+        aria-hidden="true"
+        class="hidden shrink-0 -scale-x-100 text-gold sm:block"
+      >
+        <path d={laurel}></path>
+      </svg>
+    </div>
+  </div>
+
+  <div class="pc-stage mt-10 sm:mt-14" data-pc-stage>
+    <ul class="pc-track" role="list" aria-label="Postcards from guests">
+      {cards.map((c) => (
+        <li class="pc-card" data-pc-card>
+          <figure class="pc-postcard">
+            <div class="aspect-[3/2] overflow-hidden border-[6px] border-white bg-sand">
+              {/* Photos load only as the section comes near (postcards.ts) so they don't compete
+                  with the hero on page load; <noscript> is also the no-JS fallback. */}
+              <noscript data-pc-photo>
+                <Picture
+                  src={c.photo.src}
+                  alt={c.photo.alt}
+                  widths={[320, 480, 640]}
+                  sizes="(min-width: 480px) 304px, 72vw"
+                  formats={["avif", "webp"]}
+                  fallbackFormat="jpg"
+                  class="h-full w-full object-cover"
+                  draggable="false"
+                />
+              </noscript>
+            </div>
+            <p class="mt-3 px-2 text-[11px] font-semibold tracking-[0.16em] text-forest uppercase">
+              Greetings from {c.homeName}
+            </p>
+            <div class="mt-2 grid grid-cols-[minmax(0,1fr)_62px] gap-4 px-2 pb-2">
+              <div class="flex flex-col gap-3 border-r border-[#d6cdbf] pr-4">
+                <blockquote class="font-serif text-base leading-relaxed text-stone-700 italic">
+                  <p>“{c.text}”</p>
+                </blockquote>
+                <figcaption class="mt-auto">
+                  <span class="block font-serif text-lg text-forest italic">— {c.name}</span>
+                  <span class="text-xs text-stone-600">{c.month} · via Airbnb</span>
+                </figcaption>
+              </div>
+              <div class="relative">
+                <div class="pc-stamp">
+                  <noscript data-pc-photo>
+                    <Picture
+                      src={c.bird.src}
+                      alt=""
+                      widths={[60, 120]}
+                      sizes="54px"
+                      formats={["avif", "webp"]}
+                      fallbackFormat="jpg"
+                      class="h-full w-full object-cover"
+                      draggable="false"
+                    />
+                  </noscript>
+                </div>
+                <span
+                  class="pc-postmark"
+                  style={`background-image:url("${postmark(c.postmark)}")`}
+                  aria-hidden="true"
+                ></span>
+              </div>
+            </div>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="mt-2 flex items-center justify-center gap-3 px-6 sm:gap-5" data-pc-controls hidden>
+    <button type="button" class="pc-btn" data-pc-prev aria-label="Previous postcard">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+    </button>
+    <div class="hidden sm:flex">
+      {cards.map((c, i) => (
+        <button
+          type="button"
+          class="pc-dot"
+          data-pc-dot={i}
+          aria-label={`Show the postcard from ${c.name}`}
+        ></button>
+      ))}
+    </div>
+    <button type="button" class="pc-btn" data-pc-next aria-label="Next postcard">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M9 18l6-6-6-6"></path>
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="pc-btn"
+      data-pc-toggle
+      aria-pressed="false"
+      aria-label="Pause the postcards"
+    >
+      <svg
+        data-pc-icon-pause
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M7 5h3v14H7zM14 5h3v14h-3z"></path>
+      </svg>
+      <svg
+        data-pc-icon-play
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+        class="hidden"
+      >
+        <path d="M8 5v14l11-7z"></path>
+      </svg>
+    </button>
+  </div>
+</section>
+<script>
+  import { initPostcards } from "../scripts/postcards";
+  document.querySelectorAll<HTMLElement>("[data-postcards]").forEach(initPostcards);
+</script>

@@ -61,9 +61,10 @@ export const contact = {
  */
 export const trust = {
   rating: "4.99",
-  reviews: 93,
+  /** Shown as "100+ Airbnb reviews"; a rounded floor so it doesn't go stale (CK, 26 Nov 2026). */
+  reviews: "100+",
   superhost: true,
-  checked: "Oct 2026",
+  checked: "Nov 2026",
 } as const;
 
 /**
