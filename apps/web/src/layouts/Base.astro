@@ -14,9 +14,19 @@ interface Props {
   jsonLd?: Record<string, unknown>;
   /** Extra <head> preloads, e.g. the hero image. */
   preloadImage?: string;
+  /** Extra woff2 files to preload on this page only, e.g. the hero's script font. */
+  preloadFonts?: string[];
 }
 
-const { title, description, noindex = false, og, jsonLd, preloadImage } = Astro.props;
+const {
+  title,
+  description,
+  noindex = false,
+  og,
+  jsonLd,
+  preloadImage,
+  preloadFonts = [],
+} = Astro.props;
 // build.format "file": pathnames look like "/index.html" or "/privacy.html".
 const path = Astro.url.pathname.replace(/\.html$/, "").replace(/(^|\/)index$/, "$1") || "/";
 const canonical = new URL(path, Astro.site);
@@ -54,7 +64,7 @@ const ogImageUrl = new URL(ogImg.src, Astro.site);
       content={og?.imageAlt ?? "Apricot Stays, DLF Hyde Park, New Chandigarh"}
     />
     <meta name="twitter:card" content="summary_large_image" />
-    {[loraUrl, dmSansUrl].map((href) => (
+    {[loraUrl, dmSansUrl, ...preloadFonts].map((href) => (
       <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
     ))}
     {preloadImage && <link rel="preload" href={preloadImage} as="image" fetchpriority="high" />}
