@@ -14,6 +14,7 @@ import { brand, contact, promise, trust } from "@apricot/brand";
 import { reviews } from "../data/reviews";
 import { galleries, photos } from "../data/media";
 import { waysToStay } from "../data/ways-to-stay";
+import scriptFontUrl from "../assets/fonts/pinyon-script-lowercase.woff2?url";
 
 const wa = (text: string) => contact.whatsappLink(text);
 const availability = wa(
@@ -22,6 +23,11 @@ const availability = wa(
 
 // Hero: one optimised poster, used by the <video> (desktop) and the <picture> (mobile / reduced motion).
 const hero = photos.courtyardDay;
+// Hero headline: the word "garden" is set in script (mockup F, CK 26 Nov 2026). Split the promise
+// around it so the H1 still reads "A garden of your own." for screen readers and search.
+const [heroBefore, heroAfter] = promise.name.includes("garden")
+  ? promise.name.split(/garden(.*)/s)
+  : [promise.name, undefined];
 const { listings: experiences } = await loadExperiences();
 const more = [
   {
@@ -136,6 +142,7 @@ const cardRating = (slug: string) => {
   description="A small collection of boutique homes at DLF Hyde Park, New Chandigarh — a garden cottage, a terracotta courtyard, a five-bedroom château and a care stay near PGI, each with a garden of its own. Book on WhatsApp."
   og={{ title: "Apricot Stays · Stay like you live here", image: hero.src, imageAlt: hero.alt }}
   jsonLd={jsonLd}
+  preloadFonts={[scriptFontUrl]}
 >
   <Navbar />
 
@@ -151,7 +158,7 @@ const cardRating = (slug: string) => {
         fallbackFormat="jpg"
         loading="eager"
         fetchpriority="high"
-        class="absolute inset-0 h-full w-full object-cover"
+        class="hero-zoom absolute inset-0 h-full w-full object-cover"
       />
       <video
         class="absolute inset-0 hidden h-full w-full object-cover md:block motion-reduce:hidden"
@@ -177,25 +184,44 @@ const cardRating = (slug: string) => {
           data-hero-copy
           class="mx-auto flex max-w-7xl flex-col items-start gap-4 px-6 pb-10 text-white [text-shadow:0_1px_10px_rgb(0_0_0/0.5)] sm:pb-14 lg:px-12"
         >
-          <p class="text-xs font-medium tracking-[0.2em] uppercase">Chandigarh</p>
+          <p class="hero-rise text-xs font-medium tracking-[0.2em] uppercase" style="--d: 0.2s">
+            Chandigarh
+          </p>
           <h1 class="max-w-3xl font-serif text-5xl leading-[1.05] font-normal sm:text-6xl lg:text-7xl">
             <span class="sr-only">Apricot Stays, boutique homes in New Chandigarh: </span>
-            {promise.name}.
+            {heroAfter === undefined ? (
+              <span class="hero-rise inline-block" style="--d: 0.3s">
+                {promise.name}.
+              </span>
+            ) : (
+              <>
+                <span class="hero-rise inline-block" style="--d: 0.3s">
+                  {heroBefore.trim()}
+                </span>{" "}
+                <span class="hero-script hero-write" style="--d: 0.65s">
+                  garden
+                </span>{" "}
+                <span class="hero-rise inline-block" style="--d: 1.25s">
+                  {heroAfter.trim()}.
+                </span>
+              </>
+            )}
           </h1>
-          <p class="max-w-xl text-base sm:text-lg">
+          <p class="hero-rise max-w-xl text-base sm:text-lg" style="--d: 1.55s">
             Four homes, each with a private garden. Never shared.
           </p>
           <a
             href={availability}
             target="_blank"
             rel="noopener"
-            class="btn-primary btn-lg mt-2 [text-shadow:none]"
+            style="--d: 1.8s"
+            class="hero-rise btn-primary btn-lg mt-2 [text-shadow:none]"
             aria-label="Check dates on WhatsApp"
           >
             <Icon name="whatsapp" size={20} />
             Check dates on WhatsApp
           </a>
-          <p class="inline-flex items-center gap-1.5 text-sm">
+          <p class="hero-fade inline-flex items-center gap-1.5 text-sm" style="--d: 2.1s">
             <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" class="fill-gold">
               <path d="M10 1.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.9z"></path>
             </svg>
