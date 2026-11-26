@@ -5,13 +5,17 @@ interface Props {
   class?: string;
   align?: "center" | "left";
   size?: "sm" | "xs";
+  /** "dark" for dark sections (homepage postcards on forest green). */
+  tone?: "light" | "dark";
 }
-const { class: cls = "", align = "center", size = "sm" } = Astro.props;
+const { class: cls = "", align = "center", size = "sm", tone = "light" } = Astro.props;
+const dark = tone === "dark";
 ---
 
 <p
   class:list={[
-    "flex flex-wrap items-center gap-x-2 gap-y-1 text-stone-600",
+    "flex flex-wrap items-center gap-x-2 gap-y-1",
+    dark ? "text-[#d9d3c7]" : "text-stone-600",
     size === "xs" ? "text-xs" : "text-sm",
     align === "center" ? "justify-center" : "justify-start",
     cls,
@@ -21,7 +25,8 @@ const { class: cls = "", align = "center", size = "sm" } = Astro.props;
     <path d="M10 1.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.9z"></path>
   </svg>
   <span>
-    <span class="font-medium text-stone-800">{trust.rating}</span> host rating
+    <span class:list={["font-medium", dark ? "text-linen" : "text-stone-800"]}>{trust.rating}</span>{" "}
+    host rating
   </span>
   <span class="inline-flex gap-x-2">
     <span aria-hidden="true">·</span>
